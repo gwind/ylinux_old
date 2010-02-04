@@ -1,4 +1,13 @@
-#!/usr/bin/env python
+#!/usr/bin/python
+# coding: utf-8
+
+# 说明：添加 vendor/ 目录作为 Python 的第一加载目录
+import os,sys
+
+THIRD_LIB = os.path.dirname(os.path.realpath(__file__))+"/lib"
+if sys.path.count(THIRD_LIB) == 0:
+    sys.path.insert(0,THIRD_LIB)
+
 from django.core.management import execute_manager
 try:
     import settings # Assumed to be in the same directory.
