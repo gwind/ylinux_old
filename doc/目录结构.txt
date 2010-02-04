@@ -1,0 +1,36 @@
+YLinux.org 社区项目的代码目录结构：
+
+
+说明：
+
+  1. 'ylinux/' 是项目目录
+  2. 所有表示中，以 '/' 结尾的是目录
+  3. 'ylinux/' 项目下的所有文件和目录都会列到这里，其他子目录不再罗嗦
+
+
+
+ylinux/
+
+  app/                          存放为 YLinux.org 开发的应用的代码 
+
+  doc/                          存放 doc
+
+  __init__.py                   表示这是一个 Python 包，在其他目录里作用亦同
+
+  lab/                          平时实验存放一些临时数据的地方
+
+  lib/                          存放第三发Python软件包，准备把 django 项目源码也放到此处
+
+  manage.py                     django 项目工具
+
+  README                        项目说明
+
+  scripts/                      存放开发中常用的工具
+
+  settings.py                   django 项目配置文件
+
+  templates/                    所有应用的模板都放到这里
+
+  urls.py                       django 项目URL配置文件
+
+  ymedia/                       所有静态文件放到这里，如 css js images
