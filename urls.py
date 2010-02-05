@@ -19,6 +19,7 @@ urlpatterns = patterns('',
     # (r'^ylinux/', include('ylinux.foo.urls')),
     # 注意 '' 和 ^$ 不同！
     (r'', include('ylinux.app.home.urls')),
+    (r'^account/', include('account.urls')),
 
     # Uncomment the admin/doc line below and add 'django.contrib.admindocs' 
     # to INSTALLED_APPS to enable admin documentation:

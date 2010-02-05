@@ -70,6 +70,11 @@ MEDIA_URL = '/ymedia/'
 SECRET_KEY = 'c#0cz^i$lyr6*b*xe-t@0tqc_c3dnju=+c1lk^k7(r^7lhz$g@'
 
 
+# YLinux 后端认证模块，这是一个tuple，可以有多种后段认证技术，
+# 只要有一个成功即可。详细说明请看 ylinux.app.accout 
+AUTHENTICATION_BACKENDS = ('ylinux.app.account.backends.ModelBackend',)
+
+
 # 定义如何加载模板，本处只在指定目录加载
 
 TEMPLATE_LOADERS = (
@@ -82,6 +87,8 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
 #    'django.contrib.sessions.middleware.SessionMiddleware',
 #    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'ylinux.app.sessions.middleware.SessionMiddleware',
+    'ylinux.app.account.middleware.AuthenticationMiddleware',
 )
 
 ROOT_URLCONF = 'ylinux.urls'
@@ -99,6 +106,10 @@ TEMPLATE_DIRS = (
 
 TEMPLATE_CONTEXT_PROCESSORS = (
 #    "django.core.context_processors.auth",
+
+    #auth返回user对象
+    "ylinux.app.account.context_processors.auth",
+
     "django.core.context_processors.debug",
     "django.core.context_processors.i18n",
     "django.core.context_processors.media",
@@ -114,5 +125,7 @@ INSTALLED_APPS = (
 
     # Ylinux.org 的应用
     'ylinux.app.home',
+    'ylinux.app.sessions',
+    'ylinux.app.account',
 )
 

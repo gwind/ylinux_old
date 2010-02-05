@@ -1,0 +1,14 @@
+{% extends "account/base.html" %}
+
+{% block content %}
+<fieldset>
+  <legend>注册</legend>
+  <form action="/account/register/" method="post">
+    <p><label for="id_username">用户名：</label> <input id="id_username" type="text" name="username" maxlength="30" /></p>
+<p>密码第一次：<input id="id_password" type="password" name="password_first" /></p>
+<p>密码第二次：<input id="id_password" type="password" name="password_second" /></p>
+    <p><label for="id_email">邮件：</label> <input id="id_email" type="text" name="email"/></p>
+    <input type="submit" value="注册" align="right"/>
+  </form>
+</fieldset>
+{% endblock %}

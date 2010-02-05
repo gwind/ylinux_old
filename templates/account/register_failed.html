@@ -1,0 +1,9 @@
+{% extends "account/base.html" %}
+
+{% block content %}
+<h2>非常抱歉，{{ username }}</h2>
+
+<p>您的注册失败了，原因是： {{ error_type }}</p>
+
+<p>如果需要帮助，您可以联系管理员 <a href="mailto:ylinux.admin@gmail.com">ylinux.admin@gmail.com</a> 。</p>
+{% endblock %}
