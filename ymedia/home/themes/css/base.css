@@ -1,0 +1,22 @@
+body {
+    margin: 2px,10px,2px,10px;
+    padding: 2px,5px,2px,5px;
+}
+
+h2 {
+    font-size:24px;
+    color:green;
+}
+
+a:link {color: blue}
+a:visited {color: gray}
+a:hover {color: green}
+a:active {color: #0000FF}
+
+.left {
+    float:left;
+}
+
+.right {
+    float:right;
+}

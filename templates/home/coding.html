@@ -1,0 +1,46 @@
+{% extends "home/base.html" %}
+
+{% block content %}
+
+<h3>感谢您的关注</h3>
+
+<p>正在开发中 ... ...</p>
+
+
+<h3>期待您的参与</h3>
+
+<p>目前社区使用 Django 开发，项目源码在 github 上，欢迎感兴趣的朋友一起参与进来！</p>
+<p>Github 上的项目地址：<a href="http://github.com/jianlee/ylinux/tree/master" target="_blank">http://github.com/jianlee/ylinux/tree/master</a></p>
+<pre>git clone git://github.com/jianlee/ylinux.git</pre>
+
+
+<h5>我们的讨论组:</h5>
+
+<table border=0 style="background-color: #fff; padding: 5px;" cellspacing=0>
+  <tr><td> <img src="https://groups.google.com/intl/en/images/logos/groups_logo_sm.gif" height=30 width=140 alt="Google Groups"> </td></tr>
+  <tr><td><br/><b>加入 YLinux 讨论组 ： </b></td></tr>
+  <form action="https://groups.google.com/group/ylinux?hl=zh-CN/boxsubscribe"><tr><td> 您的 Email : <input type=text name=email> <input type=submit name="sub" value="订阅"></td></tr></form>
+  <tr><td><br/><a href="https://groups.google.com/group/ylinux?hl=zh-CN">先看看讨论组</a></td></tr>
+</table>
+
+<h5>ylinux 项目的<strong>目录结构</strong>：</h5>
+
+<p>使用 Django 开发，项目名称为 ylinux 。目前项目源码存放在 github 上。其中 "lib/" 目录可存放一些第三方软件，建议把 django 项目最新源代码也放到这里，这样在服务器上部署实际的项目时，可以不受限于服务器的 django 版本，其他需要用到的纯 Python 库，也建议存放在这个目录。</p>
+
+<pre>
+ylinux/
+  - app/                    为ylinux项目开发的应用
+      - home/
+      - account/
+      - ydata/
+      - forum/
+
+  - lib/                    第三方python库，包括 django
+
+  - templates/              所有模板
+      - home/               home 应用的模板
+
+  - ymedia/                 css,js,images
+</pre>
+
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends "home/base.html" %}
+
+{% block content %}
+<p>YLinux 正在努力开发中，欢迎参加！</p>
+
+<!--<p>联系管理员：</p>-->
+<fieldset>
+<legend>联系我们</legend>
+<form action="/contact/" method="post">
+<p><label for="id_subject">主题：</label> <input id="id_subject" type="text" name="subject" maxlength="100" /></p>
+<p><label for="id_message">内容：</label><textarea name="message" id="id_message" ></textarea></p>
+<p><label for="id_sender">E-mail：</label> <input type="text" name="sender" id="id_sender" /></p>
+<input type="submit" value="发送信息" align="right"/>
+</form>
+</fieldset>
+
+{% endblock %}

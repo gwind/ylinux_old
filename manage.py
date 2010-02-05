@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 # coding: utf-8
 
 # 说明：添加 vendor/ 目录作为 Python 的第一加载目录

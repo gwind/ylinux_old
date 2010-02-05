@@ -1,0 +1,109 @@
+@import url(../css/base.css);
+
+#id_username {
+    width: 80px;
+}
+
+#id_password {
+    width: 80px;
+}
+
+#container {
+    margin: 5px;10px;5px;10px;
+}
+
+#logo {
+    height: 90px;
+}
+
+#logo img {
+    border: 0 none;
+}
+
+#navigator {
+    margin-top: 100px;
+    height: 10px;
+}
+
+#navigator ul{
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#navigator li {
+    float: left;
+    margin: 0 0.15em;
+}
+
+#navigator li a {
+    height: 2em;
+    line-height: 2em;
+    float: left;
+    width: 9em;
+    display: block;
+    border: 0.1em solid #dcdce9;
+    color: #0d2474;
+    text-decoration: none;
+    text-align: center;
+}
+
+#content {
+    margin-top: 60px;
+}
+
+#footer {
+    margin-top: 30px;
+    margin-right: auto;
+    margin-left: auto;
+    bottom: 0;
+    border: 0.1em solid #dcdce9;
+    padding: 5px;
+    text-align: center;
+    list-style: none;
+}
+
+label
+{
+    width: 4em;
+    float: left;
+    text-align: right;
+    margin-right: 0.5em;
+    display: block;
+}
+
+.submit input
+{
+    margin-left: 4.5em;
+}
+.input form
+{
+    color: #781351;
+    border: 0.1em solid #dcdce9;
+}
+
+.submit input
+{
+    color: #000;
+    border: 0.1em solid #dcdce9;
+}
+fieldset
+{
+    border: 0.1em solid #dcdce9;
+    width: 20em;
+}
+
+legend
+{
+    border: 0.1em solid #dcdce9;
+    padding: 2px 6px;
+}
+
+textarea {
+/*    width: 250px;*/
+    height: 160px;
+    margin-left: 4.5em;
+    color: #000;
+    border: 0.1em solid #dcdce9;
+/*    border: 2px outset #d7b9c9;*/
+}

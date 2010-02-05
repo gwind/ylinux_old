@@ -1,0 +1,30 @@
+{% extends "home/base.html" %}
+
+{% block content %}
+
+<p>感谢您的关注，社区正在开发中。欢迎您也能参与进来：<a href="/coding" onmouseover="this.style.color='green'" onMouseOut="this.style.color='#808284'">这里</a> 。</p>
+
+<h3>YLinux.org 的 <strong>目标</strong>：</h3>
+
+<ul>
+  <li>开发中文 GNU/Linux 发行版 -- YLinux</li>
+  <li>建立一个 “GNU” 社区</li>
+  <ul>
+    <li>Free - 自由</li>
+    <li>每个人都能参与社区开发和并决定社区发展</li>
+    <li>中文计算机科学交流空间</li>
+  </ul>
+</ul>
+
+<h3>YLinux.org 的 <strong>架构</strong>：</h3>
+
+<ul>
+  <li>首页 -- 社区首页是一个非常重要的部分，单独作为一个部分设计。这一点在 Django Web 开发中的体现就是一个单独的 app 。</li>
+  <li>用户 -- 有交互，就有交互的管理。用户部分管理社区用户的注册、登入、登出和个人信息中心。</li>
+  <li>新闻 -- 古时“秀才不出门，便知天下事“，今日新闻在大家生活有重要的地位</li>
+  <li>博客 -- 用户部分的个人信息中心的扩展</li>
+  <li>论坛 -- 最主要的互动交流空间</li>
+  <li>知识库 -- 社区的 wiki 系统，“不积跬步何以至千里”？</li>
+</ul>
+
+{% endblock %}
