@@ -13,30 +13,22 @@ UNUSABLE_PASSWORD = '!' # This will never be a valid hash
 
 # 设置密码
 def get_hexdigest(algorithm, salt, raw_password):
-    """
-    Returns a string of the hexdigest of the given plaintext password and salt
-    using the given algorithm ('md5', 'sha1' or 'crypt').
+    """根据 algorithm,salt,raw_password 参数返回加密后的密码字符串。
+    支持 'md5', 'sha1' 和 'crypt' 三种加密算法。
     """
     raw_password, salt = smart_str(raw_password), smart_str(salt)
     if algorithm == 'crypt':
         try:
             import crypt
         except ImportError:
-            raise ValueError('"crypt" password algorithm not supported in this environment')
+            raise ValueError('当前环境不支持 "crypt" 加密算法！')
         return crypt.crypt(raw_password, salt)
 
     if algorithm == 'md5':
         return md5_constructor(salt + raw_password).hexdigest()
     elif algorithm == 'sha1':
         return sha_constructor(salt + raw_password).hexdigest()
-    raise ValueError("Got unknown password algorithm type in password.")
-
-
-GENDER_CHOICES = (
-    (0, '保密'),
-    (1, '小姐'),
-    (2, '公子'),
-)
+    raise ValueError("未知加密算法")
 
 
 # 检查密码
@@ -91,7 +83,9 @@ class UserManager(models.Manager):
     def create_user(self, username, email, password=None):
         "Creates and saves a User with the given username, e-mail and password."
         now = datetime.datetime.now()
-        user = self.model(None, username, '', '', email.strip().lower(), 'placeholder', False, True, False, now, now)
+        #user = self.model(None, username, '', '', email.strip().lower(), 'placeholder', False, True, False, now, now)
+        user = self.model(username=username, email=email.strip().lower(),
+                          date_joined=now, last_login=now)        
         if password:
             user.set_password(password)
         else:
@@ -117,13 +111,18 @@ class UserManager(models.Manager):
 
 class User(models.Model):
     """用户模型，定义一个用户的基本信息。"""
+
+    GENDER = (
+        (0, '保密'),
+        (1, '小姐'),
+        (2, '公子'),
+        )
     
     username = models.CharField("用户名",max_length=30,unique=True,
                 help_text="不能与社区已有用户名重复，可更改！")
     first_name = models.CharField("名",max_length=15,blank=True)
     last_name = models.CharField("姓",max_length=15,blank=True)
-    gender = models.CharField("性别",max_length=1,
-                              choices=GENDER_CHOICES,default=0)
+    gender = models.IntegerField(default=0,choices=GENDER)
 
     # email 以后要唯一，暂且随意
     email = models.EmailField("Email",blank=True)

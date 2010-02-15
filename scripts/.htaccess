@@ -1,0 +1,40 @@
+ServerSignature EMail
+SetEnv SERVER_ADMIN lijian.gnu@gmail.com
+RewriteEngine On
+
+#Drop WWW Prefix
+# 只使用 ylinux.org 就可以
+RewriteBase /
+RewriteCond %{HTTP_HOST} ^www\.ylinux\.org$ [NC]
+RewriteRule ^(.*)$ http://ylinux.org/$1 [L,R=301]
+
+Redirect /jianlee http://jianlee.ylinux.org [L]
+#静态文件
+RewriteBase /
+#RewriteRule ^jianlee/$ http://jianlee.ylinux.org/index.html [L]
+#RewriteRule ^jianlee/.*$ - [L]
+#RewriteRule ^holmes86/.*$ - [L]
+RewriteRule ^ylinux/media.*$ - [L]
+RewriteRule ^errorpages/.*$ - [L]
+
+
+# 使用 FastCGI 启动 Django
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^(.*)$ ylinux.fcgi/$1 [QSA,L]
+
+#RedirectMatch permanent (.*)/$ $1/index.html
+#RewriteCond %{ENV:REDIRECT_STATUS} 200
+#RewriteRule .* - [L]
+
+#子域名可以这样解析
+#RewriteCond %{HTTP_HOST} ^code.fayaa.com$ [OR]
+#RewriteCond %{HTTP_HOST} ^www.code.fayaa.com$
+#RewriteRule ^(.*)$ "http\:\/\/www\.fayaa\.com\/code\/" [R=301,L]
+
+# 定制错误页
+ErrorDocument 400 /errorpages/400.html
+ErrorDocument 401 /errorpages/401.html
+ErrorDocument 403 /errorpages/403.html
+ErrorDocument 404 /errorpages/404.html
+ErrorDocument 500 /errorpages/500.html
+

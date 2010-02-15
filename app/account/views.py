@@ -79,9 +79,10 @@ def register(request):
                          context_instance=RequestContext(request))
 
             #用户名和Email都没有重复，就注册新用户
-            new_user = User.objects.create_user(username, email, password_first)
-            #new_user = User(username = username, password = password_first)
-            new_user.save()
+            User.objects.create_user(username=username, email=email, password=password_first)
+            #new_user = User(username=username, email=email)
+            #new_user.set_password(raw_password=password_first)
+            #new_user.save()
             return render_to_response("account/register_successful.html",
                                       {"title":"注册成功","username":username},
                                       context_instance=RequestContext(request))

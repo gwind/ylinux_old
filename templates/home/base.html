@@ -10,11 +10,11 @@
     {% block title %}{% if title %}<title>{{ title }} - YLinux.org</title>{% else %}<title>YLinux.org</title>{% endif %}{% endblock %}
   </head>
 
-  <!-- body 用 container 包容，分3块： header,content,footer -->  
+  <!-- body 用 container 包容，分4块： header,navigator,content,footer -->  
   <body>
     <div id="container">
 
-      <!-- 开始 header (分3块: logo,account,navigator) -->
+      <!-- 开始 header (分2块: logo,account) -->
       <div id="header">
         <div id="logo" class="left">
           <a href="/"><img src="{{ MEDIA_URL }}images/ylinux-logo.gif" alt="YLinux"/></a>
@@ -27,20 +27,21 @@
           <p><a href="/account/login/">登录</a> <a href="/account/register/"><b>注册</b></a></p>
           {% endif %}
         </div>
-
-        <br/>
-        <div id="navigator">
-          <ul>
-            <li><a href="/">首页</a></li>
-            <li><a href="/coding">新闻</a></li>
-            <li><a href="/coding">论坛</a></li>
-            <li><a href="/coding">博客</a></li>
-            <li><a href="/coding">项目</a></li>
-            <li><a href="/coding">知识库</a></li>
-          </ul>
-        </div>
       </div>
       <!-- 结束 header -->
+
+      <!-- Starting navigator -->
+      <div id="navigator">
+        <ul>
+          <li><a href="/">首页</a></li>
+          <li><a href="/coding">新闻</a></li>
+          <li><a href="/coding">论坛</a></li>
+          <li><a href="/coding">博客</a></li>
+          <li><a href="/coding">项目</a></li>
+          <li><a href="/coding">知识库</a></li>
+        </ul>
+      </div>
+      <!-- End navigator -->
 
       <!-- 开始 content -->
       <div id="content">
