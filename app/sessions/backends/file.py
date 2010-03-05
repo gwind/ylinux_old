@@ -3,7 +3,7 @@ import os
 import tempfile
 
 from django.conf import settings
-from django.contrib.sessions.backends.base import SessionBase, CreateError
+from sessions.backends.base import SessionBase, CreateError
 from django.core.exceptions import SuspiciousOperation, ImproperlyConfigured
 
 

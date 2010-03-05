@@ -1,0 +1,25 @@
+{% extends 'wiki/base.html' %}
+
+
+{% block content %}
+	<h1><a href="../{{ topic.id }}/" rel="bookmark">{{ topic.name }}</a></h1>
+
+	{% if not topic.id %}
+		<p>This topic does not exist, <a href="edit/">现在创建</a>？</p>
+	{% endif %}
+
+{% for post in posts %}
+    <p>{{ post.body }}</p><br/>
+{% endfor %}
+<!--	{{ topic.rendered|safe|linebreaks }}-->
+{% endblock %}
+
+
+{% block footer %}
+	{% if topic.id %}
+		<a href="edit/">编辑</a>
+	{% else %}
+		<a href="edit/">创建</a>
+	{% endif %}
+	|
+{% endblock %}

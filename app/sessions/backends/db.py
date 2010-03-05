@@ -1,6 +1,6 @@
 import datetime
-from django.contrib.sessions.models import Session
-from django.contrib.sessions.backends.base import SessionBase, CreateError
+from sessions.models import Session
+from sessions.backends.base import SessionBase, CreateError
 from django.core.exceptions import SuspiciousOperation
 from django.db import IntegrityError, transaction
 from django.utils.encoding import force_unicode

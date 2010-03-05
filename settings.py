@@ -37,6 +37,7 @@ EMAIL_SUBJECT_PREFIX = '[YLinux]'
 
 MANAGERS = ADMINS
 
+# 为了方便，我使用 mysql 数据库，可以自行修改为 sqlite3 数据库
 DATABASE_ENGINE = 'mysql'           # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
 DATABASE_NAME = 'ylinux'             # Or path to database file if using sqlite3.
 DATABASE_USER = 'root'             # Not used with sqlite3.
@@ -73,7 +74,9 @@ SECRET_KEY = 'c#0cz^i$lyr6*b*xe-t@0tqc_c3dnju=+c1lk^k7(r^7lhz$g@'
 # YLinux 后端认证模块，这是一个tuple，可以有多种后段认证技术，
 # 只要有一个成功即可。详细说明请看 ylinux.app.accout 
 AUTHENTICATION_BACKENDS = ('ylinux.app.account.backends.ModelBackend',)
-
+LOGIN_URL = '/account/login/'
+LOGOUT_URL = '/account/logout/'
+LOGIN_REDIRECT_URL = '/account/profile/'
 
 # 定义如何加载模板，本处只在指定目录加载
 
@@ -91,7 +94,8 @@ MIDDLEWARE_CLASSES = (
     'ylinux.app.account.middleware.AuthenticationMiddleware',
 )
 
-ROOT_URLCONF = 'ylinux.urls'
+#ROOT_URLCONF = 'ylinux.urls'
+ROOT_URLCONF = 'urls'
 
 # 指定模板目录
 
@@ -118,14 +122,18 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 
 INSTALLED_APPS = (
 #    'django.contrib.auth',
-#    'django.contrib.contenttypes',
+    # 目前 account 里的 ContentType 需要这个models
+    'django.contrib.contenttypes',
 #    'django.contrib.sessions',
 #    'django.contrib.sites',
 #    'django.contrib.admin',
 
     # Ylinux.org 的应用
-    'ylinux.app.home',
     'ylinux.app.sessions',
+    'ylinux.app.admin',
     'ylinux.app.account',
+    'ylinux.app.home',
+    'ylinux.app.ydata',
+    'ylinux.app.wiki',
 )
 

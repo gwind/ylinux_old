@@ -1,4 +1,4 @@
-from django.contrib.sessions.backends.base import SessionBase, CreateError
+from sessions.backends.base import SessionBase, CreateError
 from django.core.cache import cache
 
 class SessionStore(SessionBase):

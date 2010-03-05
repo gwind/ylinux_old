@@ -1,0 +1,27 @@
+{% extends 'admin/base.html' %}
+
+{% block content %}
+
+{% if permissions %}
+<p><a href="{% url admin:index %}">起点</a> | Permission </p>
+
+<ul>
+{% for permission in permissions %}
+    <li><a href="{% url admin:edit_permission permission.id %}">{{ permission }}</a></li>
+{% endfor %}
+</ul>
+
+<p><a href="{% url admin:add_permission %}">创建用户</a></p>
+
+{% else %}
+<p><a href="{% url admin:index %}">起点</a> | <a href="{% url admin:show_permissions %}">Permission</a> | {{ permission }}</p>
+<h3>编辑 {{ permission }}</h3>
+
+  <form action="" method="POST">
+    {{ form.as_p }}
+ 　 <p><input type="submit" value="保存"></p>
+  </form>
+
+{% endif %}
+
+{% endblock %}

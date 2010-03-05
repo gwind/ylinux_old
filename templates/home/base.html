@@ -22,9 +22,11 @@
 
         <div id="account" class="right">
           {% if user.is_authenticated %}
-          欢迎您，<b>{{ user }}</b> | <a href="/account/logout/">退出</a>
+          欢迎您，<b>{{ user }}</b>
+          {% if user.is_staff %} | <a href="{% url admin:index %}">管理界面</a> | {% endif %} |  
+          <a href="{% url account:logout %}">退出</a>
           {% else %}
-          <p><a href="/account/login/">登录</a> <a href="/account/register/"><b>注册</b></a></p>
+          <p><a href="{% url account:login %}">登录</a> <a href="{% url account:register %}"><b>注册</b></a></p>
           {% endif %}
         </div>
       </div>
@@ -38,7 +40,7 @@
           <li><a href="/coding">论坛</a></li>
           <li><a href="/coding">博客</a></li>
           <li><a href="/coding">项目</a></li>
-          <li><a href="/coding">知识库</a></li>
+          <li><a href="/wiki">知识库</a></li>
         </ul>
       </div>
       <!-- End navigator -->

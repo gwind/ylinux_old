@@ -1,0 +1,12 @@
+{% extends 'admin/base.html' %}
+
+
+{% block content %}
+<h2>社区管理</h2>
+
+<p><a href="{% url admin:show_permissions %}">Permission</a></p>
+<p><a href="{% url admin:show_users %}">User</a></p>
+<p><a href="{% url admin:show_categorys %}">Category</a></p>
+<p><a href="{% url admin:show_catalogs %}">Catalog</a></p>
+
+{% endblock %}

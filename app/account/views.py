@@ -21,11 +21,11 @@ def login(request):
                 login(request, user)
                 if request.session.test_cookie_worked():
                     request.session.delete_test_cookie()
-                return HttpResponseRedirect(request.session.get('previous_url','/'))
+                return HttpResponseRedirect(request.session.get('login_redirect_url','/') or '/')
 
-    else:
-        request.session['previous_url'] = request.META.get('HTTP_REFERER', '/')
-        form = AuthenticationForm(request)
+    # 形如 "http://127.0.0.1:8000/account/login?next=/admin/" 的 url 可以得到 next 值
+    request.session['login_redirect_url'] = request.GET.get('next')
+    form = AuthenticationForm(request)
 
     # 登录失败，或者第一次登录，都会到这里。form可以定制很多值
     request.session.set_test_cookie()

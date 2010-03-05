@@ -1,3 +1,5 @@
+# coding: utf-8
+
 import base64
 import cPickle as pickle
 
@@ -49,7 +51,9 @@ class Session(models.Model):
     objects = SessionManager()
 
     class Meta:
-        db_table = 'django_session'
+        # db_table 可以定义数据库的名字
+        #db_table = 'django_session'
+        db_table = 'ylinux_session'
         verbose_name = _('session')
         verbose_name_plural = _('sessions')
 

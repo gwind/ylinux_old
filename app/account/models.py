@@ -1,12 +1,42 @@
 # coding: utf-8
+
+import os
 import datetime
 
+from django.conf import settings
 from django.db import models
 from django.contrib.contenttypes.models import ContentType
 from django.db.models.manager import EmptyManager
 from django.utils.encoding import smart_str
 from django.utils.hashcompat import md5_constructor, sha_constructor
 
+
+# 时区
+TZ_CHOICES = [(float(x[0]), x[1]) for x in (
+    (-12, '-12'), (-11, '-11'), (-10, '-10'), (-9.5, '-09.5'), (-9, '-09'),
+    (-8.5, '-08.5'), (-8, '-08 PST'), (-7, '-07 MST'), (-6, '-06 CST'),
+    (-5, '-05 EST'), (-4, '-04 AST'), (-3.5, '-03.5'), (-3, '-03 ADT'),
+    (-2, '-02'), (-1, '-01'), (0, '00 GMT'), (1, '+01 CET'), (2, '+02'),
+    (3, '+03'), (3.5, '+03.5'), (4, '+04'), (4.5, '+04.5'), (5, '+05'),
+    (5.5, '+05.5'), (6, '+06'), (6.5, '+06.5'), (7, '+07'), (8, '+08'),
+    (9, '+09'), (9.5, '+09.5'), (10, '+10'), (10.5, '+10.5'), (11, '+11'),
+    (11.5, '+11.5'), (12, '+12'), (13, '+13'), (14, '+14'),
+)]
+
+PRIVACY_CHOICES = (
+    (0, u'Display your e-mail address.'),
+    (1, u'Hide your e-mail address but allow form e-mail.'),
+    (2, u'Hide your e-mail address and disallow form e-mail.'),
+)
+
+MARKUP_CHOICES = (
+    ('bbcode', 'bbcode'),
+    ('markdown', 'markdown'),
+)
+
+path = os.path.join(settings.MEDIA_ROOT, 'themes')
+THEME_CHOICES = [(theme, theme) for theme in os.listdir(path)
+                 if os.path.isdir(os.path.join(path, theme))]
 
 UNUSABLE_PASSWORD = '!' # This will never be a valid hash
 
@@ -129,6 +159,7 @@ class User(models.Model):
     password = models.CharField("密码",max_length=128,
                 help_text="为了您的利益和社区的安全，请复杂点！")
 
+    is_staff = models.BooleanField('staff status', default=False, help_text="用户是否能登录Admin")
     is_active = models.BooleanField("激活",default=True,
                 help_text="这里决定此用户是否可用！")
     is_superuser = models.BooleanField("root",default=False)
@@ -143,6 +174,26 @@ class User(models.Model):
     user_permissions = models.ManyToManyField(Permission,
                 verbose_name='用户权限', blank=True)
     objects = UserManager()
+
+    # 既然已经单独定义 User 了，就不在定义 Profile 之类的结构了。
+    site = models.URLField('个人主页', verify_exists=False, blank=True)
+    jabber = models.CharField('Jabber', max_length=80, blank=True)
+    icq = models.CharField('ICQ', max_length=12, blank=True)
+    qq = models.CharField('QQ', max_length=12, blank=True)
+    msn = models.CharField('MSN', max_length=80, blank=True)
+    aim = models.CharField('AIM', max_length=80, blank=True)
+    yahoo = models.CharField('Yahoo', max_length=80, blank=True)
+    location = models.CharField('Location', max_length=30, blank=True)
+    signature = models.TextField('签名', blank=True, default='', max_length=200)
+    time_zone = models.FloatField('时区', choices=TZ_CHOICES, default=float(3))
+    language = models.CharField('语言', max_length=3, default='', choices=settings.LANGUAGES)
+    theme = models.CharField('主题', choices=THEME_CHOICES, max_length=80, default='default')
+    #show_avatar = models.BooleanField('显示avatar', blank=True, default=True)
+    show_signatures = models.BooleanField('显示签名', blank=True, default=True)
+    privacy_permission = models.IntegerField('Privacy permission', choices=PRIVACY_CHOICES, default=1)
+    markup = models.CharField('默认markup', max_length=15, default="markdown", choices=MARKUP_CHOICES)
+    post_count = models.IntegerField('帖子总数', blank=True, default=0)
+    
     
     class Meta:
         verbose_name = "用户"

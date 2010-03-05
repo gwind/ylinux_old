@@ -1,0 +1,22 @@
+{% extends 'wiki/base.html' %}
+
+
+{% block content %}
+  <h3>{% if catalog %} 新主题 {% else %} 新回复 {% endif %}</h3>
+
+    <form action="{% if catalog %}/wiki/catalog/{{ catalog.id }}/topic/add/{% else %}/wiki/topic/{{ topic.id }}/post/add/{% endif %}" method="post">
+
+       <fieldset>
+          <legend>发表文章</legend>
+             {% if catalog %}
+             <label><strong>标题</strong><br />{{ form.name }}<br /></label><br /><br />
+             {% endif %}
+             <label><strong>正文</strong><br />{{ form.body }}<br /></label>
+       </fieldset>
+
+       <div class="submit">
+          <p><input type="submit" value="提交" /><a href="javascript:history.go(-1)">返回</a></p>
+       </div>
+
+    </form>
+{% endblock %}

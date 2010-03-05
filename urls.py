@@ -18,8 +18,12 @@ urlpatterns = patterns('',
     # Example:
     # (r'^ylinux/', include('ylinux.foo.urls')),
     # 注意 '' 和 ^$ 不同！
-    (r'', include('ylinux.app.home.urls')),
-    (r'^account/', include('account.urls')),
+    # namespace 参考
+    # http://docs.djangoproject.com/en/dev/topics/http/urls/#topics-http-defining-url-namespaces
+    (r'', include('ylinux.app.home.urls', namespace='home')),
+    (r'^admin/', include('ylinux.app.admin.urls', namespace='admin')),
+    (r'^account/', include('ylinux.app.account.urls', namespace='account')),
+    (r'^wiki/', include('ylinux.app.wiki.urls', namespace='wiki')), 
 
     # Uncomment the admin/doc line below and add 'django.contrib.admindocs' 
     # to INSTALLED_APPS to enable admin documentation:

@@ -1,5 +1,6 @@
 ServerSignature EMail
-SetEnv SERVER_ADMIN lijian.gnu@gmail.com
+SetEnv SERVER_ADMIN ylinux.admin@gmail.com
+SetEnv SERVER_SIGNATURE '<address><a href="mailto:ylinux.admin@gmail.com">ylinux.org</a> 运行在 Apache 服务器上。</address>\n'
 RewriteEngine On
 
 #Drop WWW Prefix
@@ -22,6 +23,8 @@ RewriteRule ^errorpages/.*$ - [L]
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^(.*)$ ylinux.fcgi/$1 [QSA,L]
 
+# 静态文件
+RewriteRule ^/robots.txt$ /ymedia/robots.txt [L]
 #RedirectMatch permanent (.*)/$ $1/index.html
 #RewriteCond %{ENV:REDIRECT_STATUS} 200
 #RewriteRule .* - [L]
