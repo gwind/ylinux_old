@@ -10,7 +10,12 @@ urlpatterns = patterns('admin.views',
     # Permission
     url(r'^permission/$', 'permission', {'id':None}, name='show_permissions'),
     url(r'^permission/(?P<id>\d+)/$', 'permission', name='edit_permission'),
-    #url(r'^user/add/$', 'add_user', name='add_user'),
+    url(r'^permission/add/$', 'add_permission', name='add_permission'),
+
+    # Group
+    url(r'^group/$', 'group', {'id':None}, name='show_groups'),
+    url(r'^group/(?P<id>\d+)/$', 'group', name='edit_group'),
+    url(r'^group/add/$', 'add_group', name='add_group'),
     
     # User
     url(r'^user/$', 'user', {'id':None}, name='show_users'),

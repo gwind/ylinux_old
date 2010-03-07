@@ -11,7 +11,7 @@
 {% endfor %}
 </ul>
 
-<p><a href="{% url admin:add_permission %}">创建用户</a></p>
+<p><a href="{% url admin:add_permission %}">创建权限</a></p>
 
 {% else %}
 <p><a href="{% url admin:index %}">起点</a> | <a href="{% url admin:show_permissions %}">Permission</a> | {{ permission }}</p>

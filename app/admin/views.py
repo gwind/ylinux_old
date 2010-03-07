@@ -75,6 +75,66 @@ def permission(request, id):
     return {'permissions':permissions}
 
 
+@render_to('admin/add_permission.html')
+def add_permission(request):
+
+    if request.method == 'POST':
+        form = PermissionForm(data=request.POST)
+        if form.is_valid():
+            name = form.cleaned_data['name']
+            codename = form.cleaned_data['codename']
+            content_type = form.cleaned_data['content_type']
+            permission = Permission(name=name,content_type=content_type,codename=codename)
+            permission.save()
+        return HttpResponseRedirect(reverse('admin:show_permissions'))
+
+    form = PermissionForm()
+    return {'form':form}
+
+
+
+# Group 管理
+
+@render_to('admin/group.html')
+def group(request,id):
+
+    if id:
+        try:
+            group = Group.objects.get(pk=id)
+        except Group.DoesNotExist:
+            group = None
+
+        if request.method == 'POST':
+            form = GroupForm(data=request.POST)
+            if form.is_valid() and group:
+                group.name = form.cleaned_data['name']
+                group.permissions.add(form.cleaned_data['permissions'])
+                group.save()
+            return HttpResponseRedirect(reverse('admin:show_groups'))
+
+        form = GroupForm(group.__dict__)
+        return {'group':group,'form':form}
+
+    groups = Group.objects.all()
+    return {'groups':groups}
+
+
+@render_to('admin/add_group.html')
+def add_group(request):
+
+    if request.method == 'POST':
+        form = GroupForm(data=request.POST)
+        if form.is_valid():
+            name = form.cleaned_data['name']
+            permissions = form.cleaned_data['permissions']
+            group = Group(name=name,permissions=permissions)
+            group.save()
+        return HttpResponseRedirect(reverse('admin:show_groups'))
+
+    form = GroupForm()
+    return {'form':form}
+
+
 # User 管理
 
 @render_to('admin/user.html')
@@ -90,6 +150,7 @@ def user(request, id):
             form = UserForm(data=request.POST)
             if form.is_valid() and user:
                 user.username = form.cleaned_data['username']
+                user.user_permissions = form.cleaned_data['user_permissions']
                 user.save()
             return HttpResponseRedirect(reverse('admin:show_users'))
 
@@ -98,6 +159,7 @@ def user(request, id):
             
     users = User.objects.all()
     return {'users':users}
+
 
 @render_to('admin/add_user.html')
 def add_user(request):
