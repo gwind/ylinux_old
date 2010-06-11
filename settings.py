@@ -137,3 +137,10 @@ INSTALLED_APPS = (
     'ylinux.app.wiki',
 )
 
+
+# 语言集合
+LANGUAGES = (
+    ('en', 'English'),
+    ('zh-cn', '简体中文'),
+    ('zh-tw', '繁体中文'),
+)

@@ -1,2 +1,4 @@
 django
+Django-1.2.1
+django.old
 *.pyc

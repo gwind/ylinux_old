@@ -4,19 +4,14 @@
 {% block content %}
 <h2>知识库系统</h2>
 
-{% if categorys %}
+{% if catalogs %}
   <ul>
-  {% for category in categorys %}
-    <li><a href="{{ category.get_absolute_url }}">{{ category.name }}</a></li>
-    <ul>
-    {% for catalog in category.catalogs.all %}
-      <li><a href={{ catalog.get_absolute_url }}>{{ catalog.name }}</a></li>
-    {% endfor %}
-    </ul>
+  {% for c in catalogs %}
+    <li><a href="{% url wiki:catalog c.id %}">{{ c.name }}</a></li>
   {% endfor %}
   </ul>
 {% else %}
-  <p><a href="add_topic/">写文章</a>.</p>
+  <p>WiKi 现在还没有内容. 请通过管理接口添加目录</p>
 {% endif %}
 
 {% endblock %}

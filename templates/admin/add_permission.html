@@ -1,0 +1,17 @@
+{% extends 'admin/base.html' %}
+{% block content %}
+
+<p>
+  <a href="{% url admin:index %}">起点</a>
+  | <a href="{% url admin:permissions %}">权限</a>
+</p>
+
+<h3>创建权限</h3>
+
+<form action="{% url admin:add_permission %}" method="POST">
+{{ form.as_p }}
+<p><input type="submit" value="创建"></p>
+</form>
+
+
+{% endblock %}

@@ -1,14 +1,23 @@
 {% extends 'admin/base.html' %}
-
 {% block content %}
 
-<p><a href="{% url admin:index %}">起点</a> | <a href="{% url admin:show_catalogs %}">Catalog</a></p>
-<h3>创建新 Catalog</h3>
+<p>
+  <a href="{% url admin:index %}">起点</a>
+  | <a href="{% url admin:catalogs %}">目录</a>
+  {% for id,name in parents %}
+  | <a href="{% url admin:show_catalog id %}">{{ name }}</a>
+  {% endfor %}
+</p>
 
-  <form action="{% url admin:add_catalog %}" method="POST">
-    {{ form.as_p }}
- 　 <p><input type="submit" value="创建"></p>
-  </form>
+{% if catalog %}
+<p>为 [<a href="{% url admin:show_catalog catalog.id %}">{{ catalog }}</a>] 新建子目录 ...<p>
+{% else %}
+<p>创建一个顶级目录 ...</p>
+{% endif %}
 
+<form action="" method="POST">
+{{ form.as_p }}
+<p><input type="submit" value="创建"></p>
+</form>
 
 {% endblock %}

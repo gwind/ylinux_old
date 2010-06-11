@@ -1,0 +1,21 @@
+{% extends 'admin/base.html' %}
+
+{% block content %}
+
+
+<p><a href="{% url admin:index %}">起点</a> | 用户组 </p>
+
+<ul>
+  {% for group in groups %}
+  <li>
+    <a href="{% url admin:show_group group.id %}">{{ group }}</a>
+    [<a href="{% url admin:edit_group group.id %}">编辑</a>]
+    [<a href="{% url admin:del_group group.id %}">删除</a>]
+  </li>
+  {% endfor %}
+</ul>
+
+<p><a href="{% url admin:add_group %}">创建用户组</a></p>
+
+
+{% endblock %}

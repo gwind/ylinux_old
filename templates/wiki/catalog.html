@@ -1,0 +1,31 @@
+{% extends 'wiki/base.html' %}
+{% block content %}
+
+<p>
+  <a href="{% url wiki:index %}">知识库</a>
+  {% for id,name in parents %}
+  | <a href="{% url wiki:catalog id %}">{{ name }}</a>
+  {% endfor %}
+</p>
+
+{% if subcatalogs %}
+<ul>
+  {% for c in subcatalogs %}
+  <li><a href="{% url wiki:catalog c.id %}">{{ c.name }}</a></li>
+  {% endfor %}
+</ul>
+{% endif %}
+
+{% if topics %}
+<ul>
+  {% for t in topics %}
+  <li>{{ t }}</li>
+  {% endfor %}
+</ul>
+{% endif %}
+
+{% if user.is_authenticated %}
+<p>新建知识点</p>
+{% endif %}
+
+{% endblock %}

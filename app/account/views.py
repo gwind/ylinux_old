@@ -4,10 +4,13 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.http import HttpResponseRedirect,HttpResponse
 
+#from account.decorators import login_required, permission_required
 from account.models import User,AnonymousUser
 from account.forms import RegisterForm,LoginForm,AuthenticationForm
 
+from ydata.util import render_to, build_form, get_parents
 
+@render_to('account/login.html')
 def login(request):
 
     if request.method == "POST":
@@ -23,23 +26,25 @@ def login(request):
                     request.session.delete_test_cookie()
                 return HttpResponseRedirect(request.session.get('login_redirect_url','/') or '/')
 
-    # 形如 "http://127.0.0.1:8000/account/login?next=/admin/" 的 url 可以得到 next 值
-    request.session['login_redirect_url'] = request.GET.get('next')
-    form = AuthenticationForm(request)
+    else:
+        # 形如 "http://127.0.0.1:8000/account/login?next=/admin/" 的 url 可以得到 next 值
+        request.session['login_redirect_url'] = request.GET.get('next')
+        form = AuthenticationForm(request)
 
     # 登录失败，或者第一次登录，都会到这里。form可以定制很多值
     request.session.set_test_cookie()
-    return render_to_response('account/login.html',
-        {'title':'登录','form': form,},
-        context_instance=RequestContext(request))
+    return {'title':'登录', 'form':form}
 
 
 
 # 退出后跳转到主页
+#@login_required
 def logout(request):
-    from django.contrib.auth import logout
+    #from django.contrib.auth import logout
+    from account import logout
+    previous_url = request.GET.get('next')
     logout(request)
-    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+    return HttpResponseRedirect(previous_url or '/')
 
 
 def register(request):

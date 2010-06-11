@@ -1,0 +1,18 @@
+{% extends 'admin/base.html' %}
+
+{% block content %}
+
+
+<p><a href="{% url admin:index %}">起点</a> | <a href="{% url admin:groups %}">用户组</a> | {{ group }}</p>
+
+<ul>
+  <li>name: {{ group.name }}</li>
+  <li>permissions: </li>
+  <ul>
+    {% for perm in group.permissions.all %}
+    <li><a href="{% url admin:show_permission perm.id %}">{{ perm }}</a></li>
+    {% endfor %}
+  </ul>
+</ul>
+
+{% endblock %}

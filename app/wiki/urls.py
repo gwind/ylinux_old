@@ -8,15 +8,16 @@ urlpatterns = patterns('wiki.views',
     url(r'^$', 'index', name='index'),
 
 
-    url(r'^category/(?P<category_id>\d+)/$','show_list',
-        {'catalog_id':None,'topic_id':None,}, name='show_category'), 
     url(r'^catalog/(?P<catalog_id>\d+)/$','show_list',
-        {'category_id':None,'topic_id':None,}, name='show_catalog'), 
+        {'topic_id':None,}, name='show_catalog'), 
 
+
+    # 显示目录： /wiki/id/
+    url(r'^(?P<id>\d+)/$', 'catalog', name='catalog'),
 
     # Topic
     url(r'^topic/(?P<topic_id>\d+)/$', 'show_list',
-        {'category_id':None, 'catalog_id':None,}, name='show_topic'), 
+        {'catalog_id':None,}, name='show_topic'), 
 
     url(r'^catalog/(?P<catalog_id>\d+)/topic/add/$', 'add_post', {'topic_id':None,}, name='add_topic'), 
 

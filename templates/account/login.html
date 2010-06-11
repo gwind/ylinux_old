@@ -4,7 +4,7 @@
 
 {% if user.is_authenticated %}
 <p>您当前登录用户名： {{ user }}<p>
-<p>如果要重新登录，请先 <a href="{% url account:logout %}">退出</a></p>
+<p>如果要重新登录，请先 <a href="{% url account:logout %}?next={% url account:login %}">退出</a></p>
 
 {% else %}
 
@@ -15,7 +15,7 @@
 <p style="color: red;">错误：用户名不存在或者密码不匹配 {{ form.errors|pluralize }}</p>
 {% endif %}
 
-<form action="/account/login/" method="post">
+<form action="{% url account:login %}" method="post">
 <p><label for="id_username">用户名：</label> <input id="id_username" type="text" name="username" maxlength="30" /></p>
 <p><label for="id_password">密码：</label> <input type="password" name="password" id="id_password" /></p>
 <p><input id="login_submit" type="submit" value="登录"/></p>

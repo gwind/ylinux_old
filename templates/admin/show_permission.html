@@ -1,0 +1,14 @@
+{% extends 'admin/base.html' %}
+
+{% block content %}
+
+
+<p><a href="{% url admin:index %}">起点</a> | <a href="{% url admin:permissions %}">权限</a> | [{{ permission }}]</p>
+
+<ul>
+  <li>name: {{permission.name}}</li>
+  <li>content_type: {{permission.content_type}}</li>
+  <li>codename: {{permission.codename}}</li>
+</ul>
+
+{% endblock %}

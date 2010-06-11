@@ -1,0 +1,31 @@
+{% extends 'admin/base.html' %}
+
+{% block content %}
+
+
+<p><a href="{% url admin:index %}">起点</a> | <a href="{% url admin:users %}">用户</a> | {{ the_user }}</p>
+
+<ul>
+  <li>用户名: {{ the_user.username }}</li>
+
+  {% if the_user.groups.all %}
+  <li>组: </li>
+  <ul>
+    {% for g in the_user.groups.all %}
+    <li><a href="{% url admin:show_group g.id %}">{{ g }}</a></li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+
+  {% if the_user.user_permissions.all %}
+  <li>权限：(除了拥有组的权限，还有这些额外权限)</li>
+  <ul>
+    {% for p in the_user.user_permissions.all %}
+    <li><a href="{% url admin:show_permission p.id %}">{{ p }}</a></li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+
+</ul>
+
+{% endblock %}

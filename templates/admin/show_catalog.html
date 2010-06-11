@@ -1,0 +1,37 @@
+{% extends "admin/base.html" %}
+{% block content %}
+
+<p>
+  <a href="{% url admin:index %}">起点</a>
+  | <a href="{% url admin:catalogs %}">目录</a>
+  {% for id,name in parents %}
+  | <a href="{% url admin:show_catalog id %}">{{ name }}</a>
+  {% endfor %}
+</p>
+
+<p>
+  {% if edit_catalog %}[<a href="{% url admin:edit_catalog catalog.id %}">编辑</a>]{% endif %}
+  {% if delete_catalog %}[<a href="{% url admin:del_catalog catalog.id %}">删除</a>]{% endif %}
+  {% if create_catalog %}[<a href="{% url admin:add_sub_catalog catalog.id %}">新建子目录</a>]{% endif %}
+  <!-- 没有权限修改此目录 -->
+</p>
+
+<h3>描述：</h3>
+<p>{{ catalog.summary }}</p>
+
+
+{% if subcatalogs %}
+<h3>Subcatalogs: </h3>
+<ul>
+  {% for sc in subcatalogs %}
+  <li>
+    <a href="{% url admin:show_catalog sc.id %}">{{ sc.name }}</a>
+    [<a href="{% url admin:edit_catalog sc.id %}">编辑</a>]
+    [<a href="{% url admin:del_catalog sc.id %}">删除</a>]
+  </li>
+  {% endfor %}
+</ul>
+{% endif %}
+
+{% endblock %}
+

@@ -7,23 +7,37 @@ from django.http import Http404, HttpResponse, HttpResponseRedirect, HttpRespons
 from django.shortcuts import get_object_or_404
 from django.core.urlresolvers import reverse
 
-from ydata.models import Category,Catalog,Topic,Post
+from ydata.models import Catalog,Topic,Post
 from ydata.forms import AddPostForm
 
-from ydata.util import render_to,build_form
+from ydata.util import render_to, build_form, get_parents
 
 
 @render_to('wiki/index.html')
 def index(request):
     """首页"""
 
-    categorys = Category.objects.all()
-    return {'categorys':categorys,}
+    #catalogs = Catalog.objects.all()
+    # 列出所有顶级目录
+    catalogs = Catalog.objects.filter(parent=None)
+    return {'catalogs':catalogs,}
+
+
+@render_to('wiki/catalog.html')
+def catalog(request, id):
+    #catalog = Catalog.objects.get(pk=id)
+    parents = get_parents (Catalog, id)
+    subcatalogs = Catalog.objects.filter(parent=id)
+    topics = Topic.objects.filter(catalog=id)
+
+    return {'parents':parents,
+            'subcatalogs':subcatalogs,
+            'topics':topics}
 
 
 # 指定 id ，显示对象的列表
 @render_to('wiki/show_list.html')
-def show_list (request, category_id, catalog_id, topic_id):
+def show_list (request, catalog_id, topic_id):
     """显示指定list"""
 
     # s 结尾表示符合条件的数据集合
@@ -38,11 +52,8 @@ def show_list (request, category_id, catalog_id, topic_id):
 
     # QuerySet 结果是一个列表
     # get 得到一个实例
-    if category_id:
-        category = Category.objects.get(pk=category_id)
-        catalogs = Catalog.objects.filter(category=category_id)
 
-    elif catalog_id:
+    if catalog_id:
         catalog = Catalog.objects.get(pk=catalog_id)
         topics = Topic.objects.filter(catalog=catalog_id)
 

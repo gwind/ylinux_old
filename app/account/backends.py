@@ -48,8 +48,8 @@ class ModelBackend(object):
                     AND ct.%s = p.%s
                     AND ug.%s = %%s""" % (
                 qn('app_label'), qn('codename'),
-                qn('auth_permission'), qn('auth_group_permissions'),
-                qn('auth_user_groups'), qn('django_content_type'),
+                qn('account_permission'), qn('account_group_permissions'),
+                qn('account_user_groups'), qn('django_content_type'),
                 qn('id'), qn('permission_id'),
                 qn('group_id'), qn('group_id'),
                 qn('id'), qn('content_type_id'),
@@ -65,6 +65,8 @@ class ModelBackend(object):
         return user_obj._perm_cache
 
     def has_perm(self, user_obj, perm):
+        #如需调试，可以取消注释
+        #print 'all:', self.get_group_permissions(user_obj)
         return perm in self.get_all_permissions(user_obj)
 
     def has_module_perms(self, user_obj, app_label):

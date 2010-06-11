@@ -2,12 +2,27 @@
 
 {% block content %}
 
-<p><a href="{% url admin:index %}">起点</a> | <a href="{% url admin:show_catalogs %}">User</a></p>
+<p><a href="{% url admin:index %}">起点</a> | <a href="{% url admin:users %}">用户</a></p>
 <h3>创建新用户</h3>
 
   <form action="{% url admin:add_user %}" method="POST">
+
+    {% if form.errors %}
+    <div id="form-error">
+      <p>提交表格有错误发生：</p>
+      <ul>
+        {% for field in form %}
+        {% if field.errors %}
+        <li>{{ field.name }}： {{ field.errors|striptags }}</li>
+        {% endif %}
+        {% endfor %}
+      </ul>
+    </div>
+    <p>返回</p>
+    {% else %}
     {{ form.as_p }}
- 　 <p><input type="submit" value="创建"></p>
+    　 <p><input type="submit" value="创建"></p>
+    {% endif %}
   </form>
 
 

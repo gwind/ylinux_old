@@ -118,3 +118,43 @@ def build_form(Form, _request, GET=False, *args, **kwargs):
         form = Form(*args, **kwargs)
     return form
 
+
+def old_get_parents(model,parent):
+    ''' 方便导航，得到一系列父目录/项目的（id，name）list
+    
+    输入： model = Catalog/Project , parent=(catalog/project).parent
+    输出： parents 类似 [(1,'First'),(2,'Second'),(3,'Third')]
+    '''
+    parents = []
+    while parent:
+        t = parent.id,parent.name
+        parents.append(t)
+        try:
+            parent = model.objects.get(pk=parent.parent.id)
+        except parent.DoesNotExist:
+            parent = None
+        except  AttributeError:
+            parent = None
+
+    # list 的 reverse 方法直接作用，返回 None！
+    parents.reverse()
+    return parents
+
+
+def get_parents(m, id):
+    ''' Model 的 parent '''
+    parent = m.objects.get (pk=id)
+    parents = []
+    while parent:
+        t = parent.id,parent.name
+        parents.append(t)
+        try:
+            parent = m.objects.get(pk=parent.parent.id)
+        except parent.DoesNotExist:
+            parent = None
+        except  AttributeError:
+            parent = None
+
+    # list 的 reverse 方法直接作用，返回 None！
+    parents.reverse()
+    return parents

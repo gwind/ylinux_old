@@ -3,26 +3,20 @@
 {% block content %}
 
 
-{% if catalogs %}
 <p><a href="{% url admin:index %}">起点</a> | Catalog </p>
 
 <ul>
-{% for catalog in catalogs %}
-    <li><a href="{% url admin:edit_catalog catalog.id %}">{{ catalog.name }}</a></li>
-{% endfor %}
+  {% for catalog in catalogs %}
+  <li>
+    <a href="{% url admin:show_catalog catalog.id %}">{{ catalog.name }}</a>
+    {% if edit_catalog %}[<a href="{% url admin:edit_catalog catalog.id %}">编辑</a>] {% endif %}
+    {% if delete_catalog %}[<a href="{% url admin:del_catalog catalog.id %}">删除</a>]{% endif %}
+  </li>
+  {% endfor %}
 </ul>
-<p><a href="{% url admin:add_catalog %}">创建新 Catalog</a></p>
 
-{% else %}
-<p><a href="{% url admin:index %}">起点</a> | <a href="{% url admin:show_catalogs %}">Catalog</a> | {{ catalog }}</p>
-<h3>编辑 {{ catalog }}</h3>
-
-  <form action="{% url admin:edit_catalog catalog.id %}" method="POST">
-    {{ form.as_p }}
- 　 <p><input type="submit" value="保存"></p>
-  </form>
-
+{% if create_catalog %}
+<p><a href="{% url admin:add_top_catalog %}">创建新 Catalog</a></p>
 {% endif %}
-
 
 {% endblock %}

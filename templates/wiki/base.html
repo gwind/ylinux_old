@@ -23,7 +23,7 @@
         <div id="account" class="right">
           {% if user.is_authenticated %}
           欢迎您，<b>{{ user }}</b>
-          {% if user.is_staff %} | <a href="{% url admin:index %}">管理界面</a> | {% endif %} |  
+          {% if user.is_staff %} | <a href="{% url admin:index %}">管理界面</a> | {% endif %}
           <a href="{% url account:logout %}">退出</a>
           {% else %}
           <p><a href="{% url account:login %}">登录</a> <a href="{% url account:register %}"><b>注册</b></a></p>

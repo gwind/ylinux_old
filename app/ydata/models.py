@@ -39,64 +39,34 @@ PRIVACY_CHOICES = (
 )
 
 
-# 分类
-class Category(models.Model):
-    name = models.CharField('Name', max_length=80)
-    groups = models.ManyToManyField(Group,blank=True, null=True, verbose_name='Groups', help_text='Only users from these groups can see this category')
-    # position 可能是为了排列
-    position = models.IntegerField('Position', blank=True, default=0)
-
-    class Meta:
-        ordering = ['position']
-        verbose_name = 'Category'
-        verbose_name_plural = 'Categories'
-
-    def __unicode__(self):
-        return self.name
-
-    def catalog_count(self):
-        return self.catalogs.all().count()
-
-    @models.permalink
-    def get_absolute_url(self):
-        return ('wiki:show_category', [self.id])
-
-    @property
-    def topics(self):
-        return Topic.objects.filter(catalog__category=self).select_related()
-
-    @property
-    def posts(self):
-        return Post.objects.filter(topic__catalog__category=self).select_related()
-
-    def has_access(self, user):
-        if self.groups.count() > 0:
-            if user.is_authenticated(): 
-                try:
-                    self.groups.get(user__pk=user.id)
-                except Group.DoesNotExist:
-                    return False
-            else:
-                return False
-        return True
-
-
 # Category 下分很多 Catalog
 class Catalog(models.Model):
-    category = models.ForeignKey(Category, related_name='catalogs', verbose_name='Category')
-    name = models.CharField('Name', max_length=80)
-    position = models.IntegerField('Position', blank=True, default=0)
-    description = models.TextField('Description', blank=True, default='')
-    moderators = models.ManyToManyField(User, blank=True, null=True, verbose_name='Moderators')
-    updated = models.DateTimeField('Updated', auto_now=True)
-    post_count = models.IntegerField('Post count', blank=True, default=0)
-    topic_count = models.IntegerField('Topic count', blank=True, default=0)
-    last_post = models.ForeignKey('Post', related_name='last_catalog_post', blank=True, null=True)
+    parent = models.ForeignKey('self', blank=True,
+               null=True, verbose_name='Catalog')
+    name = models.CharField('名字', max_length=30)
+    summary = models.CharField('概述', max_length=80)
+    groups = models.ManyToManyField(Group, blank=True,
+               verbose_name="只有在组中的用户可以访问此目录")
+    position = models.IntegerField('位置', blank=True, 
+               default=0, help_text="决定目录排序，默认0")
+    description = models.TextField('描述', blank=True, 
+                                   default='')
+    # auto_now_add 在 create object 自动保存为当前时间
+    # auto_now 在每次 save object 都自动保存为当前时间
+    created = models.DateTimeField("创建时间", 
+               auto_now_add=True)
+    updated = models.DateTimeField("更新时间", auto_now=True)
+    post_count = models.IntegerField('总帖子数', 
+               blank=True, default=0)
+    topic_count = models.IntegerField('总主题数', 
+               blank=True, default=0)
+    last_post = models.ForeignKey('Post', blank=True, 
+               null=True, related_name='last_catalog_post')
 
     class Meta:
         ordering = ['position']
-        verbose_name = 'Catalog'
-        verbose_name_plural = 'Catalogs'
+        verbose_name = '目录'
+        verbose_name_plural = '目录'
 
     def __unicode__(self):
         return self.name
@@ -115,9 +85,9 @@ class Catalog(models.Model):
 class Topic(models.Model):
     catalog = models.ForeignKey(Catalog, related_name='topics', verbose_name='Catalog')
     # 预计修改为 Subject
-    name = models.CharField('描述', max_length=255)
+    name = models.CharField('描述', max_length=256)
     created = models.DateTimeField('Created', auto_now_add=True)
-    updated = models.DateTimeField('Updated', null=True)
+    updated = models.DateTimeField('Updated', auto_now=True)
     user = models.ForeignKey(User, verbose_name='User')
     views = models.IntegerField('查看次数', blank=True, default=0)
     sticky = models.BooleanField('Sticky', blank=True, default=False)
@@ -128,8 +98,8 @@ class Topic(models.Model):
 
     class Meta:
         ordering = ['-updated']
-        verbose_name = 'Topic'
-        verbose_name_plural = 'Topics'
+        verbose_name = '主题'
+        verbose_name_plural = '主题'
 
     def __unicode__(self):
         return self.name
@@ -174,7 +144,7 @@ class Post(models.Model):
     topic = models.ForeignKey(Topic, related_name='posts', verbose_name='Topic')
     user = models.ForeignKey(User, related_name='posts', verbose_name='User')
     created = models.DateTimeField('Created', auto_now_add=True)
-    updated = models.DateTimeField('Updated', blank=True, null=True)
+    updated = models.DateTimeField('Updated', auto_now=True)
     markup = models.CharField('Markup', max_length=15, default="markup", choices=MARKUP_CHOICES)
     body = models.TextField('Message')
     body_html = models.TextField('HTML version')
@@ -185,8 +155,8 @@ class Post(models.Model):
     class Meta:
         ordering = ['created']
         get_latest_by = 'created'
-        verbose_name = 'Post'
-        verbose_name_plural = 'Posts'
+        verbose_name = '回复'
+        verbose_name_plural = '回复'
 
     def save(self, *args, **kwargs):
         if self.markup == 'bbcode':

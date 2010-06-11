@@ -77,10 +77,10 @@ def check_password(raw_password, enc_password):
 class Permission(models.Model):
     """权限"""
     
-    name = models.CharField('权限名', max_length=50)
+    name = models.CharField('名字', max_length=32)
     content_type = models.ForeignKey(ContentType,
                         related_name="permission_content_type")
-    codename = models.CharField('codename', max_length=100)
+    codename = models.CharField('codename', max_length=64)
 
     class Meta:
         verbose_name = '权限'
@@ -89,15 +89,21 @@ class Permission(models.Model):
         ordering = ('content_type__app_label', 'codename')
 
     def __unicode__(self):
-        return u"%s | %s | %s" % (
+        #return u"%s | %s | %s" % (
+        #    unicode(self.content_type.app_label),
+        #    unicode(self.content_type),
+        #    unicode(self.name))
+        return u"%s->%s.%s" % (
+            unicode(self.name),
             unicode(self.content_type.app_label),
-            unicode(self.content_type),
-            unicode(self.name))
+            unicode(self.content_type))
+
+
 
 class Group(models.Model):
-    """组可以简单分配权限"""
+    """组用来分配权限"""
     
-    name = models.CharField("组名", max_length=80, unique=True)
+    name = models.CharField("组名", max_length=32, unique=True)
     permissions = models.ManyToManyField(Permission,
                         verbose_name='权限', blank=True)
 
@@ -113,9 +119,7 @@ class UserManager(models.Manager):
     def create_user(self, username, email, password=None):
         "Creates and saves a User with the given username, e-mail and password."
         now = datetime.datetime.now()
-        #user = self.model(None, username, '', '', email.strip().lower(), 'placeholder', False, True, False, now, now)
-        user = self.model(username=username, email=email.strip().lower(),
-                          date_joined=now, last_login=now)        
+        user = self.model(username=username, email=email.strip().lower(), date_joined=now, last_login=now)        
         if password:
             user.set_password(password)
         else:
@@ -142,51 +146,49 @@ class UserManager(models.Manager):
 class User(models.Model):
     """用户模型，定义一个用户的基本信息。"""
 
-    GENDER = (
-        (0, '保密'),
-        (1, '小姐'),
-        (2, '公子'),
-        )
+    GENDER = ((0, '保密'),
+              (1, '小姐'),
+              (2, '公子'))
     
-    username = models.CharField("用户名",max_length=30,unique=True,
+    username = models.CharField("用户名",max_length=32,unique=True,
                 help_text="不能与社区已有用户名重复，可更改！")
-    first_name = models.CharField("名",max_length=15,blank=True)
-    last_name = models.CharField("姓",max_length=15,blank=True)
+    first_name = models.CharField("名",max_length=16,blank=True)
+    last_name = models.CharField("姓",max_length=16,blank=True)
     gender = models.IntegerField(default=0,choices=GENDER)
 
-    # email 以后要唯一，暂且随意
-    email = models.EmailField("Email",blank=True)
+    email = models.EmailField("Email",blank=True,unique=True)
     password = models.CharField("密码",max_length=128,
                 help_text="为了您的利益和社区的安全，请复杂点！")
 
-    is_staff = models.BooleanField('staff status', default=False, help_text="用户是否能登录Admin")
+    is_staff = models.BooleanField('管理组', default=False, 
+                help_text="用户是否能登录Admin")
     is_active = models.BooleanField("激活",default=True,
                 help_text="这里决定此用户是否可用！")
     is_superuser = models.BooleanField("root",default=False)
 
-    last_login = models.DateTimeField("最后登录",
-                                    default=datetime.datetime.now)
-    date_joined = models.DateTimeField("注册日期",
-                                    default=datetime.datetime.now)
-    groups = models.ManyToManyField(Group, verbose_name='所属组',
-                blank=True,
-                help_text="用户可以获得每个组的所有权限")
+    last_login = models.DateTimeField("最后登录", auto_now=True)
+    date_joined = models.DateTimeField("注册日期", auto_now_add=True)
+
+    groups = models.ManyToManyField(Group, verbose_name='所属组', blank=True, help_text="用户可以获得每个组的所有权限")
+    # 组管理的一个增强功能吧
     user_permissions = models.ManyToManyField(Permission,
-                verbose_name='用户权限', blank=True)
+                verbose_name='权限', blank=True)
+
     objects = UserManager()
 
-    # 既然已经单独定义 User 了，就不在定义 Profile 之类的结构了。
+    # YLinux 自行定义 User 模型， 不再定义 Profile 之类的模型
     site = models.URLField('个人主页', verify_exists=False, blank=True)
-    jabber = models.CharField('Jabber', max_length=80, blank=True)
+    jabber = models.CharField('Jabber', max_length=32, blank=True)
     icq = models.CharField('ICQ', max_length=12, blank=True)
-    qq = models.CharField('QQ', max_length=12, blank=True)
-    msn = models.CharField('MSN', max_length=80, blank=True)
-    aim = models.CharField('AIM', max_length=80, blank=True)
-    yahoo = models.CharField('Yahoo', max_length=80, blank=True)
-    location = models.CharField('Location', max_length=30, blank=True)
+    qq = models.CharField('QQ', max_length=16, blank=True)
+    msn = models.CharField('MSN', max_length=32, blank=True)
+    aim = models.CharField('AIM', max_length=32, blank=True)
+    yahoo = models.CharField('Yahoo', max_length=32, blank=True)
+    location = models.CharField('Location', max_length=32, blank=True)
     signature = models.TextField('签名', blank=True, default='', max_length=200)
-    time_zone = models.FloatField('时区', choices=TZ_CHOICES, default=float(3))
-    language = models.CharField('语言', max_length=3, default='', choices=settings.LANGUAGES)
+    time_zone = models.FloatField('时区', choices=TZ_CHOICES, default=float(8))
+    # django/conf/global_settings.py 有 LANGUAGES 
+    language = models.CharField('语言', max_length=32, default='zh-cn', choices=settings.LANGUAGES)
     theme = models.CharField('主题', choices=THEME_CHOICES, max_length=80, default='default')
     #show_avatar = models.BooleanField('显示avatar', blank=True, default=True)
     show_signatures = models.BooleanField('显示签名', blank=True, default=True)
@@ -210,7 +212,7 @@ class User(models.Model):
         return False
 
     def is_authenticated(self):
-        "一个通用的在模板里方便地判断用户是否经过认证的方法"
+        "在模板里方便地判断用户是否经过认证的一个通用方法"
         return True
 
     def get_full_name(self):
@@ -246,6 +248,35 @@ class User(models.Model):
         # Sets a value that will never be a valid hash
         self.password = UNUSABLE_PASSWORD
 
+    def has_perm(self, perm):
+        """
+        Returns True if the user has the specified permission. This method
+        queries all available auth backends, but returns immediately if any
+        backend returns True. Thus, a user who has permission from a single
+        auth backend is assumed to have permission in general.
+        """
+        # Inactive users have no permissions.
+        if not self.is_active:
+            return False
+
+        # Superusers have all permissions.
+        if self.is_superuser:
+            return True
+
+        # Otherwise we need to check the backends.
+        from ylinux.app.account import get_backends
+        for backend in get_backends():
+            if hasattr(backend, "has_perm"):
+                if backend.has_perm(self, perm):
+                    return True
+        return False
+
+    def has_perms(self, perm_list):
+        """Returns True if the user has each of the specified permissions."""
+        for perm in perm_list:
+            if not self.has_perm(perm):
+                return False
+        return True
 
 
 # 匿名用户模型

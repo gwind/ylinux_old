@@ -1,0 +1,23 @@
+{% extends "admin/base.html" %}
+{% block content %}
+
+<p>
+  <a href="{% url admin:index %}">起点</a> 
+  {% for id,name in parents %}
+  | <a href="{% url admin:show_catalog id %}">{{ name }}</a>
+  {% endfor %}
+</p>
+
+<p>删除 {{ catalog }} 出错！</p>
+
+{% if subcatalogs %}
+<p>此目录还有下列子目录 :<p>
+<ul>{% for sc in subcatalogs %}
+<li><a href="{% url admin:show_catalog sc.id %}">{{ sc }}</a></li>
+{% endfor %}</ul>
+{% endif %}
+
+<p>请处理上面错误，再删除此目录！</p>
+
+
+{% endblock %}

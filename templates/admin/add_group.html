@@ -1,0 +1,17 @@
+{% extends 'admin/base.html' %}
+{% block content %}
+
+<p>
+  <a href="{% url admin:index %}">起点</a>
+  | <a href="{% url admin:groups %}">用户组</a>
+</p>
+
+<h3>创建新组</h3>
+
+<form action="{% url admin:add_group %}" method="POST">
+{{ form.as_p }}
+<p><input type="submit" value="创建"></p>
+</form>
+
+
+{% endblock %}

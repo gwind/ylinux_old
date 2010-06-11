@@ -1,0 +1,36 @@
+{% extends "admin/base.html" %}
+{% block content %}
+
+
+<p>
+  <a href="{% url admin:index %}">起点</a> 
+  | <a href="{% url admin:catalogs %}">目录</a>
+  {% for id,name in parents %}
+  | <a href="{% url admin:show_catalog id %}">{{ name }}</a>
+  {% endfor %}
+</p>
+<p>编辑 "{{ catalog }}"</p>
+
+<form action="{% url admin:edit_catalog catalog.id %}" method="POST">
+
+
+{% if form.errors %}
+  <div id="form-error">
+    <p>提交表格有错误发生：</p>
+    <ul>
+      {% for field in form %}
+      {% if field.errors %}
+      <li>{{ field.name }}： {{ field.errors|striptags }}</li>
+      {% endif %}
+      {% endfor %}
+    </ul>
+  </div>
+  <p>返回</p>
+{% else %}
+  {{ form.as_p }}
+<p><input type="submit" value="保存"></p>
+{% endif %}
+</form>
+
+
+{% endblock %}

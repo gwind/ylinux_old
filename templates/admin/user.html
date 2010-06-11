@@ -2,26 +2,18 @@
 
 {% block content %}
 
-{% if users %}
 <p><a href="{% url admin:index %}">起点</a> | User </p>
 
 <ul>
-{% for user in users %}
-    <li><a href="{% url admin:edit_user user.id %}">{{ user }}</a></li>
+{% for u in users %}
+    <li>
+      <a href="{% url admin:show_user u.id %}">{{ u }}</a>
+      {% if edit_user %}[<a href="{% url admin:edit_user u.id %}">编辑</a>]{% endif %}
+      {% if delete_user %}[<a href="{% url admin:del_user u.id %}">删除</a>]{% endif %}
+    </li>
 {% endfor %}
 </ul>
 
-<p><a href="{% url admin:add_user %}">创建用户</a></p>
-
-{% else %}
-<p><a href="{% url admin:index %}">起点</a> | <a href="{% url admin:show_users %}">User</a> | {{ user }}</p>
-<h3>编辑 {{ user }}</h3>
-
-  <form action="{% url admin:edit_user user.id %}" method="POST">
-    {{ form.as_p }}
- 　 <p><input type="submit" value="保存"></p>
-  </form>
-
-{% endif %}
+{% if create_user %}<p><a href="{% url admin:add_user %}">创建用户</a></p>{% endif %}
 
 {% endblock %}
