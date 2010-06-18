@@ -7,7 +7,7 @@
 {% if catalogs %}
   <ul>
   {% for c in catalogs %}
-    <li><a href="{% url wiki:catalog c.id %}">{{ c.name }}</a></li>
+    <li><a href="{% url wiki:show_catalog c.id %}">{{ c.name }}</a></li>
   {% endfor %}
   </ul>
 {% else %}

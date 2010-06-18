@@ -1,19 +1,13 @@
 # coding: utf-8
+import os
 
+from django.conf import settings
 from django import forms
 
 from ydata.models import Topic, Post, Reputation, Report, Attachment, TZ_CHOICES, PRIVACY_CHOICES
 from ydata import settings as ydata_settings
  
 
-#class AddPostForm(forms.ModelForm):
-#    name = forms.CharField(label='Subject', max_length=255,
-#                           widget=forms.TextInput(attrs={'size':'115'}))
-#
-#    class Meta:
-#        model = Post
-
-# 发表 Post
 class AddPostForm(forms.ModelForm):
     name = forms.CharField(label='Subject', max_length=255,
                            widget=forms.TextInput(attrs={'size':'115'}))
@@ -78,3 +72,34 @@ class AddPostForm(forms.ModelForm):
             obj.path = fname
             obj.save()
 
+
+class AddTopicForm(forms.ModelForm):
+
+    #text = forms.TextField(label='正文', max_length=2048,
+    #          widget=forms.TextInput(attrs={'size':'2048'}))
+    text = forms.CharField(widget=forms.Textarea)
+
+    class Meta:
+        model = Topic
+        fields = ['catalog','name','markup']
+
+    def __init__(self, *args, **kwargs):
+        self.catalog = kwargs.pop('catalog', None)
+        self.user = kwargs.pop('user', None)
+        self.user_ip = kwargs.pop('user_ip', None)
+        super(AddTopicForm, self).__init__(*args, **kwargs)
+
+        self.fields['catalog'].initial = self.catalog.id
+        if self.catalog:
+            self.fields['catalog'].widget = forms.HiddenInput()
+
+    def save(self):
+        topic = Topic(name=self.cleaned_data['name'],
+                user_ip=self.user_ip,
+                markup=self.cleaned_data['markup'])
+        topic.catalog=self.catalog
+        topic.user=self.user
+        topic.save()
+        text = self.cleaned_data['text'].encode('utf8')
+        topic.save_file(text)
+        return topic

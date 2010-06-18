@@ -3,6 +3,7 @@
 {% block content %}
 
 {% if user.is_authenticated %}
+<p>抱歉，您没有权限这样做！</p>
 <p>您当前登录用户名： {{ user }}<p>
 <p>如果要重新登录，请先 <a href="{% url account:logout %}">退出</a></p>
 

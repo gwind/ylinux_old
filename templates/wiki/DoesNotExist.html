@@ -1,0 +1,8 @@
+{% extends 'wiki/base.html' %}
+{% block content %}
+
+<p>id 为 "{{ id }}" 的 "{{ type }}" 不存在！</p>
+
+<p>返回 <a href="{% url wiki:index %}">知识库</a></p>
+
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends 'wiki/base.html' %}
+{% block content %}
+
+<p>
+  <a href="{% url wiki:index %}">知识库</a>
+  {% for id,name in parents %}
+  | <a href="{% url wiki:show_catalog id %}">{{ name }}</a>
+  {% endfor %}
+  | 发表新主题
+</p>
+
+<form action="" method="POST">
+  {% if form.errors %}
+  <div id="form-error">
+    <p>提交表格有错误发生：</p>
+    <ul>
+      {% for field in form %}
+      {% if field.errors %}
+      <li>{{ field.name }}： {{ field.errors|striptags }}</li>
+      {% endif %}
+      {% endfor %}
+    </ul>
+  </div>
+  <p>返回</p>
+  {% else %}
+  {{ form.as_p }}
+  　 <p><input type="submit" value="创建"></p>
+  {% endif %}
+</form>
+
+{% endblock %}

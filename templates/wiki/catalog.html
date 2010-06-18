@@ -4,14 +4,14 @@
 <p>
   <a href="{% url wiki:index %}">知识库</a>
   {% for id,name in parents %}
-  | <a href="{% url wiki:catalog id %}">{{ name }}</a>
+  | <a href="{% url wiki:show_catalog id %}">{{ name }}</a>
   {% endfor %}
 </p>
 
 {% if subcatalogs %}
 <ul>
   {% for c in subcatalogs %}
-  <li><a href="{% url wiki:catalog c.id %}">{{ c.name }}</a></li>
+  <li><a href="{% url wiki:show_catalog c.id %}">{{ c.name }}</a></li>
   {% endfor %}
 </ul>
 {% endif %}
@@ -19,13 +19,13 @@
 {% if topics %}
 <ul>
   {% for t in topics %}
-  <li>{{ t }}</li>
+  <li><a href="{% url wiki:show_topic t.id %}">{{ t }}</a></li>
   {% endfor %}
 </ul>
 {% endif %}
 
 {% if user.is_authenticated %}
-<p>新建知识点</p>
+<p><a href="{% url wiki:add_topic catalog.id %}">新建知识点</a></p>
 {% endif %}
 
 {% endblock %}

@@ -7,22 +7,22 @@ urlpatterns = patterns('wiki.views',
 
     url(r'^$', 'index', name='index'),
 
+    # 一些不存在的对象
+    url(r'^catalog_not_exist/(?P<id>\d+)/$', 'doesnotexist', {'type':'Catalog'}, name='catalog_not_exist'),
+    url(r'^topic_not_exist/(?P<id>\d+)/$', 'doesnotexist', {'type':'Topic'}, name='topic_not_exist'),
+    url(r'^post_not_exist/(?P<id>\d+)/$', 'doesnotexist', {'type':'Post'}, name='post_not_exist'),
 
-    url(r'^catalog/(?P<catalog_id>\d+)/$','show_list',
-        {'topic_id':None,}, name='show_catalog'), 
+    # Show Catalog : /前缀/catalog/<catalog-id>/
+    # Show Topic : /前缀/topic/<topic-id>/
+    # Show Post : /前缀/post/<post-id>/
+    url(r'^catalog/(?P<id>\d+)/$', 'catalog', name='show_catalog'),
+    url(r'^topic/(?P<id>\d+)/$', 'topic', name='show_topic'),
+    url(r'^post/(?P<id>\d+)/$', 'post', name='show_post'),
 
-
-    # 显示目录： /wiki/id/
-    url(r'^(?P<id>\d+)/$', 'catalog', name='catalog'),
-
-    # Topic
-    url(r'^topic/(?P<topic_id>\d+)/$', 'show_list',
-        {'catalog_id':None,}, name='show_topic'), 
-
-    url(r'^catalog/(?P<catalog_id>\d+)/topic/add/$', 'add_post', {'topic_id':None,}, name='add_topic'), 
-
-
-    # Post
+    url(r'^catalog/(?P<id>\d+)/addtopic/$', 'add_topic', name='add_topic'),
+    # Add Topic : /前缀/catalog/<catalog-id>/addtopic
+    # Add Post : /前缀/topic/<topic-id>/addpost
+    #url(r'^catalog/(?P<catalog_id>\d+)/topic/add/$', 'add_post', {'topic_id':None,}, name='add_topic'), 
     url(r'^topic/(?P<topic_id>\d+)/post/add/$', 'add_post', {'catalog_id':None,}, name='add_post'),
-    url('^post/(?P<post_id>\d+)/$', 'show_post', name='show_post'),
+
 )

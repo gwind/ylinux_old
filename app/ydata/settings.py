@@ -1,3 +1,5 @@
+# coding: utf-8
+
 from django.conf import settings
 import re
 
@@ -54,6 +56,9 @@ AUTHORITY_STEP_10 = get('AUTHORITY_STEP_10', 1000)
 
 # REPUTATION Extension
 REPUTATION_SUPPORT = get('REPUTATION_SUPPORT', True)
+
+# TOPIC 存放目录
+TOPICS_DIR = get ('TOPICS_DIR', 'ydata/topics')
 
 # ATTACHMENT Extension
 ATTACHMENT_SUPPORT = get('ATTACHMENT_SUPPORT', True)

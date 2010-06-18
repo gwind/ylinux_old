@@ -2,6 +2,8 @@
 
 # 将 YLinux.org 的主要数据结构在此定义
 
+import os
+from django.conf import settings
 from markdown import Markdown
 
 from account.models import User,Group
@@ -79,21 +81,44 @@ class Catalog(models.Model):
     def posts(self):
         return Post.objects.filter(topic__catalog=self).select_related()
 
+    def has_access(self, user):
+        if self.groups.count() > 0:
+            if user.is_authenticated():
+                try:
+                    self.groups.get(user__pk=user.id)
+                except Group.DoesNotExist:
+                    return False
+            else:
+                return False
+        return True
+
 
 # 主题：每个 catalog 下会有很多主题，
 # YLinux 默认： 论坛以 Topic 为表现形式，Wiki 以 Tag 为表现形式。
 class Topic(models.Model):
     catalog = models.ForeignKey(Catalog, related_name='topics', verbose_name='Catalog')
     # 预计修改为 Subject
-    name = models.CharField('描述', max_length=256)
+    name = models.CharField('标题', max_length=256)
     created = models.DateTimeField('Created', auto_now_add=True)
     updated = models.DateTimeField('Updated', auto_now=True)
-    user = models.ForeignKey(User, verbose_name='User')
+    user = models.ForeignKey(User, related_name='topics', verbose_name='User')
+    user_ip = models.IPAddressField('User IP', blank=True, null=True)
     views = models.IntegerField('查看次数', blank=True, default=0)
+    # sticky 置顶属性
     sticky = models.BooleanField('Sticky', blank=True, default=False)
-    closed = models.BooleanField('禁止回复', blank=True, default=False)
+    # distillate ['distilit;'distəlit] n. 蒸馏物，馏份，精华
+    distillate = models.BooleanField('精华', blank=True, default=False)
+    # closed 禁止回复
+    closed = models.BooleanField('关闭', blank=True, default=False)
+    # 没有被被关注，需要主动关注
     subscribers = models.ManyToManyField(User, related_name='subscriptions', verbose_name='Subscribers', blank=True)
-    post_count = models.IntegerField('Post count', blank=True, default=0)
+
+    # 把 topic 的主体存放为文件
+    markup = models.CharField('Markup', max_length=16, default="markdown", choices=MARKUP_CHOICES)
+    #body_path = models.CharField('SrcPath', max_length=256)
+    #body_html_path = models.CharField('HtmlPath', max_length=256)
+
+    post_count = models.IntegerField('回复数', blank=True, default=0)
     last_post = models.ForeignKey('Post', related_name='last_topic_post', blank=True, null=True)
 
     class Meta:
@@ -105,16 +130,38 @@ class Topic(models.Model):
         return self.name
 
     @property
-    def head(self):
-        try:
-            return self.posts.select_related().order_by('created')[0]
-        except IndexError:
-            return None
+    def body_path(self):
+        return os.path.join(settings.MEDIA_ROOT, ydata_settings.TOPICS_DIR, str(self.id) + '.src')
 
     @property
-    def reply_count(self):
-        return self.post_count - 1
+    def body_html_path(self):
+        return os.path.join(settings.MEDIA_ROOT, ydata_settings.TOPICS_DIR, str(self.id) + '.html')
+    
+    @property
+    def body(self):
+        return 'Source Body'
 
+    @property
+    def body_html(self):
+        try:
+            f = file(os.path.join(settings.MEDIA_ROOT, ydata_settings.TOPICS_DIR, self.body_html_path), 'r')
+            html = f.read()
+            f.close()
+        except IOError:
+            return ''
+        return html
+
+    def save_file(self, text):
+        #text = self.cleaned_data['text'].encode('utf8')
+        f = file(self.body_path, 'w')
+        f.write(text)
+        f.close()
+
+        from markdown import Markdown
+        Markdown().convertFile(input=self.body_path, 
+                       output=self.body_html_path, 
+                       encoding="utf8")
+        
     @models.permalink
     def get_absolute_url(self):
         return ('wiki:show_topic', [self.id])
@@ -145,7 +192,7 @@ class Post(models.Model):
     user = models.ForeignKey(User, related_name='posts', verbose_name='User')
     created = models.DateTimeField('Created', auto_now_add=True)
     updated = models.DateTimeField('Updated', auto_now=True)
-    markup = models.CharField('Markup', max_length=15, default="markup", choices=MARKUP_CHOICES)
+    markup = models.CharField('Markup', max_length=15, default="markdown", choices=MARKUP_CHOICES)
     body = models.TextField('Message')
     body_html = models.TextField('HTML version')
     #body_text = models.TextField('Text version')
@@ -177,22 +224,17 @@ class Post(models.Model):
 
     def delete(self, *args, **kwargs):
         self_id = self.id
-        head_post_id = self.topic.posts.order_by('created')[0].id
         catalog = self.topic.catalog
         topic = self.topic
         self.last_topic_post.clear()
         self.last_catalog_post.clear()
         super(Post, self).delete(*args, **kwargs)
-        #if post was last in topic - remove topic
-        if self_id == head_post_id:
-            topic.delete()
-        else:
-            try:
-                topic.last_post = Post.objects.filter(topic=topic).latest()
-            except Post.DoesNotExist:
-                topic.last_post = None
-            topic.post_count = Post.objects.filter(topic=topic).count()
-            topic.save()
+        try:
+            topic.last_post = Post.objects.filter(topic=topic).latest()
+        except Post.DoesNotExist:
+            topic.last_post = None
+        topic.post_count = Post.objects.filter(topic=topic).count()
+        topic.save()
         try:
             catalog.last_post = Post.objects.filter(topic__catalog=catalog).latest()
         except Post.DoesNotExist:
@@ -237,7 +279,7 @@ class Report(models.Model):
     zapped = models.BooleanField('Zapped', blank=True, default=False)
     zapped_by = models.ForeignKey(User, related_name='zapped_by', blank=True, null=True,  verbose_name='Zapped by')
     created = models.DateTimeField('Created', blank=True)
-    reason = models.TextField('Reason', blank=True, default='', max_length='1000')
+    reason = models.TextField('Reason', blank=True, default='', max_length='1024')
 
     class Meta:
         verbose_name = 'Report'
@@ -251,8 +293,8 @@ class Report(models.Model):
 class Attachment(models.Model):
     post = models.ForeignKey(Post, verbose_name='Post', related_name='attachments')
     size = models.IntegerField('Size')
-    content_type = models.CharField('Content type', max_length=255)
-    path = models.CharField('Path', max_length=255)
+    content_type = models.CharField('Content type', max_length=256)
+    path = models.CharField('Path', max_length=256)
     name = models.TextField('Name')
     hash = models.CharField('Hash', max_length=40, blank=True, default='', db_index=True)
 
