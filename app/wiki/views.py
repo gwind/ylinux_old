@@ -61,7 +61,7 @@ def topic(request, id):
     #posts = topic.posts.all()
     posts = Post.objects.filter(topic=id).order_by('-updated')
     length = len(posts)
-    posts = [(i+1, posts[i]) for i in xrange(length)]
+    posts = [(length-i, posts[i]) for i in xrange(length)]
 
     return {'parents':parents, 'topic':topic, 
             'posts':posts, 'total':length}
@@ -104,7 +104,14 @@ def add_post(request, catalog_id, topic_id):
     if topic and topic.closed:
         return HttpResponseRedirect(topic.get_absolute_url())
 
-    ip = request.META.get("REMOTE_ADDR", None)
+    #ip = request.META.get("REMOTE_ADDR", None)
+    try:
+        real_ip = request.META['HTTP_X_FORWARDED_FOR']
+    except KeyError:
+        ip = request.META.get('REMOTE_ADDR', None)
+    else:
+        ip = real_ip.split(",")[0].strip()
+
     form = build_form(AddPostForm, request, topic=topic, catalog=catalog,
                       user=request.user, ip=ip,
                       initial={'markup': request.user.markup})
@@ -135,7 +142,13 @@ def add_topic(request,id):
         return HttpResponseForbidden()
     parents = get_parents (Catalog, id)
 
-    ip = request.META.get('REMOTE_ADDR', None)
+    #ip = request.META.get('REMOTE_ADDR', None)
+    try:
+        real_ip = request.META['HTTP_X_FORWARDED_FOR']
+    except KeyError:
+        ip = request.META.get('REMOTE_ADDR', None)
+    else:
+        ip = real_ip.split(",")[0].strip()
 
     form = build_form (AddTopicForm, request, 
            catalog=catalog, user=request.user, user_ip=ip)

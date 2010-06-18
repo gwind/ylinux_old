@@ -13,13 +13,17 @@
 
 {{ topic.body_html|safe }}
 
-<h3>按照时间顺序排列</h3>
+{% if posts %}
+<p>网友回复：</p>
 {% for index,post in posts %}
-<p>时间：{{ post.updated }} [回复：{{ index }}/{{ total }}]</p>
+<p>[{{ index }}/{{ total }}] <a href="{% url account:show_user post.user.id %}">{{ post.user }}</a> 在 {{ post.updated }} 于 <a href="http://www.ip138.com/ips.asp?ip={{ post.user_ip }}&action=2">{{ post.user_ip }}</a></p>
 <p>{{ post.body }}</p>
 {% endfor %}
+{% else %}
+<p>目前还没有任何回复</p>
+{% endif %}
 
-<p><a href="{% url wiki:add_post topic.id %}">回复</a></p>
+<p><a href="{% url wiki:add_post topic.id %}">我来说两句</a></p>
 
 
 {% endblock %}

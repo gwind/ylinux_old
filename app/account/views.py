@@ -8,6 +8,8 @@ from django.http import HttpResponseRedirect,HttpResponse
 from account.models import User,AnonymousUser
 from account.forms import RegisterForm,LoginForm,AuthenticationForm
 
+from ydata.models import Topic, Post
+
 from ydata.util import render_to, build_form, get_parents
 
 @render_to('account/login.html')
@@ -99,3 +101,19 @@ def register(request):
                               { 'form': form },
                               context_instance=RequestContext(request))
 
+
+@render_to('account/user.html')
+def user(request, id):
+
+    try:
+        user = User.objects.get(pk=id)
+    except User.DoesNotExist:
+        url = reverse ('account:user_not_exist', args=[id])
+        return HttpResponseRedirect(url)
+
+    topics = Topic.objects.filter(user=id).order_by('-updated')
+    posts = Post.objects.filter(user=id).order_by('-updated')
+
+    # 因为 ylinux.app.sessions.middleware.SessionMiddleware
+    # 中间件会在 request 里的设置 user 变量，我们这里另起名
+    return {'the_user':user, 'topics':topics, 'posts':posts}
