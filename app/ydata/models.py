@@ -139,7 +139,12 @@ class Topic(models.Model):
     
     @property
     def body(self):
-        return 'Source Body'
+        try:
+            f = file(os.path.join(settings.MEDIA_ROOT, ydata_settings.TOPICS_DIR, self.body_path), 'r')
+            txt = f.read()
+        except IOError:
+            return ''
+        return txt
 
     @property
     def body_html(self):

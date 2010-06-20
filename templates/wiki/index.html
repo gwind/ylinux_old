@@ -5,6 +5,7 @@
 <h2>知识库系统</h2>
 
 {% if catalogs %}
+<h3>知识库分类：</h3>
   <ul>
   {% for c in catalogs %}
     <li><a href="{% url wiki:show_catalog c.id %}">{{ c.name }}</a></li>
@@ -12,6 +13,24 @@
   </ul>
 {% else %}
   <p>WiKi 现在还没有内容. 请通过管理接口添加目录</p>
+{% endif %}
+
+{% if topics %}
+<h3>最近主题：</h3>
+  <ul>
+  {% for t in topics %}
+    <li><a href="{% url wiki:show_topic t.id %}">{{ t.name }}</a></li>
+  {% endfor %}
+  </ul>
+{% endif %}
+
+{% if posts %}
+<h3>最近回复：</h3>
+  <ul>
+  {% for p in posts %}
+    <li><a href="{% url wiki:show_post p.id %}">{{ p }}</a></li>
+  {% endfor %}
+  </ul>
 {% endif %}
 
 {% endblock %}

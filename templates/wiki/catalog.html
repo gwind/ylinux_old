@@ -19,7 +19,10 @@
 {% if topics %}
 <ul>
   {% for t in topics %}
-  <li><a href="{% url wiki:show_topic t.id %}">{{ t }}</a></li>
+  <li>
+    <a href="{% url wiki:show_topic t.id %}">{{ t }}</a>
+    [<a href="{% url wiki:edit_topic t.id %}">编辑</a>]
+  </li>
   {% endfor %}
 </ul>
 {% endif %}

@@ -25,4 +25,5 @@ urlpatterns = patterns('wiki.views',
     #url(r'^catalog/(?P<catalog_id>\d+)/topic/add/$', 'add_post', {'topic_id':None,}, name='add_topic'), 
     url(r'^topic/(?P<topic_id>\d+)/post/add/$', 'add_post', {'catalog_id':None,}, name='add_post'),
 
+    url(r'^topic/(?P<id>\d+)/eidt/$', 'edit_topic', name='edit_topic'),
 )

@@ -4,10 +4,24 @@ from forms import ContactForm
 from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect
 from django.template import RequestContext
+from django.shortcuts import get_object_or_404
+from django.core.urlresolvers import reverse
 
+from account.models import User
+from ydata.models import Catalog, Topic, Post
+from ydata.util import render_to, build_form, get_parents
+
+
+@render_to('home/index.html')
 def index(request):
-    return render_to_response('home/index.html',{'title':"首页",},
-                              context_instance=RequestContext(request))
+
+    topics = Topic.objects.all()[:10]
+    posts = Post.objects.all().order_by('-updated')[:10]
+    new_register_user = User.objects.all().order_by('-date_joined')[0]
+
+    return {'title':'首页', 'topics':topics, 'posts':posts, 
+            'new_register_user':new_register_user}
+
 
 def about(request):
     return render_to_response('home/about.html',{'title':"关于",},

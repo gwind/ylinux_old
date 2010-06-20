@@ -75,8 +75,6 @@ class AddPostForm(forms.ModelForm):
 
 class AddTopicForm(forms.ModelForm):
 
-    #text = forms.TextField(label='正文', max_length=2048,
-    #          widget=forms.TextInput(attrs={'size':'2048'}))
     text = forms.CharField(widget=forms.Textarea)
 
     class Meta:
@@ -99,6 +97,32 @@ class AddTopicForm(forms.ModelForm):
                 markup=self.cleaned_data['markup'])
         topic.catalog=self.catalog
         topic.user=self.user
+        topic.save()
+        text = self.cleaned_data['text'].encode('utf8')
+        topic.save_file(text)
+        return topic
+
+class EditTopicForm(forms.ModelForm):
+
+    text = forms.CharField(widget=forms.Textarea)
+
+    class Meta:
+        model = Topic
+        fields = ['catalog','name','markup']
+
+    def __init__(self, *args, **kwargs):
+        self.text = kwargs.pop('text', None)
+        self.user_ip = kwargs.pop('user_ip', None)
+        super(EditTopicForm, self).__init__(*args, **kwargs)
+        
+        self.fields['text'].initial = self.text
+
+    def save(self):
+        topic = super(EditTopicForm, self).save(commit=False)
+        topic.name = self.cleaned_data['name']
+        topic.user_ip = self.user_ip
+        topic.markup = self.cleaned_data['markup']
+        topic.catalog=self.cleaned_data['catalog']
         topic.save()
         text = self.cleaned_data['text'].encode('utf8')
         topic.save_file(text)

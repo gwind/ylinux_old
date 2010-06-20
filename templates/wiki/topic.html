@@ -6,10 +6,14 @@
   {% for id,name in parents %}
   | <a href="{% url wiki:show_catalog id %}">{{ name }}</a>
   {% endfor %}
-  | 主题： {{ topic }} [{{ total }} 条回复]
 </p>
 
+<h1>{{ topic }}</h1>
+<h4><a href="{% url account:show_user topic.user.id %}">{{ topic.user }}</a> 于 {{ topic.updated }} 在 {{ topic.user_ip }}</h4>
 
+<p>
+  <a href="{% url wiki:edit_topic topic.id %}">编辑</a>
+</p>
 
 {{ topic.body_html|safe }}
 

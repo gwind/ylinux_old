@@ -8,7 +8,8 @@ from django.shortcuts import get_object_or_404
 from django.core.urlresolvers import reverse
 
 from ydata.models import Catalog,Topic,Post
-from ydata.forms import AddPostForm, AddTopicForm
+from ydata.forms import AddPostForm, AddTopicForm, \
+    EditTopicForm
 
 from ydata.util import render_to, build_form, get_parents
 
@@ -20,7 +21,11 @@ def index(request):
     #catalogs = Catalog.objects.all()
     # 列出所有顶级目录
     catalogs = Catalog.objects.filter(parent=None)
-    return {'catalogs':catalogs,}
+    topics = Topic.objects.all()
+    posts = Post.objects.all()
+    return {'catalogs':catalogs,
+            'topics':topics,
+            'posts':posts}
 
 
 # 一些 DoesNotExist 的页面这里处理
@@ -159,3 +164,29 @@ def add_topic(request,id):
         return HttpResponseRedirect(url)
 
     return {'parents':parents, 'form':form}
+
+
+@render_to('wiki/edit_topic.html')
+def edit_topic(request, id):
+
+    topic = get_object_or_404(Topic, pk=id)
+    parents = get_parents (Catalog, topic.catalog.id)
+
+    try:
+        real_ip = request.META['HTTP_X_FORWARDED_FOR']
+    except KeyError:
+        ip = request.META.get('REMOTE_ADDR', None)
+    else:
+        ip = real_ip.split(",")[0].strip()
+    
+    form = build_form (EditTopicForm, request,
+                       text = topic.body,
+                       user_ip = ip,
+                       instance=topic)
+
+    if form.is_valid():
+        topic = form.save()
+        url = reverse ('wiki:show_topic', args=[id])
+        return HttpResponseRedirect(url)
+
+    return {'form':form,'parents':parents,'topic':topic}
