@@ -82,6 +82,7 @@ class Catalog(models.Model):
         return Post.objects.filter(topic__catalog=self).select_related()
 
     def has_access(self, user):
+        ''' 判断用户是否有权限，如果一个 Catalog 还未指定用户组，所有用户都有权限 '''
         if self.groups.count() > 0:
             if user.is_authenticated():
                 try:
@@ -110,6 +111,12 @@ class Topic(models.Model):
     distillate = models.BooleanField('精华', blank=True, default=False)
     # closed 禁止回复
     closed = models.BooleanField('关闭', blank=True, default=False)
+    bloged = models.BooleanField('Blog中显示', default=True)
+    wikied = models.BooleanField('Wiki中显示', default=True)
+    forumed = models.BooleanField('Forum中显示', default=True)
+    recycled = models.BooleanField('放入回收站', default=False)
+    hidden = models.BooleanField('隐藏', default=False)
+
     # 没有被被关注，需要主动关注
     subscribers = models.ManyToManyField(User, related_name='subscriptions', verbose_name='Subscribers', blank=True)
 
@@ -117,6 +124,9 @@ class Topic(models.Model):
     markup = models.CharField('Markup', max_length=16, default="markdown", choices=MARKUP_CHOICES)
     #body_path = models.CharField('SrcPath', max_length=256)
     #body_html_path = models.CharField('HtmlPath', max_length=256)
+
+    # Tags
+    tags = models.ManyToManyField('Tag', blank=True, verbose_name="标签")
 
     post_count = models.IntegerField('回复数', blank=True, default=0)
     last_post = models.ForeignKey('Post', related_name='last_topic_post', blank=True, null=True)
@@ -198,8 +208,8 @@ class Post(models.Model):
     created = models.DateTimeField('Created', auto_now_add=True)
     updated = models.DateTimeField('Updated', auto_now=True)
     markup = models.CharField('Markup', max_length=15, default="markdown", choices=MARKUP_CHOICES)
-    body = models.TextField('Message')
-    body_html = models.TextField('HTML version')
+    body = models.TextField('正文')
+    body_html = models.TextField('HTML正文')
     #body_text = models.TextField('Text version')
     user_ip = models.IPAddressField('User IP', blank=True, null=True)
 
@@ -320,3 +330,14 @@ class Attachment(models.Model):
         return os.path.join(settings.MEDIA_ROOT, ydata_settings.ATTACHMENT_UPLOAD_TO,
                             self.path)
 
+
+class Tag(models.Model):
+    ''' Tag 模型 '''
+    
+    name = models.CharField('Name', max_length=256)
+    user = models.ForeignKey(User, related_name='tags', verbose_name='User')
+    created = models.DateTimeField('Created', auto_now_add=True)
+    total_ref = models.IntegerField(blank=True, default=0)
+
+    def __unicode__(self):
+        return self.name 

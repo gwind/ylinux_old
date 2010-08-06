@@ -19,11 +19,20 @@ urlpatterns = patterns('wiki.views',
     url(r'^topic/(?P<id>\d+)/$', 'topic', name='show_topic'),
     url(r'^post/(?P<id>\d+)/$', 'post', name='show_post'),
 
+    # Add Topic :  /前缀/catalog/<catalog-id>/addtopic
+    # Add Post  :  /前缀/topic/<topic-id>/addpost
+    url(r'^topic/(?P<id>\d+)/addpost/$', 'add_post', name='add_post'),
     url(r'^catalog/(?P<id>\d+)/addtopic/$', 'add_topic', name='add_topic'),
-    # Add Topic : /前缀/catalog/<catalog-id>/addtopic
-    # Add Post : /前缀/topic/<topic-id>/addpost
-    #url(r'^catalog/(?P<catalog_id>\d+)/topic/add/$', 'add_post', {'topic_id':None,}, name='add_topic'), 
-    url(r'^topic/(?P<topic_id>\d+)/post/add/$', 'add_post', {'catalog_id':None,}, name='add_post'),
 
-    url(r'^topic/(?P<id>\d+)/eidt/$', 'edit_topic', name='edit_topic'),
+    # Edit Topic :  /前缀/topic/<topic-id>/edit/
+    url(r'^topic/(?P<id>\d+)/edit/$', 'edit_topic', name='edit_topic'),
+
+    # Delete Topic : /前缀/topic/<topic-id>/delete/
+    url(r'^topic/(?P<id>\d+)/delete/$', 'manage_topic', {'type':'delete'}, name='del_topic'),
+    url(r'^topic/(?P<id>\d+)/recycled/$', 'manage_topic', {'type':'recycled'}, name='recycled_topic'),
+    url(r'^topic/(?P<id>\d+)/hidden/$', 'manage_topic', {'type':'hidden'}, name='hidden_topic'),
+    url(r'^topic/(?P<id>\d+)/disable_recycled/$', 'manage_topic', {'type':'disable_recycled'}, name='disable_recycled_topic'),
+    url(r'^topic/(?P<id>\d+)/disable_hidden/$', 'manage_topic', {'type':'disable_hidden'}, name='disable_hidden_topic'),
+
+    url(r'^post/(?P<id>\d+)/delete/$', 'del_post', name='del_post'),
 )

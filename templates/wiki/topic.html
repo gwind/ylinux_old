@@ -9,10 +9,12 @@
 </p>
 
 <h1>{{ topic }}</h1>
-<h4><a href="{% url account:show_user topic.user.id %}">{{ topic.user }}</a> 于 {{ topic.updated }} 在 {{ topic.user_ip }}</h4>
+<h4><a href="{% url account:show_user topic.user.id %}">{{ topic.user }}</a> 于 {{ topic.updated }} 在 <a href="http://www.ip138.com/ips.asp?ip={{ topic.user_ip }}&action=2">{{ topic.user_ip }}</a></h4>
 
 <p>
-  <a href="{% url wiki:edit_topic topic.id %}">编辑</a>
+  {% ifequal user topic.user %}<a href="{% url wiki:edit_topic topic.id %}">编辑</a> |{% endifequal %}
+  <a href="{% url wiki:add_post topic.id %}">回复</a>
+  {% ifequal user topic.user %}<!--[<a href="{% url wiki:del_topic topic.id %}">删除</a>]-->| [<a href="{% url wiki:hidden_topic topic.id %}">隐藏</a>] [<a href="{% url wiki:recycled_topic topic.id %}">移入回收站</a>]{% endifequal %}
 </p>
 
 {{ topic.body_html|safe }}
@@ -20,14 +22,11 @@
 {% if posts %}
 <p>网友回复：</p>
 {% for index,post in posts %}
-<p>[{{ index }}/{{ total }}] <a href="{% url account:show_user post.user.id %}">{{ post.user }}</a> 在 {{ post.updated }} 于 <a href="http://www.ip138.com/ips.asp?ip={{ post.user_ip }}&action=2">{{ post.user_ip }}</a></p>
+<p>[{{ index }}/{{ total }}] <a href="{% url account:show_user post.user.id %}">{{ post.user }}</a> 在 {{ post.updated }} 于 <a href="http://www.ip138.com/ips.asp?ip={{ post.user_ip }}&action=2">{{ post.user_ip }}</a>{% ifequal user post.user %}<a href="{% url wiki:del_post post.id %}">删除</a>{% endifequal %}</p>
 <p>{{ post.body }}</p>
 {% endfor %}
-{% else %}
-<p>目前还没有任何回复</p>
 {% endif %}
 
 <p><a href="{% url wiki:add_post topic.id %}">我来说两句</a></p>
-
 
 {% endblock %}

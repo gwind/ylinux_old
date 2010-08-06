@@ -21,7 +21,9 @@
   {% for t in topics %}
   <li>
     <a href="{% url wiki:show_topic t.id %}">{{ t }}</a>
+    {% if edit_topic_perm %}
     [<a href="{% url wiki:edit_topic t.id %}">编辑</a>]
+    {% endif %}
   </li>
   {% endfor %}
 </ul>

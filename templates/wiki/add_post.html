@@ -1,22 +1,29 @@
 {% extends 'wiki/base.html' %}
-
-
 {% block content %}
-  <h3>{% if catalog %} 新主题 {% else %} 新回复 {% endif %}</h3>
 
-    <form action="{% if catalog %}/wiki/catalog/{{ catalog.id }}/topic/add/{% else %}/wiki/topic/{{ topic.id }}/post/add/{% endif %}" method="post">
+<h3>回复： {{ topic }}</h3>
 
-       <fieldset>
-          <legend>发表文章</legend>
-             {% if catalog %}
-             <label><strong>标题</strong><br />{{ form.name }}<br /></label><br /><br />
-             {% endif %}
-             <label><strong>正文</strong><br />{{ form.body }}<br /></label>
-       </fieldset>
+<form action="" method="post">
 
-       <div class="submit">
-          <p><input type="submit" value="提交" /><a href="javascript:history.go(-1)">返回</a></p>
-       </div>
+  <p><label for="id_body">正文:</label> <textarea id="id_body" rows="20" cols="60" name="body"></textarea></p>
+<p><label for="id_attachment">附件:</label> <input type="file" name="attachment" id="id_attachment" /><input type="hidden" name="name" id="id_name" /></p>
 
-    </form>
+  <div class="submit">
+    <p><input type="submit" value="发表回复" /><a href="javascript:history.go(-1)">返回</a></p>
+  </div>
+
+</form>
+
+
+{% if posts %}
+<h3>其他回复：</h3>
+{% for p in posts %}
+<p><a href="{% url account:show_user p.user.id %}">{{ p.user }}</a> 在 {{ p.updated }} 于 <a href="http://www.ip138.com/ips.asp?ip={{ p.user_ip }}&action=2">{{ p.user_ip }}</a></p>
+<p>{{ p.body }}</p>
+{% endfor %}
+{% else %}
+<p>目前还没有任何回复</p>
+{% endif %}
+
+
 {% endblock %}

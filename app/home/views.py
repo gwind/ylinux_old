@@ -17,7 +17,11 @@ def index(request):
 
     topics = Topic.objects.all()[:10]
     posts = Post.objects.all().order_by('-updated')[:10]
-    new_register_user = User.objects.all().order_by('-date_joined')[0]
+    all_user = User.objects.all()
+    if all_user:
+        new_register_user = all_user.order_by('-date_joined')[0]
+    else:
+        new_register_user = None
 
     return {'title':'首页', 'topics':topics, 'posts':posts, 
             'new_register_user':new_register_user}

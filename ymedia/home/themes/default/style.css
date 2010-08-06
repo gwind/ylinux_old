@@ -1,5 +1,9 @@
 @import url(../css/base.css);
 
+#sitesearch {
+
+}
+
 #id_username {
     width: 80px;
 }
@@ -106,9 +110,8 @@ legend
 
 textarea {
 /*    width: 250px;*/
-    height: 160px;
-    margin-left: 4.5em;
+    height: 360px;
+/*    margin-left: 4.0em;*/
     color: #000;
     border: 0.1em solid #dcdce9;
-/*    border: 2px outset #d7b9c9;*/
 }

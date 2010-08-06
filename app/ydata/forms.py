@@ -9,9 +9,10 @@ from ydata import settings as ydata_settings
  
 
 class AddPostForm(forms.ModelForm):
-    name = forms.CharField(label='Subject', max_length=255,
-                           widget=forms.TextInput(attrs={'size':'115'}))
-    attachment = forms.FileField(label='Attachment', required=False)
+    name = forms.CharField(label='标题', max_length=256,
+           widget=forms.TextInput(attrs={'size':'115'}))
+    attachment = forms.FileField(label='附件', 
+                                 required=False)
 
     class Meta:
         model = Post
@@ -20,7 +21,6 @@ class AddPostForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user', None)
         self.topic = kwargs.pop('topic', None)
-        self.catalog = kwargs.pop('catalog', None)
         self.ip = kwargs.pop('ip', None)
         super(AddPostForm, self).__init__(*args, **kwargs)
 
@@ -28,7 +28,7 @@ class AddPostForm(forms.ModelForm):
             self.fields['name'].widget = forms.HiddenInput()
             self.fields['name'].required = False
 
-        self.fields['body'].widget = forms.Textarea(attrs={'class':'bbcode', 'rows':'20', 'cols':'95'})
+        #self.fields['body'].widget = forms.Textarea(attrs={'class':'bbcode', 'rows':'20', 'cols':'95'})
 
         if not ydata_settings.ATTACHMENT_SUPPORT:
             self.fields['attachment'].widget = forms.HiddenInput()
@@ -43,23 +43,11 @@ class AddPostForm(forms.ModelForm):
 
 
     def save(self):
-        if self.catalog:
-            topic = Topic(catalog=self.catalog,
-                          user=self.user,
-                          name=self.cleaned_data['name'])
-            topic.save()
-        else:
-            topic = self.topic
-
-        post = Post(topic=topic, user=self.user, user_ip=self.ip,
-                    markup='none',
-                    body=self.cleaned_data['body'])
-
+        post = Post(topic=self.topic, user=self.user, user_ip=self.ip, markup='none', body=self.cleaned_data['body'])
         post.save()
         if ydata_settings.ATTACHMENT_SUPPORT:
             self.save_attachment(post, self.cleaned_data['attachment'])
         return post
-
 
     def save_attachment(self, post, memfile):
         if memfile:

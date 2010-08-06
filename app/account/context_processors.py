@@ -1,5 +1,6 @@
 # coding: utf-8
 
+from django.core.context_processors import PermWrapper
 from django.conf import settings
 
 def auth(request):
@@ -18,5 +19,5 @@ def auth(request):
     return {
         'user': user,
 #        'messages': user.get_and_delete_messages(),
-#        'perms': PermWrapper(user),
+        'perms': PermWrapper(user),
     }

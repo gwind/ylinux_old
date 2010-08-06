@@ -83,9 +83,10 @@ class AuthenticationForm(forms.Form):
         if username and password:
             self.user_cache = authenticate(username=username, password=password)
             if self.user_cache is None:
-                raise forms.ValidationError(_("Please enter a correct username and password. Note that both fields are case-sensitive."))
+                raise forms.ValidationError("用户名或者密码不正确，注意区分大小写！")
             elif not self.user_cache.is_active:
-                raise forms.ValidationError(_("This account is inactive."))
+                #raise forms.ValidationError(_("This account is inactive."))
+                raise forms.ValidationError('此账户未激活！')
 
         # TODO: determine whether this should move to its own method.
         if self.request:
@@ -213,12 +214,15 @@ class AdminPasswordChangeForm(forms.Form):
         return self.user
 
 
+class RequestRegisterForm(forms.Form):
+    email = forms.EmailField(max_length=32)
+
 # 我测试时候定义的
 class RegisterForm(forms.Form):
-    username = forms.CharField(max_length=30)
-    password_first = forms.CharField()
-    password_second = forms.CharField()
-    email = forms.EmailField()
+    username = forms.CharField(max_length=32)
+    password_first = forms.CharField(max_length=32)
+    password_second = forms.CharField(max_length=32)
+
 
 class LoginForm(forms.Form):
     username = forms.CharField(max_length=30)

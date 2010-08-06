@@ -2,9 +2,12 @@
 
 import os
 import datetime
+import random
+import re
 
 from django.conf import settings
 from django.db import models
+from django.template.loader import render_to_string
 from django.contrib.contenttypes.models import ContentType
 from django.db.models.manager import EmptyManager
 from django.utils.encoding import smart_str
@@ -39,6 +42,8 @@ THEME_CHOICES = [(theme, theme) for theme in os.listdir(path)
                  if os.path.isdir(os.path.join(path, theme))]
 
 UNUSABLE_PASSWORD = '!' # This will never be a valid hash
+
+SHA1_RE = re.compile('^[a-f0-9]{40}$')
 
 
 # 设置密码
@@ -162,7 +167,7 @@ class User(models.Model):
 
     is_staff = models.BooleanField('管理组', default=False, 
                 help_text="用户是否能登录Admin")
-    is_active = models.BooleanField("激活",default=True,
+    is_active = models.BooleanField("激活",default=False,
                 help_text="这里决定此用户是否可用！")
     is_superuser = models.BooleanField("root",default=False)
 
@@ -278,6 +283,11 @@ class User(models.Model):
                 return False
         return True
 
+    def email_user(self, subject, message, from_email=None):
+        "Sends an e-mail to this User."
+        from django.core.mail import send_mail
+        send_mail(subject, message, from_email, [self.email])
+
 
 # 匿名用户模型
 class AnonymousUser(object):
@@ -345,3 +355,68 @@ class AnonymousUser(object):
     def is_authenticated(self):
         return False
 
+
+class RegisterManager(models.Manager):
+
+    def create_profile(self, email):
+        """ 创建一个 Email - Key 对 """
+
+        salt = sha_constructor(str(random.random())).hexdigest()[:5]
+        if isinstance(email, unicode):
+            email = email.encode('utf-8')
+        activation_key = sha_constructor(salt+email).hexdigest()
+        return self.create(email=email,
+                           activation_key=activation_key)
+
+    def create_activate_user(self, username, email, password, activation_key, send_email=False):
+        """ 验证 activation_key ， 创建新用户 """
+
+        if SHA1_RE.search(activation_key):
+            try:
+                profile = self.get(activation_key=activation_key)
+            except self.model.DoesNotExist:
+                return False
+
+            new_user = User.objects.create_user(username, email, password)
+            new_user.is_active = True
+            new_user.save()
+            profile.activation_key = self.model.ACTIVATED
+            profile.save()
+            return new_user
+        return False
+
+
+class Register(models.Model):
+    ''' 存放注册用户的Email和验证Key '''
+
+    ACTIVATED = u"ALREADY_ACTIVATED"
+
+    email = models.EmailField("邮件",blank=True,unique=True)
+    activation_key = models.CharField('激活Key', max_length=40)
+    updated = models.DateTimeField("最后修改", auto_now=True)
+    
+
+    objects = RegisterManager()
+
+    class Meta:
+        verbose_name = '注册激活码'
+        verbose_name_plural = '注册激活码'
+
+    def __unicode__ (self):
+        return u'%s - %s' % (self.email, self.activation_key)
+
+    def send_activation_email(self):
+        ''' 向用户发送注册验证邮件 '''
+
+        ctx_dict = {'activation_key': self.activation_key,
+                    'expiration_days': 3}
+        #subject = render_to_string('account/activation_email_subject.txt', ctx_dict)
+        subject = 'YLinux.org 注册申请信息'
+        # Email subject *must not* contain newlines
+        subject = ''.join(subject.splitlines())
+        
+        #message = render_to_string('account/activation_email.txt', ctx_dict)
+        message = "尊敬的 %s ， 您的注册 URL 是： http://ylinux.org/account/register/%s" % (self.email,self.activation_key)
+
+        from django.core.mail import send_mail
+        send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [self.email])

@@ -9,23 +9,38 @@
   | 发表新主题
 </p>
 
+
+{% if form.errors %}
+<div id="form-error">
+  <p>提交表格有错误发生：</p>
+  <ul>
+    {% for field in form %}
+    {% if field.errors %}
+    <li>{{ field.name }}： {{ field.errors|striptags }}</li>
+    {% endif %}
+    {% endfor %}
+  </ul>
+</div>
+{% endif %}
+
 <form action="" method="POST">
-  {% if form.errors %}
-  <div id="form-error">
-    <p>提交表格有错误发生：</p>
-    <ul>
-      {% for field in form %}
-      {% if field.errors %}
-      <li>{{ field.name }}： {{ field.errors|striptags }}</li>
-      {% endif %}
-      {% endfor %}
-    </ul>
-  </div>
-  <p>返回</p>
-  {% else %}
-  {{ form.as_p }}
-  　 <p><input type="submit" value="创建"></p>
-  {% endif %}
+  
+  <p><label for="id_name">标题:</label> <input id="id_name" type="text" name="name" maxlength="256" /></p>
+  <p>
+    <label for="id_markup">语法:</label>
+    <select name="markup" id="id_markup">
+      <option value="bbcode">bbcode</option>
+      <option value="markdown" selected="selected">markdown</option>
+    </select>
+  </p>
+  <p>
+    <label for="id_text">正文:</label>
+    <textarea id="id_text" rows="20" cols="60" name="text"></textarea>
+    <input type="hidden" name="catalog" value="4" id="id_catalog" />
+  </p>
+  　 <p><input type="submit" value="发表"></p>
+
 </form>
+
 
 {% endblock %}

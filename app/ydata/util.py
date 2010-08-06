@@ -158,3 +158,16 @@ def get_parents(m, id):
     # list 的 reverse 方法直接作用，返回 None！
     parents.reverse()
     return parents
+
+def ylinux_get_ip(request):
+    ''' 从 request 里获得用户的 ip  '''
+
+    #ip = request.META.get('REMOTE_ADDR', None)
+    try:
+        real_ip = request.META['HTTP_X_FORWARDED_FOR']
+    except KeyError:
+        ip = request.META.get('REMOTE_ADDR', None)
+    else:
+        ip = real_ip.split(",")[0].strip()
+
+    return ip

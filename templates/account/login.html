@@ -13,7 +13,8 @@
 <legend>登录</legend>
 
 {% if form.errors %}
-<p style="color: red;">错误：用户名不存在或者密码不匹配 {{ form.errors|pluralize }}</p>
+<p style="color: red;">{{ form.errors }}</p>
+<p>如有疑问，请联系管理员： ylinux.admin@gmail.com</p>
 {% endif %}
 
 <form action="{% url account:login %}" method="post">

@@ -1,0 +1,5 @@
+{% extends "account/base.html" %}
+
+{% block content %}
+<p>{% if new_user %}欢迎新用户：<a href="{% url account:show_user new_user.id %}">{{ new_user }}</a>{% endif %}</p>
+{% endblock %}

@@ -2,7 +2,7 @@
 
 {% block content %}
 
-<p>感谢您的关注，社区正在开发中。欢迎您也能参与进来：<a href="/coding" onmouseover="this.style.color='green'" onMouseOut="this.style.color='#808284'">这里</a> 。欢迎新用户：<a href="{% url account:show_user new_register_user.id %}">{{ new_register_user }}</a></p>
+<p>感谢您的关注，社区正在开发中。欢迎您也能参与进来：<a href="/coding" onmouseover="this.style.color='green'" onMouseOut="this.style.color='#808284'">这里</a> 。{% if new_register_user %}欢迎新用户：<a href="{% url account:show_user new_register_user.id %}">{{ new_register_user }}</a>{% endif %}</p>
 
 {% if topics %}
 <h3>最近主题(top 10)：</h3>

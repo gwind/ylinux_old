@@ -1,0 +1,29 @@
+{% extends "account/base.html" %}
+
+{% block content %}
+
+{% if ALREADY_USED_EMAIL %}
+<h2> 此邮件已经被使用： {{ email }}</h2>
+<p>原因： {{ REASON }}</p>
+<p>如有疑问请联系管理员： ylinux.admin@gmail.com</p>
+<p>尝试重置密码 [开发中 ...]</p>
+{% endif %}
+
+{% if EMAIL_SENT %}
+<h2> 注册链接已经发送到邮件： {{ email }} </h2>
+<p>[测试开发] url : {{ register_url }}</p>
+{% endif %}
+
+{% if NEW_REQUEST %}
+
+{% if form.errors %}
+<p style="color: red;">{{ form.errors }}</p>
+{% endif %}
+
+<form action="" method="post">
+  <p><label for="id_email">邮件：</label> <input id="id_email" type="text" name="email"/></p>
+  <input type="submit" value="申请" align="right"/>
+</form>
+{% endif %}
+
+{% endblock %}
