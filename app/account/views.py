@@ -1,12 +1,13 @@
 # coding: utf-8
 
+from django.conf import settings
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.http import HttpResponseRedirect,HttpResponse,HttpResponseForbidden
 
 #from account.decorators import login_required, permission_required
 from account.models import User,AnonymousUser,Register
-from account.forms import RegisterForm,LoginForm,AuthenticationForm, RequestRegisterForm
+from account.forms import RegisterForm,LoginForm,AuthenticationForm, RequestRegisterForm, PasswordResetRequestForm, SetPasswordForm
 
 from ydata.models import Topic, Post
 
@@ -20,18 +21,14 @@ def index(request):
 
 
 @render_to('account/login.html')
-def login(request):
+def login (request):
 
-    print 'Here1'
     if request.method == "POST":
-        print 'Here2'
         form = AuthenticationForm(data=request.POST)
         if form.is_valid():
-            print 'Here3'
             username = form.cleaned_data["username"]
             password = form.cleaned_data["password"]
             from account import authenticate,login
-            print 'Here4'
             user = authenticate(username=username, password=password)
             if user is not None:
                 if user.is_active:
@@ -87,10 +84,11 @@ def request_register(request):
 
         register=Register.objects.create_profile(email)
         if register:
-            #register.send_activation_email()
-            url= "http://ylinux.org/account/register/%s" % register.activation_key
+            register.send_activation_email()
+            #url= "http://ylinux.org/account/register/%s" % register.activation_key
 
-        return {'EMAIL_SENT':True, 'email':email, 'register_url':url}
+        #return {'EMAIL_SENT':True, 'email':email, 'register_url':url}
+        return {'EMAIL_SENT':True, 'email':email}
 
     return {'NEW_REQUEST':True, 'form':form}
  
@@ -126,7 +124,6 @@ def register(request, key=None):
                                        "error_type":"密码不匹配",},
                                       context_instance=RequestContext(request))
 
-        print 'email: ', register.email
         user = Register.objects.create_activate_user (
             username=username, 
             email=register.email,
@@ -164,3 +161,64 @@ def user(request, id):
 def list_all_user(request):
 
     ''' 列出已注册的用户，还未最终决定是否需要这个功能 '''
+
+
+@render_to('account/password_reset_request.html')
+def password_reset_request (request):
+
+    ''' 用户请求重置密码密码 '''
+
+    form = build_form (PasswordResetRequestForm, request)
+
+    if form.is_valid():
+        email = form.cleaned_data['email']
+
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            return {'NOT_EXIST_EMAIL':True, 'email':email,
+                    'REASON':'该 Email 还未注册用户 ！'}
+
+        try:
+            register = Register.objects.get(email=email)
+            register.reset_activation_key()
+            register.save()
+        except Register.DoesNotExist:
+            register=Register.objects.create_profile(email)
+
+        # 发送邮件
+        subject = u'YLinux.org 重置密码邮件'
+        message = u"尊敬的 %s ，应您的要求，重置密码 URL 是， http://ylinux.org/account/password/reset/%s" % (email, register.activation_key)
+        user.email_user (subject = subject,
+             message = message, 
+             from_email=settings.DEFAULT_FROM_EMAIL)
+
+        return {'EMAIL_SENT':True, 'email':email}
+
+    return {'NEW_REQUEST':True, 'form':form}
+
+
+@render_to('account/password_reset.html')
+def password_reset (request, key=None):
+    """ 重置用户密码 """
+
+    try:
+        register = Register.objects.get(activation_key=key)
+    except Register.DoesNotExist:
+        return HttpResponseForbidden(u'<h1>错误的 Key ： %s </h1>' % key)
+
+    try:
+        user = User.objects.get(email=register.email)
+    except User.DoesNotExist:
+        return HttpResponseForbidden(u'<h2>无此 email 注册的用户 ： %s </h2>' % register.email)
+
+    form = build_form (SetPasswordForm, request, user=user)
+
+    if form.is_valid():
+        form.clean_new_password2()
+        form.save()
+
+        return {'PASSWORD_RESET_DONE':True,}
+
+    return {'NEW_REQUEST':True, 'form':form}
+

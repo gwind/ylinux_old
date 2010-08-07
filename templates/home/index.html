@@ -24,41 +24,4 @@
 {% endif %}
 
 
-<h3 style="color:green">最近更新：</h3>
-<ul>
-  <li style="color:red">2010年6月18日： 更新 wiki， admin</li>
-    <p>重写 admin, wiki， 去除从其他项目拿来即用的代码束缚。刚开始参考 <a href="http://djangobb.org/">djangobb</a> 项目，反而受其模型束缚很深，尤其是 wiki 的 topic 和 post 如何区分， 现在重写 topic 模型， 并结合 Markdown 完成一个初步可用的 wiki 。欢迎测试。看代码更容易了解：<a href="http://github.com/jianlee/ylinux">查看源代码</a></p>
-    <p>用户名： ylinux 密码： fff </p>
-
-  <li>2010年3月5日：更新 wiki，admin 功能</li>
-    <ul>
-       <li>定义 ydata app 存放 Category,Catalog,Topic,Post 等 models </li>
-       <li>增加 wiki app ，使用 wiki 样式显示知识库 ， <a style="color:red" href="{% url wiki:index %}">测试地址</a></li>
-       <li>增加 admin app ， 增加一些管理功能，<a style="color:red" href="{% url admin:index %}">测试地址</a></li>
-    </ul>
-</ul>
-
-<h3>YLinux.org 的 <strong>目标</strong>：</h3>
-
-<ul>
-  <li>开发中文 GNU/Linux 发行版 -- YLinux</li>
-  <li>建立一个 “GNU” 社区</li>
-  <ul>
-    <li>Free - 自由</li>
-    <li>每个人都能参与社区开发和并决定社区发展</li>
-    <li>中文计算机科学交流空间</li>
-  </ul>
-</ul>
-
-<h3>YLinux.org 的 <strong>架构</strong>：</h3>
-
-<ul>
-  <li>首页 -- 社区首页是一个非常重要的部分，单独作为一个部分设计。这一点在 Django Web 开发中的体现就是一个单独的 app 。</li>
-  <li>用户 -- 有交互，就有交互的管理。用户部分管理社区用户的注册、登入、登出和个人信息中心。</li>
-  <li>新闻 -- 古时“秀才不出门，便知天下事“，今日新闻在大家生活有重要的地位</li>
-  <li>博客 -- 用户部分的个人信息中心的扩展</li>
-  <li>论坛 -- 最主要的互动交流空间</li>
-  <li>知识库 -- 社区的 wiki 系统，“不积跬步何以至千里”？</li>
-</ul>
-
 {% endblock %}

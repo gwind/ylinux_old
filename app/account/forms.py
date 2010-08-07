@@ -150,8 +150,9 @@ class SetPasswordForm(forms.Form):
     new_password1 = forms.CharField(label=_("New password"), widget=forms.PasswordInput)
     new_password2 = forms.CharField(label=_("New password confirmation"), widget=forms.PasswordInput)
 
-    def __init__(self, user, *args, **kwargs):
-        self.user = user
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user', None)
+        #self.user = user
         super(SetPasswordForm, self).__init__(*args, **kwargs)
 
     def clean_new_password2(self):
@@ -216,6 +217,11 @@ class AdminPasswordChangeForm(forms.Form):
 
 class RequestRegisterForm(forms.Form):
     email = forms.EmailField(max_length=32)
+
+
+class PasswordResetRequestForm(forms.Form):
+    email = forms.EmailField(max_length=32)
+
 
 # 我测试时候定义的
 class RegisterForm(forms.Form):

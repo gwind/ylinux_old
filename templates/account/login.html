@@ -22,7 +22,7 @@
 <p><label for="id_password">密码：</label> <input type="password" name="password" id="id_password" /></p>
 <p><input id="login_submit" type="submit" value="登录"/></p>
 </form>
-<p><a href="/account/reset_password">忘记密码</a> <a href="/account/register"><b>注册</b></a></p>
+<p><a href="{% url account:password_reset_request %}">忘记密码</a> | <a href="{% url account:register %}"><b>注册</b></a></p>
 </fieldset>
 {% endif %}
 

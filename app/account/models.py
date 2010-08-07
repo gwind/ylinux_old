@@ -416,7 +416,15 @@ class Register(models.Model):
         subject = ''.join(subject.splitlines())
         
         #message = render_to_string('account/activation_email.txt', ctx_dict)
-        message = "尊敬的 %s ， 您的注册 URL 是： http://ylinux.org/account/register/%s" % (self.email,self.activation_key)
+        message = "尊敬的 %s ：您的注册 URL 是：http://ylinux.org/account/register/%s" % (self.email,self.activation_key)
 
         from django.core.mail import send_mail
         send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [self.email])
+
+    def reset_activation_key (self):
+        ''' 重新生成 activation_key '''
+
+        salt = sha_constructor(str(random.random())).hexdigest()[:5]
+        if isinstance(self.email, unicode):
+            email = self.email.encode('utf-8')
+        self.activation_key = sha_constructor(salt+self.email).hexdigest()
