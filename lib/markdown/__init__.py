@@ -1,3 +1,5 @@
+#coding: utf-8
+
 """
 Python Markdown
 ===============
@@ -67,6 +69,7 @@ ENABLE_ATTRIBUTES = True     # @id = xyz -> <... id="xyz">
 SMART_EMPHASIS = True        # this_or_that does not become this<i>or</i>that
 DEFAULT_OUTPUT_FORMAT = 'xhtml1'     # xhtml or html4 output
 HTML_REMOVED_TEXT = "[HTML_REMOVED]" # text used instead of HTML in safe mode
+# BLOCK_LEVEL_ELEMENTS 包含的 tag 都可以在 markdown 源文件中出现
 BLOCK_LEVEL_ELEMENTS = re.compile("p|div|h[1-6]|blockquote|pre|table|dl|ol|ul"
                                   "|script|noscript|form|fieldset|iframe|math"
                                   "|ins|del|hr|hr/|style|li|dt|dd|thead|tbody"
@@ -213,6 +216,7 @@ class Markdown:
 
         # Preprocessors
         self.preprocessors = odict.OrderedDict()
+        # 将 self 作为参数传递给类，可以让类的对象调用本类对象的方法
         self.preprocessors["html_block"] = \
                 preprocessors.HtmlBlockPreprocessor(self)
         self.preprocessors["reference"] = \
@@ -361,14 +365,10 @@ class Markdown:
     def convert(self, source):
         """
         Convert markdown to serialized XHTML or HTML.
-
-        Keyword arguments:
-
-        * source: Source text as a Unicode string.
-
+        参数 "source" 是一个包含源文件内容的 Unicode 字符串
         """
 
-        # Fixup the source text
+        # 确保 "source text" 是非空的 Unicode 字符串
         if not source.strip():
             return u""  # a blank unicode string
         try:

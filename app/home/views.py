@@ -2,7 +2,7 @@
 
 from forms import ContactForm
 from django.shortcuts import render_to_response
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect,HttpResponse
 from django.template import RequestContext
 from django.shortcuts import get_object_or_404
 from django.core.urlresolvers import reverse
@@ -58,6 +58,17 @@ def contact(request):
 #    return render_to_response('home/thanks.html',{'title':"感谢",},
 #                              context_instance=RequestContext(request))
 
+
 def coding(request):
     return render_to_response('home/coding.html',{'title':"Coding 之中",},
                               context_instance=RequestContext(request))
+
+
+def sitemap(request):
+    from ydata.models import Topic
+    topics = Topic.objects.all()
+    urls = []
+    for t in topics:
+        url = reverse ('wiki:show_topic', args=[t.id])
+        urls.append('http://ylinux.org'+url+'\n')
+    return HttpResponse(urls)

@@ -5,8 +5,8 @@
 
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    {% if theme %}<link rel="stylesheet" href="{{ MEDIA_URL }}home/themes/{{ theme }}/style.css" />{% else %}
-    <link rel="stylesheet" href="{{ MEDIA_URL }}home/themes/default/style.css" />{% endif %}
+    {% if theme %}<link rel="stylesheet" href="{{ MEDIA_URL }}themes/{{ theme }}/style.css" />{% else %}
+    <link rel="stylesheet" href="{{ MEDIA_URL }}themes/default/style.css" />{% endif %}
     {% block title %}{% if title %}<title>{{ title }} - YLinux.org</title>{% else %}<title>YLinux.org</title>{% endif %}{% endblock %}
     <script type="text/javascript" src="{{ MEDIA_URL }}js/editor.js" ></script>
   </head>

@@ -1,6 +1,7 @@
 body {
     margin: 2px,10px,2px,10px;
     padding: 2px,5px,2px,5px;
+    background-color: #F0EBE2;
 }
 
 h2 {
@@ -9,7 +10,7 @@ h2 {
 }
 
 a:link {color: blue}
-a:visited {color: gray}
+a:visited {color: #9F4C09}
 a:hover {color: green}
 a:active {color: #0000FF}
 
