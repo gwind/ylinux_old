@@ -9,7 +9,7 @@
 </p>
 
 <h1>{{ topic }}</h1>
-<h4><a href="{% url account:show_user topic.user.id %}">{{ topic.user }}</a> 于 {{ topic.updated }} 在 <a href="http://www.ip138.com/ips.asp?ip={{ topic.user_ip }}&action=2">{{ topic.user_ip }}</a></h4>
+<h4><a href="{% url account:show_user topic.user.id %}">{{ topic.user }}</a> 于 {{ topic.updated }} <!--在 <a href="http://www.ip138.com/ips.asp?ip={{ topic.user_ip }}&action=2">{{ topic.user_ip }}</a>-->更新</h4>
 
 <p>
   {% ifequal user topic.user %}<a href="{% url wiki:edit_topic topic.id %}">编辑</a> |{% endifequal %}

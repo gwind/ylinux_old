@@ -135,6 +135,7 @@ INSTALLED_APPS = (
     'ylinux.app.home',
     'ylinux.app.ydata',
     'ylinux.app.wiki',
+    'ylinux.app.blog',
 )
 
 

@@ -1,3 +1,5 @@
+/* Default style of YLinux (hettp://www.ylinux.org) */
+
 body {
     margin: 2px,10px,2px,10px;
     padding: 2px,5px,2px,5px;
@@ -126,16 +128,20 @@ legend
 }
 
 textarea {
-/*    width: 250px;*/
     height: 360px;
-/*    margin-left: 4.0em;*/
     color: #000;
     border: 0.1em solid #dcdce9;
 }
 
 pre {
+    padding: 0.5em;
+    margin-left: 1em;
+    margin-right: 1em;
     border: 0.1em solid #dcdce9;
-    padding: 2px 6px;
-    color: #000;
-    background: #FFF;
+    white-space: pre;
+    font-family : Monospace, sans-serif;
+    font-size: 95%;
+    overflow: auto;
+    max-height: 3in;
+    color: black;
 }

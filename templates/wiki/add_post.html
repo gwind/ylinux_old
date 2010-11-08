@@ -5,9 +5,7 @@
 
 <form action="" method="post">
 
-  <p><label for="id_body">正文:</label> <textarea id="id_body" rows="20" cols="60" name="body"></textarea></p>
-<p><label for="id_attachment">附件:</label> <input type="file" name="attachment" id="id_attachment" /><input type="hidden" name="name" id="id_name" /></p>
-
+{{ form.as_p }}
   <div class="submit">
     <p><input type="submit" value="发表回复" /><a href="javascript:history.go(-1)">返回</a></p>
   </div>

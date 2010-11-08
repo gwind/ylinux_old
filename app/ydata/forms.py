@@ -10,7 +10,7 @@ from ydata import settings as ydata_settings
 
 class AddPostForm(forms.ModelForm):
     name = forms.CharField(label='标题', max_length=256,
-           widget=forms.TextInput(attrs={'size':'115'}))
+           widget=forms.TextInput)
     attachment = forms.FileField(label='附件', 
                                  required=False)
 
@@ -28,7 +28,7 @@ class AddPostForm(forms.ModelForm):
             self.fields['name'].widget = forms.HiddenInput()
             self.fields['name'].required = False
 
-        #self.fields['body'].widget = forms.Textarea(attrs={'class':'bbcode', 'rows':'20', 'cols':'95'})
+        self.fields['body'].widget = forms.Textarea(attrs={'class':'bbcode', 'rows':'10', 'cols':'60'})
 
         if not ydata_settings.ATTACHMENT_SUPPORT:
             self.fields['attachment'].widget = forms.HiddenInput()
@@ -92,18 +92,20 @@ class AddTopicForm(forms.ModelForm):
 
 class EditTopicForm(forms.ModelForm):
 
-    text = forms.CharField(widget=forms.Textarea)
+    text = forms.CharField(widget=forms.Textarea(
+        attrs={'class':'markdown', 'rows':'20', 'cols':'65'}))
+
 
     class Meta:
         model = Topic
         fields = ['catalog','name','markup']
 
     def __init__(self, *args, **kwargs):
-        self.text = kwargs.pop('text', None)
+        self.old_text = kwargs.pop('text', None)
         self.user_ip = kwargs.pop('user_ip', None)
         super(EditTopicForm, self).__init__(*args, **kwargs)
         
-        self.fields['text'].initial = self.text
+        self.fields['text'].initial = self.old_text
 
     def save(self):
         topic = super(EditTopicForm, self).save(commit=False)

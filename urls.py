@@ -24,6 +24,7 @@ urlpatterns = patterns('',
     (r'^admin/', include('ylinux.app.admin.urls', namespace='admin')),
     (r'^account/', include('ylinux.app.account.urls', namespace='account')),
     (r'^wiki/', include('ylinux.app.wiki.urls', namespace='wiki')), 
+    (r'^blog/', include('ylinux.app.blog.urls', namespace='blog')),
 
     # Uncomment the admin/doc line below and add 'django.contrib.admindocs' 
     # to INSTALLED_APPS to enable admin documentation:

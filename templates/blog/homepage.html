@@ -1,0 +1,20 @@
+{% extends 'blog/base.html' %}
+{% block content %}
+
+<h3>用户名：{{ the_user }}</h3>
+
+<h3>发表的主题有：</h3>
+<ul>
+  {% for t in topics %}
+  <li><a href="{% url wiki:show_topic t.id %}">{{ t }}</a></li>
+  {% endfor %}
+</ul>
+
+<h3>参与的主题有：</h3>
+<ul>
+  {% for p in posts %}
+  <li><a href="{% url wiki:show_post p.id %}">{{ p }}</a></li>
+  {% endfor %}
+</ul>
+
+{% endblock %}

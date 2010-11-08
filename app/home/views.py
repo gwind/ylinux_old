@@ -72,3 +72,7 @@ def sitemap(request):
         url = reverse ('wiki:show_topic', args=[t.id])
         urls.append('http://ylinux.org'+url+'\n')
     return HttpResponse(urls)
+
+def robots(request):
+    return HttpResponse('User-agent: * ' + '\n' + 'Allow: /')
+

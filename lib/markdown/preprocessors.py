@@ -80,10 +80,9 @@ class HtmlBlockPreprocessor(Preprocessor):
     """
     处理 html 块标签
 
-    先从 text 里删除它们，存放到一个安全的地方，以后再取回加入 text 。
-
-    Remove html blocks from the text and store them for later
-    retrieval."""
+    逐块处理（'\n\n'分割的即为一个 block），遇到 html 块时，用
+    HtmlStash 对象转换保存。方便以后选择处理这个些对象。
+    """
 
     # "</%s>" 形式的右标签很多： </pre> </h1>
     # "%>" 形式的右标签如： --> (html的注释)
@@ -136,78 +135,90 @@ class HtmlBlockPreprocessor(Preprocessor):
 
         while text:
             block = text[0]
-            if block.startswith("\n"):
-                block = block[1:]
             text = text[1:]
 
-            #if block.startswith("\n"):
-            #    block = block[1:]
-
             if not in_tag:
-                if block.startswith("<"):
-                    left_tag = self._get_left_tag(block)
-                    right_tag, data_index = self._get_right_tag(left_tag, block)
 
-                    if block[1] == "!":
-                        # 处理 "<!--任意内容-->"
-                        # comment 标签里可以含有任何字符，故特殊对待
-                        left_tag = "--"
-                        right_tag, data_index = self._get_right_tag(left_tag, block)
-                        # keep checking conditions below and maybe just append
-                    
-                    if data_index < len(block) \
-                        and markdown.isBlockLevel(left_tag): 
-                        text.insert(0, block[data_index:])
-                        block = block[:data_index]
-
-                    if not (markdown.isBlockLevel(left_tag) \
-                        or block[1] in ["!", "?", "@", "%"]):
-                        new_blocks.append(block)
-                        continue
-
-                    if self._is_oneliner(left_tag):
-                        new_blocks.append(block.strip())
-                        continue
-
-                    if block.rstrip().endswith(">") \
-                        and self._equal_tags(left_tag, right_tag):
-                        new_blocks.append(
-                            self.markdown.htmlStash.store(block.strip()))
-                    else: #if not block[1] == "!":
-                        # 如果 block 里面的 html 标签对还没有结束
-                        if markdown.isBlockLevel(left_tag) or left_tag == "--" \
-                            and not block.rstrip().endswith(">"):
-                            items.append(block.strip())
-                            in_tag = True
-                        else:
-                            new_blocks.append(
-                            self.markdown.htmlStash.store(block.strip()))
+                if not block.startswith("<"):
+                    new_blocks.append(block)
                     continue
 
-                new_blocks.append(block)
-            else:
-                items.append(block.strip())
-
+                left_tag = self._get_left_tag(block)
                 right_tag, data_index = self._get_right_tag(left_tag, block)
 
+                if block[1] == "!":
+                    # 处理 "<!--html注释-->"
+                    left_tag = "--"
+                    right_tag, data_index = self._get_right_tag(left_tag, block)
+
+                if data_index < len(block) and \
+                        markdown.isBlockLevel(left_tag):
+                    # 处理这样的 block： "<pre>内容</pre>其他"
+                    # 这样 data_index 的值会小于 block 长度
+                    # 需先将 pre 块后面的放回 text 列表，下次处理
+                    text.insert(0, block[data_index:])
+                    block = block[:data_index]
+
+                if not markdown.isBlockLevel(left_tag) and \
+                        block[1] not in ["!", "?", "@", "%"]:
+                    # 既不是合法html块标签，又不是特殊标签
+                    new_blocks.append(block)
+                    continue
+
+                if self._is_oneliner(left_tag):
+                    # 处理 "<hr/>","<hr>" 这样的行分割符
+                    new_blocks.append(block.strip())
+                    continue
+
+                if not block.rstrip().endswith(">") or not\
+                        self._equal_tags(left_tag, right_tag) and\
+                        markdown.isBlockLevel(left_tag) or\
+                        left_tag == "--" :
+                    # block 里的 html 标签对还未结束
+                    items.append(block.strip())
+                    in_tag = True
+                    continue
+
+                # 剩下的情况都当作 html 块处理
+                new_blocks.append(self.markdown.htmlStash.store(block.strip()))
+
+            else:
+                # 进入跨 block 的 html 块标签
+                right_tag, data_index = self._get_right_tag(left_tag, block)
+
+                if data_index < len(block) and \
+                        markdown.isBlockLevel(left_tag):
+                    text.insert(0, block[data_index:])
+                    block = block[:data_index]
+
+                items.append(block.strip())
+
                 if self._equal_tags(left_tag, right_tag):
-                    # if find closing tag
+                    # 如果左右标签成对，就准备结束 in_tag 情况
                     in_tag = False
-                    new_blocks.append(
-                        self.markdown.htmlStash.store('\n\n'.join(items)))
+                    new_blocks.append(self.markdown.htmlStash.store('\n\n'.join(items)))
                     items = []
 
         if items:
+            # 如果 items 里面还有内容，说明有 html 块标签未配对，直接加上
             new_blocks.append(self.markdown.htmlStash.store('\n\n'.join(items)))
             new_blocks.append('\n')
 
-        new_text = "\n\n".join(new_blocks)
-        return new_text.split("\n")
+        return "\n\n".join(new_blocks).split("\n")
 
 
 class ReferencePreprocessor(Preprocessor):
-    """ Remove reference definitions from text and store for later use. """
+    """ 从 text 中移除引用定义，以后在使用它
+ 
+    引用类似： "[Google]:http://www.google.com"
+    """
 
+    # 下面的正则表示 Markdown 的引用应该怎样
+    # a, 所在行必续以空白开头
+    # b, 空白后面就是 "[id]"
+    # c, "[id]"后紧接":"
+    # d, ":"后可以有任意空白
+    # e, 接着是其他内容
     RE = re.compile(r'^(\ ?\ ?\ ?)\[([^\]]*)\]:\s*([^ ]*)(.*)$', re.DOTALL)
 
     def run (self, lines):
@@ -215,6 +226,7 @@ class ReferencePreprocessor(Preprocessor):
         for line in lines:
             m = self.RE.match(line)
             if m:
+                # 处理 "[Google]:http://www.google.com" 这样的块时
                 id = m.group(2).strip().lower()
                 t = m.group(4).strip()  # potential title
                 if not t:

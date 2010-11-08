@@ -214,7 +214,7 @@ class Markdown:
         self.docType = ""
         self.stripTopLevelTags = True
 
-        # Preprocessors
+        # Preprocessors -- 将暂不处理的 block 先隐藏起来
         self.preprocessors = odict.OrderedDict()
         # 将 self 作为参数传递给类，可以让类的对象调用本类对象的方法
         self.preprocessors["html_block"] = \
