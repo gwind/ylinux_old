@@ -2,10 +2,11 @@
 
 
 {% block content %}
-<h2>知识库系统</h2>
+<h1><a href="{% url home:index %}">YLinux</a> => 知识库系统</h1>
+<hr class="HrWhite"/>
 
 {% if catalogs %}
-<h3>知识库分类：</h3>
+<h3>分类：</h3>
   <ul>
   {% for c in catalogs %}
     <li><a href="{% url wiki:show_catalog c.id %}">{{ c.name }}</a></li>

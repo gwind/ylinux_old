@@ -1,9 +1,43 @@
 /* Default style of YLinux (hettp://www.ylinux.org) */
 
+/*
 body {
-    margin: 2px,10px,2px,10px;
+    margin: 50px,55px,20px,10px;
     padding: 2px,5px,2px,5px;
     background-color: #F0EBE2;
+}
+*/
+html {
+    /*background:none repeat scroll 0 0 #CCCCCC;*/
+    background:none repeat scroll 0 0 #AFC6CE;
+}
+
+body {
+    /*background-color: #F0EBE2;*/
+    background-color: #DAE1E5;
+    color:#000000;
+    margin: 10px 20px 10px 20px;
+    /*border: 1px solid white;*/
+    /*margin-left: auto;
+    margin-right: auto; 
+    width: 930px;
+    */
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: #577793;
+    border-width: thin medium thick 10px;
+    display: inline;
+}
+
+h1 {
+    font-size: 108%;
+    font-style: italic;
+    border-width: 2px;
+}
+
+h2 {
+   font-size: 102%;
 }
 
 a:link {color: blue}
@@ -33,6 +67,7 @@ a:active {color: #0000FF}
 
 #container {
     margin: 2px;10px;5px;10px;
+    padding: 5px 10px 5px 10px;
 }
 
 #header {
@@ -144,4 +179,20 @@ pre {
     overflow: auto;
     max-height: 3in;
     color: black;
+}
+
+
+/* 圆角边框 */
+/*div#RoundAngle {margin: 0 10%; background: #9BD1FA}*/
+/*div#RoundAngle {background: #9BD1FA}*/
+body#RoundAngle {background: #DAE1E5}
+b.rtop, b.rbottom {display:block;background: #AFC6CE}
+b.rtop b, b.rbottom b{display:block;height: 1px; overflow: hidden; background: #DAE1E5}
+b.r1{margin: 0 5px}
+b.r2{margin: 0 3px}
+b.r3{margin: 0 2px}
+b.rtop b.r4, b.rbottom b.r4{margin: 0 1px;height: 2px}
+
+hr.HrWhite {
+    color: white;
 }
