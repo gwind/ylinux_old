@@ -43,8 +43,9 @@ PRIVACY_CHOICES = (
 
 # Category 下分很多 Catalog
 class Catalog(models.Model):
+    # parent 键可以搜索 child
     parent = models.ForeignKey('self', blank=True,
-               null=True, verbose_name='Catalog')
+               null=True, verbose_name='Catalog', related_name='child')
     name = models.CharField('名字', max_length=30)
     summary = models.CharField('概述', max_length=80)
     groups = models.ManyToManyField(Group, blank=True,
@@ -79,7 +80,7 @@ class Catalog(models.Model):
 
     @property
     def posts(self):
-        return Post.objects.filter(topic__catalog=self).select_related()
+        return Post.objects.filter(topic__catalog=self).select_related().count()
 
     def has_access(self, user):
         ''' 判断用户是否有权限，如果一个 Catalog 还未指定用户组，所有用户都有权限 '''

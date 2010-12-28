@@ -1,12 +1,12 @@
 /* Default style of YLinux (hettp://www.ylinux.org) */
 
-/*
-body {
+/*body {
     margin: 50px,55px,20px,10px;
     padding: 2px,5px,2px,5px;
     background-color: #F0EBE2;
 }
 */
+
 html {
     /*background:none repeat scroll 0 0 #CCCCCC;*/
     /*background:none repeat scroll 0 0 #AFC6CE;*/
@@ -22,10 +22,6 @@ body {
     margin-right: auto; 
     width: 930px;
     */
-}
-
-p {
-    text-indent:2em; /* 元素缩进 2em */
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -76,7 +72,7 @@ a:active {color: #0000FF}
 
 #header {
     margin-top: 2px;
-    height: 60px;
+    /*height: 60px;*/
 }
 
 #logo {
@@ -188,18 +184,6 @@ pre {
 img {
     border: 0 none;
 }
-
-/* 圆角边框 */
-/*div#RoundAngle {margin: 0 10%; background: #9BD1FA}*/
-/*div#RoundAngle {background: #9BD1FA}*/
-/*body#RoundAngle {background: #DAE1E5}
-b.rtop, b.rbottom {display:block;background: #092E20}
-b.rtop b, b.rbottom b{display:block;height: 1px; overflow: hidden; background: #DAE1E5}
-b.r1{margin: 0 5px}
-b.r2{margin: 0 3px}
-b.r3{margin: 0 2px}
-b.rtop b.r4, b.rbottom b.r4{margin: 0 1px;height: 2px}
-*/
 
 hr.HrWhite {
     color: white;

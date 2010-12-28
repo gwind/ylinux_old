@@ -1,0 +1,49 @@
+{% extends "bbs/base.html" %}
+
+{% block content %}
+
+<p>
+  <a href="{% url bbs:index %}">论坛</a>
+  {% for id,name in parents %}
+  > <a href="{% url bbs:subforum id %}">{{ name }}</a>
+  {% endfor %}
+</p>
+
+{% if catalogs %}
+<h2>子论坛信息：</h2>
+
+<table colspan="2">
+  <tr>
+    <th>版面</th>
+    <th>主题</th>
+    <th>回复</th>
+  </tr>
+{% for c in catalogs %}
+  <tr>
+    <td><a href="{% url bbs:subforum c.id %}">{{ c.name }}</a></td>
+    <td>主题：{{ c.topic_count }}</td>
+    <td>回复：{{ c.posts }}</td>
+  </tr>
+{% endfor %}
+</table>
+{% endif %}
+
+{% if topics %}
+<h2>主题列表：</h2>
+<table>
+  <tr>
+    <th>主题</th>
+    <th>回复</th>
+    <th>最后更新</th>
+  </tr>
+  {% for t in topics %}
+  <tr>
+    <td><a href="{% url wiki:show_topic t.id %}">{{ t.name }}</a></td>
+    <td>{{ t.post_count }}</td>
+    <td>{{ t.updated }}</td>
+  </tr>
+  {% endfor %}
+</table>
+{% endif %}
+
+{% endblock %}
