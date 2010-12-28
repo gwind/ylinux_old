@@ -1,6 +1,7 @@
 # coding: utf-8
 
 from django.conf.urls.defaults import *
+from wiki.views import LatestTopicFeed, LatestPostFeed
 
 # patterns 的第一个元素是其他view的base路径
 urlpatterns = patterns('wiki.views',
@@ -35,4 +36,8 @@ urlpatterns = patterns('wiki.views',
     url(r'^topic/(?P<id>\d+)/disable_hidden/$', 'manage_topic', {'type':'disable_hidden'}, name='disable_hidden_topic'),
 
     url(r'^post/(?P<id>\d+)/delete/$', 'del_post', name='del_post'),
+
+    # Feeds
+    url(r'^topic/news/$', LatestTopicFeed(), name='topic_news'),
+    url(r'^post/news/$', LatestPostFeed(), name='post_news'),
 )

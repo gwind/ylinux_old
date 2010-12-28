@@ -8,6 +8,8 @@
     {% if theme %}<link rel="stylesheet" href="{{ MEDIA_URL }}home/themes/{{ theme }}/style.css" />{% else %}
     <link rel="stylesheet" href="{{ MEDIA_URL }}themes/default/style.css" />{% endif %}
     {% block title %}{% if title %}<title>{{ title }} - YLinux.org</title>{% else %}<title>YLinux.org</title>{% endif %}{% endblock %}
+    <link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="/wiki/topic/news/" />
+    <!--<link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/backend.php?atom" />-->
     <script type="text/javascript" src="{{ MEDIA_URL }}js/editor.js" ></script>
   </head>
 
@@ -70,6 +72,7 @@
           <li><a href="/blog">博客</a></li>
           <li><a href="/coding">项目</a></li>
           <li><a href="/wiki">知识库</a></li>
+          <a href="/wiki/topic/news/"><img src="{{ MEDIA_URL }}images/feed.gif" alt="订阅最近动态"/></a>
         </ul>
       </div>
       <!-- End navigator -->

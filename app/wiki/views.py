@@ -6,6 +6,8 @@
 from django.http import Http404, HttpResponse, HttpResponseRedirect, HttpResponseForbidden
 from django.shortcuts import get_object_or_404
 from django.core.urlresolvers import reverse
+#from django.contrib.syndication.views import Feed
+from syndication.views import Feed
 
 from account.decorators import login_required, permission_required
 from ydata.models import Catalog,Topic,Post
@@ -217,3 +219,40 @@ def del_post (request, id):
 
     url = reverse ('wiki:show_topic', args=[t_id])
     return HttpResponseRedirect(url)
+
+
+# django.utils.feedgenerator 是 low-level 调用，以后换成这个
+class LatestTopicFeed(Feed):
+    title = "YLinux.org 最新主题"
+    link = "/topic/news/"
+    description = "YLinux.org 站点的最近主题动态"
+
+    def items(self):
+        return Topic.objects.order_by('-updated')[:20]
+
+    def item_title(self, item):
+        return item.name
+
+    def item_pubdate(self, item):
+        return item.updated
+
+    def item_description(self, item):
+        return item.feed_desc
+
+
+class LatestPostFeed(Feed):
+    title = "YLinux.org 最新回复"
+    link = "/post/news/"
+    description = "YLinux.org 站点的最近回复动态"
+
+    def items(self):
+        return Post.objects.order_by('-updated')[:20]
+
+    def item_title(self, item):
+        return item.topic.name
+
+    def item_pubdate(self, item):
+        return item.updated
+
+    def item_description(self, item):
+        return item.body_html

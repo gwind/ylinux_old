@@ -9,12 +9,12 @@ body {
 */
 html {
     /*background:none repeat scroll 0 0 #CCCCCC;*/
-    background:none repeat scroll 0 0 #AFC6CE;
+    /*background:none repeat scroll 0 0 #AFC6CE;*/
 }
 
 body {
     /*background-color: #F0EBE2;*/
-    background-color: #DAE1E5;
+    /*background-color: #DAE1E5;*/
     color:#000000;
     margin: 10px 20px 10px 20px;
     /*border: 1px solid white;*/
@@ -181,17 +181,21 @@ pre {
     color: black;
 }
 
+img {
+    border: 0 none;
+}
 
 /* 圆角边框 */
 /*div#RoundAngle {margin: 0 10%; background: #9BD1FA}*/
 /*div#RoundAngle {background: #9BD1FA}*/
-body#RoundAngle {background: #DAE1E5}
-b.rtop, b.rbottom {display:block;background: #AFC6CE}
+/*body#RoundAngle {background: #DAE1E5}
+b.rtop, b.rbottom {display:block;background: #092E20}
 b.rtop b, b.rbottom b{display:block;height: 1px; overflow: hidden; background: #DAE1E5}
 b.r1{margin: 0 5px}
 b.r2{margin: 0 3px}
 b.r3{margin: 0 2px}
 b.rtop b.r4, b.rbottom b.r4{margin: 0 1px;height: 2px}
+*/
 
 hr.HrWhite {
     color: white;

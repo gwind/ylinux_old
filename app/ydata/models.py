@@ -166,6 +166,10 @@ class Topic(models.Model):
             return ''
         return html
 
+    @property
+    def feed_desc(self):
+        return ''.join(self.body.split('\n')[:4])
+
     def save_file(self, text):
         #text = self.cleaned_data['text'].encode('utf8')
         f = file(self.body_path, 'w')
@@ -213,6 +217,9 @@ class Post(models.Model):
     #body_text = models.TextField('Text version')
     user_ip = models.IPAddressField('User IP', blank=True, null=True)
 
+    @property
+    def feed_desc(self):
+        return ''.join(self.body.split('\n')[:4])
 
     class Meta:
         ordering = ['created']
