@@ -1,8 +1,9 @@
+# coding: utf-8
 
 import markdown
 
 class State(list):
-    """ Track the current and nested state of the parser. 
+    """ Track the current and nested(嵌套的) state of the parser. 
     
     This utility class is used to track the state of the BlockParser and 
     support multiple levels if nesting. It's just a simple API wrapped around
@@ -37,7 +38,7 @@ class State(list):
 class BlockParser:
     """ Parse Markdown blocks into an ElementTree object. 
     
-    A wrapper class that stitches the various BlockProcessors together,
+    A wrapper class that stitches(缝合) the various BlockProcessors together,
     looping through them and creating an ElementTree object.
     """
 

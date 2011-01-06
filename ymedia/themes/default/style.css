@@ -76,11 +76,19 @@ a:active {color: #0000FF}
 
 #header {
     margin-top: 2px;
+    /*height: 60px;*/
+    padding-bottom: 5px;
+    margin-bottom: 5px;
+    /*border-bottom: 5px solid gray;*/
+}
+
+#header1 {
     height: 60px;
 }
 
 #logo {
-    height: 60px;
+    display: inline;
+    width: 80px;
 }
 
 #logo img {
@@ -89,7 +97,8 @@ a:active {color: #0000FF}
 
 #navigator {
     margin-top: 2px;
-    height: 35px;
+    font-size: 20px;
+    float: right;
 }
 
 #navigator ul{
@@ -115,11 +124,63 @@ a:active {color: #0000FF}
     text-align: center;
 }
 
+#login {
+    clear: both;
+    display: inline;
+}
+
+#tools {
+    clear: both;
+    display: inline;
+    float: right;
+}
+
+#tools form {
+    display: inline;
+}
+
+#header hr {width: 95%; color: white; margin-top: 15px;}
+
+
 #content {
     margin-top: 10px;
 }
 
+/*#Stopic { float:left; width:447px; height:500px; background:#6cf;}*/
+/*#Spost { float:right; width:447px; height:500px; background:#cff;}*//*因为是固定宽度，采用左右浮动方法可有效避免ie 3像素bug*/
+#Stopic {
+/*
+    position: absolute;
+    top: 150px;
+    left: 0px;
+*/
+    float: left;
+    margin: 5px;
+    background: #FFF;
+    /*border: 1px solid gray;*/
+    voice-family: "\"}\"";
+    voice-family:inherit;
+    width: 45%;
+}
+
+#Spost {
+/*
+    position: absolute;
+    top: 150px;
+    left: 50%;
+*/
+    float: right;
+    margin: 5px;
+    background: #FFF;
+    /*border: 1px solid gray;*/
+    voice-family: "\"}\"";
+    voice-family:inherit;
+    width: 45%;
+}
+
+
 #footer {
+    clear: both; /* 此属性定义了元素的哪边上不允许出现浮动元素: left,right,both,none */
     margin-top: 10px;
     margin-right: auto;
     margin-left: auto;
@@ -149,6 +210,7 @@ label
     border: 0.1em solid #dcdce9;
 }
 
+
 .submit input
 {
     color: #000;
@@ -173,15 +235,15 @@ textarea {
 }
 
 pre {
-    padding: 0.5em;
-    margin-left: 1em;
-    margin-right: 1em;
-    border: 0.1em solid #dcdce9;
+    /*padding: 0.5em;*/
+    /*margin-left: 1em;*/
+    /*margin-right: 1em;*/
+    /*border: 0.1em solid #dcdce9;*/
     white-space: pre;
     font-family : Monospace, sans-serif;
     font-size: 95%;
     overflow: auto;
-    max-height: 3in;
+    /*max-height: 3in;*/
     color: black;
 }
 
@@ -203,4 +265,10 @@ b.rtop b.r4, b.rbottom b.r4{margin: 0 1px;height: 2px}
 
 hr.HrWhite {
     color: white;
+}
+
+
+ul {
+    /* list-style 简写属性在一个声明中设置所有的列表属性 */
+    list-style: square inside url('/ymedia/images/eg_arrow.gif')
 }

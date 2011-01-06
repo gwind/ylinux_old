@@ -15,30 +15,44 @@
 
   <!-- body 用 container 包容，分4块： header,navigator,content,footer -->  
   <body>
-    <b class="rtop"><b class="r1"></b><b class="r2"></b><b class="r3"></b><b class="r4"></b></b>
     <div id="container">
 
-      <!-- 开始 header (分2块: logo,account) -->
-      <div id="header">
-        <div id="logo" class="left">
-          <a href="/"><img src="{{ MEDIA_URL }}images/ylinux-logo.gif" alt="YLinux"/></a>
-        </div>
+    <div id="header">
 
-        <div id="header_right" class="right">
-        <div id="account">
+    <div id="header1"> <!-- Start header1 -->
+      <!-- 开始 header (分2块: logo,account) -->
+      <div id="logo"><a href="/"><img src="{{ MEDIA_URL }}images/ylinux-logo.gif" alt="ylinux"/></a></div>
+
+      <!-- Starting navigator -->
+      <div id="navigator"></p>
+          <a href="/wiki/topic/news/"><img src="{{ MEDIA_URL }}images/feed.gif" alt="订阅最近动态"/>
+          <a href="/">首页</a>
+          <a href="/coding">新闻</a>
+          <a href="/bbs">论坛</a>
+          <a href="/blog">博客</a>
+          <a href="/coding">项目</a>
+          <a href="/wiki">知识库</a></p>
+      </p></div>
+      <!-- End navigator -->
+    </div> <!-- End header1 -->
+
+    <div id="header2"> <!-- Start header2 -->
+      <div id="login"></p>
           {% if user.is_authenticated %}
           欢迎您，<a href="{% url account:show_user user.id %}"><b>{{ user }}</a></b>
           {% if user.is_staff %} | <a href="{% url admin:index %}">管理界面</a> | {% endif %}
           <a href="{% url account:logout %}">退出</a>
           {% else %}
-          <p><a href="{% url account:login %}">登录</a> <a href="{% url account:register %}"><b>注册</b></a></p>
+          <a href="{% url account:login %}">登录</a> <a href="{% url account:register %}"><b>注册</b></a>
           {% endif %}
-        </div>
+      </p></div>
+
+      <div id="tools">
+
+        <input type="button" onmouseout="helpline('tip')" onmouseover="helpline('ime')" onclick="sougoubutton()" style="width: 110px; font-size: 10pt; font-weight: bold; color: rgb(159, 76, 9);" value="搜狗云输入法" name="addlitsitem" accesskey="t" class="btnbbcode"/>
 
         <!-- SiteSearch Google -->
-        <div id="sitesearch">
           <form method="get" action="http://www.google.com/search" target="google_window">
-
             <input type="text" name="as_q" size="16" maxlength="255" value=""/>
             <input type="submit" name="sa" value="搜索"/>
             <input name="as_sitesearch" value="ylinux.org" type="hidden"/>
@@ -50,32 +64,18 @@
             <input name="as_ft" value="1" type="hidden"/>
             <input name="as_qdr" value="all" type="hidden"/>
             <input name="as_occt" value="any" type="hidden"/>
-
             <input name="as_dt" value="i" type="hidden"/>
           </form>
-        </div>
         <!-- SiteSearch Google -->
 
-        <div id="ime">
-          <input type="button" onmouseout="helpline('tip')" onmouseover="helpline('ime')" onclick="sougoubutton()" style="width: 110px; font-size: 10pt; font-weight: bold; color: rgb(159, 76, 9);" value="搜狗云输入法" name="addlitsitem" accesskey="t" class="btnbbcode"/>
-        </div>
-       </div>
+      </div>
+    </div> <!-- End header2 -->
+
+    <hr/>
       </div>
       <!-- 结束 header -->
 
-      <!-- Starting navigator -->
-      <div id="navigator">
-        <ul>
-          <li><a href="/">首页</a></li>
-          <li><a href="/coding">新闻</a></li>
-          <li><a href="/bbs">论坛</a></li>
-          <li><a href="/blog">博客</a></li>
-          <li><a href="/coding">项目</a></li>
-          <li><a href="/wiki">知识库</a></li>
-          <a href="/wiki/topic/news/"><img src="{{ MEDIA_URL }}images/feed.gif" alt="订阅最近动态"/></a>
-        </ul>
-      </div>
-      <!-- End navigator -->
+
 
       <!-- 开始 content -->
       <div id="content">
@@ -95,6 +95,5 @@
       
     </div>
     <!-- 结束 container -->
-    <b class="rbottom"><b class="r4"></b><b class="r3"></b><b class="r2"></b><b class="r1"></b></b> 
     </body>
   </html>

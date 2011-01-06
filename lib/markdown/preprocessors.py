@@ -45,6 +45,7 @@ class HtmlStash:
     """
     This class is used for stashing HTML objects that we extract
     in the beginning and replace with place-holders.
+    此类是为了隐藏 HTML 块，以后可以替换。
     """
 
     def __init__ (self):
@@ -54,6 +55,8 @@ class HtmlStash:
 
     def store(self, html, safe=False):
         """
+        存储一个原始html块，返回一个placeholder，以后可以据此替换
+
         Saves an HTML segment for later reinsertion.  Returns a
         placeholder string that needs to be inserted into the
         document.
@@ -144,6 +147,7 @@ class HtmlBlockPreprocessor(Preprocessor):
                     continue
 
                 left_tag = self._get_left_tag(block)
+                # data_index 是 right_tag 结束的地方
                 right_tag, data_index = self._get_right_tag(left_tag, block)
 
                 if block[1] == "!":
@@ -179,7 +183,7 @@ class HtmlBlockPreprocessor(Preprocessor):
                     in_tag = True
                     continue
 
-                # 剩下的情况都当作 html 块处理
+                # 现在 block 里一定是 html 块处理
                 new_blocks.append(self.markdown.htmlStash.store(block.strip()))
 
             else:

@@ -1,3 +1,5 @@
+# coding: utf-8
+
 """
 CORE MARKDOWN BLOCKPARSER
 =============================================================================
@@ -17,6 +19,10 @@ import markdown
 
 class BlockProcessor:
     """ Base class for block processors. 
+
+    此基类用于将每一个block添加到ElementTree对象里，所有具体的实现
+    类比如提供 test 和 run 方法， test 决定当前处理的 block 是否用
+    run 方法加入 ElementTree.
     
     Each subclass will provide the methods below to work with the source and
     tree. Each processor will need to define it's own ``test`` and ``run``
@@ -382,8 +388,9 @@ class SetextHeaderProcessor(BlockProcessor):
 
 
 class HRProcessor(BlockProcessor):
-    """ Process Horizontal Rules. """
+    """ 处理 <hr/> -- Horizontal Rules. """
 
+    # 不以 >=3 个空格开头的 block， 如果有 >=3 个 '*' 或 '_' 或 '-' 字符， 即为 <hr/>
     RE = r'[ ]{0,3}(?P<ch>[*_-])[ ]?((?P=ch)[ ]?){2,}[ ]*'
     # Detect hr on any line of a block.
     SEARCH_RE = re.compile(r'(^|\n)%s(\n|$)' % RE)

@@ -178,7 +178,7 @@ class Topic(models.Model):
         f.close()
 
         from markdown import Markdown
-        Markdown().convertFile(input=self.body_path, 
+        Markdown(extensions=['fenced_code']).convertFile(input=self.body_path, 
                        output=self.body_html_path, 
                        encoding="utf8")
         

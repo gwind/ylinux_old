@@ -19,7 +19,9 @@
 
 {{ topic.body_html|safe }}
 
+
 {% if posts %}
+<hr/>
 <p>网友回复：</p>
 {% for index,post in posts %}
 <p>[{{ index }}/{{ total }}] <a href="{% url account:show_user post.user.id %}">{{ post.user }}</a> 在 {{ post.updated }} 于 <a href="http://www.ip138.com/ips.asp?ip={{ post.user_ip }}&action=2">{{ post.user_ip }}</a>{% ifequal user post.user %}<a href="{% url wiki:del_post post.id %}">删除</a>{% endifequal %}</p>

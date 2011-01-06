@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-
+# coding: utf-8
 """
 Fenced Code Extension for Python Markdown
 =========================================
@@ -68,7 +68,9 @@ FENCED_BLOCK_RE = re.compile( \
     re.MULTILINE|re.DOTALL
     )
 CODE_WRAP = '<pre><code%s>%s</code></pre>'
-LANG_TAG = ' class="%s"'
+#LANG_TAG = ' class="%s"'
+# 为了 syntaxhighlighter 语法高亮
+LANG_TAG = ' class="brush:%s;"'
 
 
 class FencedCodeExtension(markdown.Extension):
