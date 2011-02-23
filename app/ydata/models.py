@@ -4,13 +4,13 @@
 
 import os
 from django.conf import settings
-from markdown import Markdown
 
 from account.models import User,Group
 from django.db import models
 
 from ydata import settings as ydata_settings
 from ydata.util import urlize,smiles
+from markdown import Markdown
 
 
 TZ_CHOICES = [(float(x[0]), x[1]) for x in (
@@ -142,17 +142,22 @@ class Topic(models.Model):
 
     @property
     def body_path(self):
-        return os.path.join(settings.MEDIA_ROOT, ydata_settings.TOPICS_DIR, str(self.id) + '.src')
+        return os.path.join(settings.MEDIA_ROOT,
+                            ydata_settings.TOPICS_DIR,
+                            str(self.id) + '.src')
 
     @property
     def body_html_path(self):
-        return os.path.join(settings.MEDIA_ROOT, ydata_settings.TOPICS_DIR, str(self.id) + '.html')
+        return os.path.join(settings.MEDIA_ROOT,
+                            ydata_settings.TOPICS_DIR,
+                            str(self.id) + '.html')
     
     @property
     def body(self):
         try:
-            f = file(os.path.join(settings.MEDIA_ROOT, ydata_settings.TOPICS_DIR, self.body_path), 'r')
+            f = file(self.body_path, 'r')
             txt = f.read()
+            f.close()
         except IOError:
             return ''
         return txt
@@ -160,7 +165,7 @@ class Topic(models.Model):
     @property
     def body_html(self):
         try:
-            f = file(os.path.join(settings.MEDIA_ROOT, ydata_settings.TOPICS_DIR, self.body_html_path), 'r')
+            f = file(self.body_html_path, 'r')
             html = f.read()
             f.close()
         except IOError:
@@ -172,12 +177,10 @@ class Topic(models.Model):
         return ''.join(self.body.split('\n')[:4])
 
     def save_file(self, text):
-        #text = self.cleaned_data['text'].encode('utf8')
         f = file(self.body_path, 'w')
         f.write(text)
         f.close()
 
-        from markdown import Markdown
         Markdown(extensions=['fenced_code']).convertFile(input=self.body_path, 
                        output=self.body_html_path, 
                        encoding="utf8")

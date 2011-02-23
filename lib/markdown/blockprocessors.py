@@ -197,7 +197,7 @@ class CodeBlockProcessor(BlockProcessor):
     
     def run(self, parent, blocks):
         sibling = self.lastChild(parent)
-        block = blocks.pop(0)
+        block = blocks.pop(0) # 每次取出 blocks 数组里面的第一个元素
         theRest = ''
         if sibling and sibling.tag == "pre" and len(sibling) \
                     and sibling[0].tag == "code":

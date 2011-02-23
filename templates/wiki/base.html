@@ -18,9 +18,10 @@
     <script type="text/javascript" src="{{ MEDIA_URL }}js/syntaxhighlighter/scripts/shBrushPerl.js"></script>
     <script type="text/javascript" src="{{ MEDIA_URL }}js/syntaxhighlighter/scripts/shBrushXml.js"></script>
     <script type="text/javascript" src="{{ MEDIA_URL }}js/syntaxhighlighter/scripts/shBrushSql.js"></script>
-    <link type="text/css" rel="stylesheet" href="{{ MEDIA_URL }}js/syntaxhighlighter/styles/shCoreRDark.css"/>
+    <link type="text/css" rel="stylesheet" href="{{ MEDIA_URL }}js/syntaxhighlighter/styles/shThemeDefault.css"/>
     <script type="text/javascript">
       SyntaxHighlighter.config.tagName = 'code';
+      SyntaxHighlighter.defaults['toolbar'] = false;
       SyntaxHighlighter.all();
     </script>
   </head>
@@ -84,11 +85,11 @@
       </div>
       <!-- 结束 header -->
 
-      <!-- 开始 content -->
-      <div id="content">
+      <!-- 开始 main -->
+      <div id="main">
       {% block content %}{% endblock %}
       </div>
-      <!-- 结束 content -->
+      <!-- 结束 main -->
 
       <!-- 开始 footer -->
       <div id="footer">

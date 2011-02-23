@@ -45,7 +45,7 @@ Multiple blocks and language tags:
     ... <p>block two</p>
     ... ~~~~'''
     >>> markdown.markdown(text, extensions=['fenced_code'])
-    u'<pre><code class="python">block one\\n</code></pre>\\n\\n<pre><code class="html">&lt;p&gt;block two&lt;/p&gt;\\n</code></pre>'
+    u'<pre><code class="brush:python;">block one\\n</code></pre>\\n\\n<pre><code class="brush:html;">&lt;p&gt;block two&lt;/p&gt;\\n</code></pre>'
 
 Copyright 2007-2008 [Waylan Limberg](http://achinghead.com/).
 
@@ -59,7 +59,9 @@ Dependencies:
 * [Markdown 2.0+](http://www.freewisdom.org/projects/python-markdown/)
 
 """
-
+#运行 doctest 需要找到 markdown
+#import sys
+#sys.path.insert(0,'/home/jian/myprojects/ylinux/lib/')
 import markdown, re
 
 # Global vars
@@ -67,7 +69,7 @@ FENCED_BLOCK_RE = re.compile( \
     r'(?P<fence>^~{3,})[ ]*(\{?\.(?P<lang>[a-zA-Z0-9_-]*)\}?)?[ ]*\n(?P<code>.*?)(?P=fence)[ ]*$', 
     re.MULTILINE|re.DOTALL
     )
-CODE_WRAP = '<pre><code%s>%s</code></pre>'
+CODE_WRAP = '<pre><code%s>\n%s</code></pre>'
 #LANG_TAG = ' class="%s"'
 # 为了 syntaxhighlighter 语法高亮
 LANG_TAG = ' class="brush:%s;"'
@@ -86,7 +88,7 @@ class FencedCodeExtension(markdown.Extension):
 class FencedBlockPreprocessor(markdown.preprocessors.Preprocessor):
     
     def run(self, lines):
-        """ Match and store Fenced Code Blocks in the HtmlStash. """
+        """ Match and store Fenced Code Blocks in the HtmlStash. (Stash隐藏)"""
         text = "\n".join(lines)
         while 1:
             m = FENCED_BLOCK_RE.search(text)

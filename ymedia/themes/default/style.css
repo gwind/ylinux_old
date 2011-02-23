@@ -69,6 +69,15 @@ a:active {color: #0000FF}
     width: 80px;
 }
 
+#contents {
+    float: right;
+    padding-right: 10px;
+    border-top: 1px solid #CCCCCC;
+    border-bottom: 1px solid #CCCCCC;
+    border-left: 1px solid #CCCCCC;
+    border-right: 1px solid #CCCCCC;
+}
+
 #container {
     margin: 2px;10px;5px;10px;
     padding: 5px 10px 5px 10px;
@@ -141,10 +150,6 @@ a:active {color: #0000FF}
 
 #header hr {width: 95%; color: white; margin-top: 15px;}
 
-
-#content {
-    margin-top: 10px;
-}
 
 /*#Stopic { float:left; width:447px; height:500px; background:#6cf;}*/
 /*#Spost { float:right; width:447px; height:500px; background:#cff;}*//*因为是固定宽度，采用左右浮动方法可有效避免ie 3像素bug*/
@@ -241,7 +246,7 @@ pre {
     /*border: 0.1em solid #dcdce9;*/
     white-space: pre;
     font-family : Monospace, sans-serif;
-    font-size: 95%;
+    /*font-size: 95%;*/
     overflow: auto;
     /*max-height: 3in;*/
     color: black;
@@ -271,4 +276,16 @@ hr.HrWhite {
 ul {
     /* list-style 简写属性在一个声明中设置所有的列表属性 */
     list-style: square inside url('/ymedia/images/eg_arrow.gif')
+}
+
+#toplink {
+    border-top: 1px solid #CCCCCC;
+    clear: both;
+    height: 1%;
+    padding: 5px;
+    text-align: right;
+}
+
+strong {
+    color: red;
 }

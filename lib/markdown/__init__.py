@@ -333,6 +333,9 @@ class Markdown:
                 ext = load_extension(ext, configs.get(ext, []))
             if isinstance(ext, Extension):
                 try:
+                    # 每个扩展都有extendMarkdown方法，传递给它本类的实
+                    # 例（self），它调用下面的 registerExtension 方法注
+                    # 册函数，此处非常有技巧，值得学习！
                     ext.extendMarkdown(self, globals())
                 except NotImplementedError, e:
                     message(ERROR, e)
@@ -340,6 +343,7 @@ class Markdown:
                 message(ERROR, 'Extension "%s.%s" must be of type: "markdown.Extension".' \
                     % (ext.__class__.__module__, ext.__class__.__name__))
 
+    # 此方法可以被有reset()方法的扩展调用，用于本类的reset()方法一次重置所有的扩展
     def registerExtension(self, extension):
         """ This gets called by the extension """
         self.registeredExtensions.append(extension)
@@ -396,6 +400,9 @@ class Markdown:
             if newRoot:
                 root = newRoot
 
+        # 添加 contents
+        add_contents(root)
+            
         # Serialize _properly_.  Strip top-level tags.
         output, length = codecs.utf_8_decode(self.serializer(root, encoding="utf-8"))
         if self.stripTopLevelTags:
@@ -609,6 +616,50 @@ def markdownFromFile(input = None,
                   safe_mode=safe_mode,
                   output_format=output_format)
     md.convertFile(input, output, encoding)
+
+
+
+
+
+def add_contents(root):
+
+    ''' 处理 Element 根节点，将其下的 h1 全部创建内部链接，
+    并在文本开头插入链接
+    '''
+
+    toplink = etree.Element('p', id = "toplink")
+    the_link = etree.SubElement(toplink, 'a', href="#container")
+    the_link.text = u"回页首"
+
+    # 创建 content
+    contents = etree.Element('div', id = "contents")
+    ul = etree.SubElement(contents, 'ul')
+
+    # 给 header 添上内部链接
+    #childs = root.getchildren()
+    h1s = root.findall('h1')
+
+    for h in h1s:
+        addr = "H1_" + str(h1s.index(h))
+
+        li = etree.Element('li')
+        link = etree.SubElement(li, 'a', href = "#" + addr)
+        link.text = h.text
+        ul.append(li)
+
+        aname = etree.Element('a', name = addr)
+        aname.append(h)
+
+        index = root.getchildren().index(h) # 当前header在root中的序号
+        root.remove(h)
+        root.insert(index, aname)
+        if h != h1s[0]:
+            root.insert(index, toplink)
+        #etree.dump(aname)
+
+    #etree.dump(contents)
+    root.insert(0, contents)
+    root.append(toplink)
 
 
 
