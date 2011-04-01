@@ -8,14 +8,28 @@
   {% endfor %}
 </p>
 
-<h1>{{ topic }}</h1>
-<h4><a href="{% url account:show_user topic.user.id %}">{{ topic.user }}</a> 于 {{ topic.updated }} <!--在 <a href="http://www.ip138.com/ips.asp?ip={{ topic.user_ip }}&action=2">{{ topic.user_ip }}</a>-->更新</h4>
 
-<p>
-  {% ifequal user topic.user %}<a href="{% url wiki:edit_topic topic.id %}">编辑</a> |{% endifequal %}
-  <a href="{% url wiki:add_post topic.id %}">回复</a>
-  {% ifequal user topic.user %}<!--[<a href="{% url wiki:del_topic topic.id %}">删除</a>]-->| [<a href="{% url wiki:hidden_topic topic.id %}">隐藏</a>] [<a href="{% url wiki:recycled_topic topic.id %}">移入回收站</a>]{% endifequal %}
-</p>
+<div id="topic-header">
+  <p class="topic-title">{{ topic }}</p>
+  <p class="topic-info">
+    <b>作   者：</b> <a href="{% url account:show_user topic.user.id %}">{{ topic.user }}</a>
+    <br>
+    <b>发布时间：</b> {{ topic.created }}
+    <br>
+    <b>最近更新：</b> {{ topic.updated }}
+    <!--在 <a href="http://www.ip138.com/ips.asp?ip={{ topic.user_ip }}&action=2">{{ topic.user_ip }}</a>-->
+  </p>
+
+  <p class="topic-action">
+    {% ifequal user topic.user %}<a href="{% url wiki:edit_topic topic.id %}">编辑</a> |{% endifequal %}
+    <a href="{% url wiki:add_post topic.id %}">回复</a>
+    {% ifequal user topic.user %}<!--[<a href="{% url wiki:del_topic topic.id %}">删除</a>]-->| [<a href="{% url wiki:hidden_topic topic.id %}">隐藏</a>] [<a href="{% url wiki:recycled_topic topic.id %}">移入回收站</a>]{% endifequal %}
+  </p>
+
+</div>
+
+
+
 
 {{ topic.body_html|safe }}
 

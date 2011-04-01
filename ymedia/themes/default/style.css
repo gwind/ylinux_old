@@ -1,51 +1,40 @@
 /* Default style of YLinux (hettp://www.ylinux.org) */
 
-/*
 body {
-    margin: 50px,55px,20px,10px;
-    padding: 2px,5px,2px,5px;
-    background-color: #F0EBE2;
-}
-*/
-html {
-    /*background:none repeat scroll 0 0 #CCCCCC;*/
-    /*background:none repeat scroll 0 0 #AFC6CE;*/
-}
-
-body {
-    /*background-color: #F0EBE2;*/
-    /*background-color: #DAE1E5;*/
-    color:#000000;
-    margin: 10px 20px 10px 20px;
-    /*border: 1px solid white;*/
-    /*margin-left: auto;
-    margin-right: auto; 
-    width: 930px;
+    /*
+    -moz-border-radius: 11px 11px 11px 11px;
+    background: none repeat scroll 0 0 #FFFFFF;
+    border: 1px solid #DFDFDF;
     */
+    color: #333333;
+    margin: 10px 20px 10px 20px;
+    font-family: "Lucida Grande",Verdana,Arial,"Bitstream Vera Sans",sans-serif;
 }
 
-p {
-    text-indent:2em; /* 元素缩进 2em */
-}
 
 h1, h2, h3, h4, h5, h6 {
-    color: #577793;
     border-width: thin medium thick 10px;
     display: inline;
 }
 
-h1 {
-    font-size: 108%;
-    font-style: italic;
-    border-width: 2px;
+.atitle {
+    border-bottom: 1px solid #DADADA;
+    /*clear: both;*/
+    /*color: #666666;*/
+    font: 24px Georgia,"Times New Roman",Times,serif;
+    margin: 5px 0 0 -4px;
+    padding: 0 0 7px;
 }
 
-h2 {
-   font-size: 102%;
+.asmalltitle {
+    font: 18px Georgia,"Times New Roman",Times,serif;
+    margin: 5px 0 0 -4px;
+    padding: 0 0 7px;
 }
+
 
 a:link {color: blue}
-a:visited {color: #9F4C09}
+a:visited {color: #9F4C09} 
 a:hover {color: green}
 a:active {color: #0000FF}
 
@@ -71,11 +60,20 @@ a:active {color: #0000FF}
 
 #contents {
     float: right;
+    margin: 10px 0px 15px 20px;
+/*
     padding-right: 10px;
     border-top: 1px solid #CCCCCC;
     border-bottom: 1px solid #CCCCCC;
     border-left: 1px solid #CCCCCC;
     border-right: 1px solid #CCCCCC;
+*/
+}
+
+#contents ul {
+    list-style: none;
+    border: 1px solid #CCCCCC;
+    padding: 10px;
 }
 
 #container {
@@ -134,14 +132,12 @@ a:active {color: #0000FF}
 }
 
 #login {
-    clear: both;
     display: inline;
 }
 
 #tools {
-    clear: both;
     display: inline;
-    float: right;
+    /*float: right;*/
 }
 
 #tools form {
@@ -151,8 +147,6 @@ a:active {color: #0000FF}
 #header hr {width: 95%; color: white; margin-top: 15px;}
 
 
-/*#Stopic { float:left; width:447px; height:500px; background:#6cf;}*/
-/*#Spost { float:right; width:447px; height:500px; background:#cff;}*//*因为是固定宽度，采用左右浮动方法可有效避免ie 3像素bug*/
 #Stopic {
 /*
     position: absolute;
@@ -240,10 +234,6 @@ textarea {
 }
 
 pre {
-    /*padding: 0.5em;*/
-    /*margin-left: 1em;*/
-    /*margin-right: 1em;*/
-    /*border: 0.1em solid #dcdce9;*/
     white-space: pre;
     font-family : Monospace, sans-serif;
     /*font-size: 95%;*/
@@ -255,18 +245,6 @@ pre {
 img {
     border: 0 none;
 }
-
-/* 圆角边框 */
-/*div#RoundAngle {margin: 0 10%; background: #9BD1FA}*/
-/*div#RoundAngle {background: #9BD1FA}*/
-/*body#RoundAngle {background: #DAE1E5}
-b.rtop, b.rbottom {display:block;background: #092E20}
-b.rtop b, b.rbottom b{display:block;height: 1px; overflow: hidden; background: #DAE1E5}
-b.r1{margin: 0 5px}
-b.r2{margin: 0 3px}
-b.r3{margin: 0 2px}
-b.rtop b.r4, b.rbottom b.r4{margin: 0 1px;height: 2px}
-*/
 
 hr.HrWhite {
     color: white;
@@ -288,4 +266,20 @@ ul {
 
 strong {
     color: red;
+}
+
+#topic-header {
+    border: 1px solid #CCCCCC;
+    background-color: #EDEDED;
+    padding-left: 10px;
+    margin-buttom: 50px;
+}
+
+.topic-title {
+    font-family: sans-serif;
+    font-size:20px;
+}
+
+.topic-info {
+    padding: 5px;
 }

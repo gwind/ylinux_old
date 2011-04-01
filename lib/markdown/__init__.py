@@ -402,6 +402,7 @@ class Markdown:
 
         # 添加 contents
         add_contents(root)
+        swap_h2(root)
             
         # Serialize _properly_.  Strip top-level tags.
         output, length = codecs.utf_8_decode(self.serializer(root, encoding="utf-8"))
@@ -424,7 +425,7 @@ class Markdown:
 
         return output.strip()
 
-    def convertFile(self, input=None, output=None, encoding=None):
+    def convertFile(self, input=None, output=None, encoding=None, myfilter=None):
         """Converts a markdown file and returns the HTML as a unicode string.
 
         Decodes the file using the provided encoding (defaults to utf-8),
@@ -452,6 +453,8 @@ class Markdown:
         input_file.close()
         text = text.lstrip(u'\ufeff') # remove the byte-order mark
 
+        if myfilter:
+            text = myfilter(text)
         # Convert
         html = self.convert(text)
 
@@ -621,7 +624,7 @@ def markdownFromFile(input = None,
 
 
 
-def add_contents(root):
+def add_contents2(root):
 
     ''' 处理 Element 根节点，将其下的 h1 全部创建内部链接，
     并在文本开头插入链接
@@ -661,5 +664,71 @@ def add_contents(root):
     root.insert(0, contents)
     root.append(toplink)
 
+
+
+
+def add_contents(root):
+
+    ''' 处理 Element 根节点，将其下的 h1 全部创建内部链接，
+    并在文本开头插入链接
+    '''
+    # 给 header 添上内部链接
+    #childs = root.getchildren()
+    h1s = root.findall('h1')
+    if len(h1s) < 2:
+	return
+
+    toplink = etree.Element('p', id = "toplink")
+    the_link = etree.SubElement(toplink, 'a', href="#container")
+    the_link.text = u"回页首"
+
+    # 创建 content
+    contents = etree.Element('div', id = "contents")
+    ul = etree.SubElement(contents, 'ul')
+
+
+    for h in h1s:
+        addr = "H1_" + str(h1s.index(h))
+
+        li = etree.Element('li')
+        link = etree.SubElement(li, 'a', href = "#" + addr)
+        link.text = h.text
+        ul.append(li)
+
+        atitle = etree.Element('span')
+        atitle.set('class','atitle')
+        atitle.text = h.text
+        aname = etree.Element('a', name = addr)
+        aname.append(atitle)
+        ap = etree.Element('p')
+        ap.append(aname)
+
+        index = root.getchildren().index(h) # 当前header在root中的序号
+        root.remove(h)
+        root.insert(index, ap)
+        if h != h1s[0]:
+            root.insert(index, toplink)
+        #etree.dump(aname)
+
+    #etree.dump(contents)
+    root.insert(0, contents)
+    root.append(toplink)
+
+def swap_h2(root):
+
+    ''' 处理 Element 根节点，将其下的 h2 全部替换为 <p><span class='asmalltitle'>XXX</span></p> '''
+
+    h2s = root.findall('h2')
+
+    for h in h2s:
+        asmalltitle = etree.Element('span')
+        asmalltitle.set('class','asmalltitle')
+        asmalltitle.text = h.text
+        ap = etree.Element('p')
+        ap.append(asmalltitle)
+
+        index = root.getchildren().index(h) # 当前header在root中的序号
+        root.remove(h)
+        root.insert(index, ap)
 
 

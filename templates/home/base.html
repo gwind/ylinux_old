@@ -5,7 +5,7 @@
 
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    {% if theme %}<link rel="stylesheet" href="{{ MEDIA_URL }}home/themes/{{ theme }}/style.css" />{% else %}
+    {% if theme %}<link rel="stylesheet" href="{{ MEDIA_URL }}themes/{{ theme }}/style.css" />{% else %}
     <link rel="stylesheet" href="{{ MEDIA_URL }}themes/default/style.css" />{% endif %}
     {% block title %}{% if title %}<title>{{ title }} - YLinux.org</title>{% else %}<title>YLinux.org</title>{% endif %}{% endblock %}
     <link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="/wiki/topic/news/" />
@@ -48,10 +48,6 @@
       </p></div>
 
       <div id="tools">
-
-        <input type="button" onmouseout="helpline('tip')" onmouseover="helpline('ime')" onclick="sougoubutton()" style="width: 110px; font-size: 10pt; font-weight: bold; color: rgb(159, 76, 9);" value="搜狗云输入法" name="addlitsitem" accesskey="t" class="btnbbcode"/>
-
-        <!-- SiteSearch Google -->
           <form method="get" action="http://www.google.com/search" target="google_window">
             <input type="text" name="as_q" size="16" maxlength="255" value=""/>
             <input type="submit" name="sa" value="搜索"/>
@@ -66,12 +62,10 @@
             <input name="as_occt" value="any" type="hidden"/>
             <input name="as_dt" value="i" type="hidden"/>
           </form>
-        <!-- SiteSearch Google -->
-
+          <input type="button" onmouseout="helpline('tip')" onmouseover="helpline('ime')" onclick="sougoubutton()" style="width: 110px; font-size: 10pt; font-weight: bold; color: rgb(159, 76, 9);" value="搜狗云输入法" name="addlitsitem" accesskey="t" class="btnbbcode"/>
       </div>
     </div> <!-- End header2 -->
 
-    <hr/>
       </div>
       <!-- 结束 header -->
 

@@ -1,4 +1,5 @@
 {% extends 'wiki/base.html' %}
+{% block extend_header %}<script type="text/javascript" src="/ymedia/js/upload.js"></script>{% endblock %}
 {% block content %}
 
 <p>
@@ -32,6 +33,7 @@
       <option value="bbcode">bbcode</option>
       <option value="markdown" selected="selected">markdown</option>
     </select>
+    <span><a href="/wiki/topic/8/" target="_blank">Markdown 标记语言使用帮助</a></span>
   </p>
   <p>
     <label for="id_text">正文:</label>
@@ -41,6 +43,30 @@
   　 <p><input type="submit" value="发表"></p>
 
 </form>
+
+<div id="uploadList">
+  <p>附件管理</p>
+  <table>
+    <tbody id="upload">
+      <tr>
+        <th>ID</th>
+        <th>名字</th>
+        <th>描述</th>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div id="uF">
+  <table>
+    <tr>
+      <td id="upload_form"></td>
+    </tr>
+    <tr>
+      <td><button onclick="CreateUploadForm();">添加附件</button></td>
+    </tr>
+  </table>
+</div>
 
 
 {% endblock %}

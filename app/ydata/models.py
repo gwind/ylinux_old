@@ -2,8 +2,9 @@
 
 # 将 YLinux.org 的主要数据结构在此定义
 
-import os
+import os, re, codecs
 from django.conf import settings
+#from django.core.urlresolvers import reverse
 
 from account.models import User,Group
 from django.db import models
@@ -117,14 +118,11 @@ class Topic(models.Model):
     forumed = models.BooleanField('Forum中显示', default=True)
     recycled = models.BooleanField('放入回收站', default=False)
     hidden = models.BooleanField('隐藏', default=False)
+    markup = models.CharField('Markup', max_length=16, default="markdown", choices=MARKUP_CHOICES,
+                              help_text='<span><a href="/wiki/topic/8/" target="_blank">Markdown 标记语言使用帮助</a></span>')
 
     # 没有被被关注，需要主动关注
     subscribers = models.ManyToManyField(User, related_name='subscriptions', verbose_name='Subscribers', blank=True)
-
-    # 把 topic 的主体存放为文件
-    markup = models.CharField('Markup', max_length=16, default="markdown", choices=MARKUP_CHOICES)
-    #body_path = models.CharField('SrcPath', max_length=256)
-    #body_html_path = models.CharField('HtmlPath', max_length=256)
 
     # Tags
     tags = models.ManyToManyField('Tag', blank=True, verbose_name="标签")
@@ -183,8 +181,8 @@ class Topic(models.Model):
 
         Markdown(extensions=['fenced_code']).convertFile(input=self.body_path, 
                        output=self.body_html_path, 
-                       encoding="utf8")
-        
+                       encoding="utf8", myfilter=ylinux_text_filter)
+
     @models.permalink
     def get_absolute_url(self):
         return ('wiki:show_topic', [self.id])
@@ -317,25 +315,28 @@ class Report(models.Model):
 
 # 附件
 class Attachment(models.Model):
-    post = models.ForeignKey(Post, verbose_name='Post', related_name='attachments')
-    size = models.IntegerField('Size')
-    content_type = models.CharField('Content type', max_length=256)
-    path = models.CharField('Path', max_length=256)
+    user = models.ForeignKey(User, related_name='attachments', verbose_name='User')
+    topic = models.ForeignKey(Topic, related_name='attachments', verbose_name='Topic')
     name = models.TextField('Name')
+    size = models.IntegerField('Size')
+    path = models.CharField('Path', max_length=256)
     hash = models.CharField('Hash', max_length=40, blank=True, default='', db_index=True)
+    description = models.TextField('描述', blank=True,  default='')
+    qtimes = models.IntegerField('引用次数', blank=True, default=1) #被其他用户引用的次数
+    dtimes = models.IntegerField('下载次数', blank=True, default=0) #被下载的次数
+    created = models.DateTimeField("创建时间", auto_now_add=True)
+    updated = models.DateTimeField("更新时间", auto_now=True)
 
     def __unicode__(self):
         return self.name
 
-    def save(self, *args, **kwargs):
-        super(Attachment, self).save(*args, **kwargs)
-        if not self.hash:
-            self.hash = sha_constructor(str(self.id) + settings.SECRET_KEY).hexdigest()
-        super(Attachment, self).save(*args, **kwargs)
-
     @models.permalink
     def get_absolute_url(self):
-        return ('wiki:ydata_attachment', [self.hash])
+        return ('ydata:show_attachment', [self.id])
+
+    @models.permalink
+    def get_absolute_durl(self):
+        return ('ydata:download_attachment', [self.id])
 
     def get_absolute_path(self):
         return os.path.join(settings.MEDIA_ROOT, ydata_settings.ATTACHMENT_UPLOAD_TO,
@@ -352,3 +353,68 @@ class Tag(models.Model):
 
     def __unicode__(self):
         return self.name 
+
+
+# TOPIC 里几种可行的引用附件格式： 
+# [A:ID] | [a:ID] | [附:ID] | [附件:ID] 等
+ATTACHMENT_QUOTE = re.compile(u'\[[ ]*(a|atta|attachment|附|附件)[ ]*:[ ]*(?P<id>[0-9]+)[ ]*\]', re.I)
+WIKI_QUOTE = re.compile(u'\[[ ]*(w|wiki|维科|知识库)[ ]*:[ ]*(?P<id>[0-9]+)[ ]*\]', re.I)
+IMG_QUOTE = re.compile(u'\[[ ]*(i|img|图片)[ ]*:[ ]*(?P<id>[0-9]+)[ ]*\]', re.I)
+
+def ylinux_text_filter(text):
+
+    # 过滤附件信息
+    while 1:
+        m = ATTACHMENT_QUOTE.search(text)
+        if m:
+            place_html = u''
+            id = ''
+            if m.group('id'):
+                id = m.group('id')
+                try:
+                    a = Attachment.objects.get(pk=id)
+                    place_html = u'<a href="%s">%s</a>' % (a.get_absolute_url(), a.name)
+                except Attachment.DoesNotExist:
+                    place_html = u'<span style="color:red;">[ID为%s的附件不存在]</span>' % id
+
+            text = '%s%s%s' % (text[:m.start()], place_html, text[m.end():])
+        else:
+            break
+
+    # 过滤WIKI信息
+    while 1:
+        m = WIKI_QUOTE.search(text)
+        if m:
+            place_html = u''
+            id = ''
+            if m.group('id'):
+                id = m.group('id')
+                try:
+                    t = Topic.objects.get(pk=id)
+                    place_html = u'<a href="%s">%s</a>' % (t.get_absolute_url(), t.name)
+                except Topic.DoesNotExist:
+                    place_html = u'<span style="color:red;">[ID为%s的附件不存在]</span>' % id
+
+            text = '%s%s%s' % (text[:m.start()], place_html, text[m.end():])
+        else:
+            break
+
+    # 过滤图片信息
+    while 1:
+        m = IMG_QUOTE.search(text)
+        if m:
+            place_html = u''
+            id = ''
+            if m.group('id'):
+                id = m.group('id')
+                try:
+                    img = Attachment.objects.get(pk=id)
+                    place_html = u'<img src="%s" alt="%s"/>' % (img.get_absolute_durl(), img.name)
+                except Topic.DoesNotExist:
+                    place_html = u'<span style="color:red;">[ID为%s的附件不存在]</span>' % id
+
+            text = '%s%s%s' % (text[:m.start()], place_html, text[m.end():])
+        else:
+            break
+
+    return text

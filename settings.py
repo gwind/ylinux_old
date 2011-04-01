@@ -136,6 +136,7 @@ INSTALLED_APPS = (
     'ylinux.app.ydata',
     'ylinux.app.wiki',
     'ylinux.app.blog',
+    'ylinux.app.ylab',
 )
 
 

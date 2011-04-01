@@ -18,61 +18,52 @@
 
       <!-- 开始 header (分2块: logo,account) -->
       <div id="header">
-        <div id="logo" class="left">
-          <a href="/"><img src="{{ MEDIA_URL }}images/ylinux-logo.gif" alt="YLinux"/></a>
+      
+      <div id="header1">
+        <div id="logo" class="left"><a href="/"><img src="{{ MEDIA_URL }}images/ylinux-logo.gif" alt="YLinux"/></a></div>
+
+        <div id="navigator"><p>
+          <a href="/wiki/topic/news/"><img src="{{ MEDIA_URL }}images/feed.gif" alt="订阅最近动态"/></a>
+          <a href="/">首页</a>
+          <a href="/coding">新闻</a>
+          <a href="/bbs">论坛</a>
+          <a href="/blog">博客</a>
+          <a href="/coding">项目</a>
+          <a href="/wiki">知识库</a>
+        </p></div>
+      </div>
+
+      <div id="header2">
+        <div id="login">
+            {% if user.is_authenticated %}
+            欢迎您，<a href="{% url account:show_user user.id %}"><b>{{ user }}</a></b>
+            {% if user.is_staff %} | <a href="{% url admin:index %}">管理界面</a> | {% endif %}
+            <a href="{% url account:logout %}">退出</a>
+            {% else %}
+            <p><a href="{% url account:login %}">登录</a> <a href="{% url account:register %}"><b>注册</b></a></p>
+            {% endif %}
         </div>
 
-        <div id="header_right" class="right">
-        <div id="account">
-          {% if user.is_authenticated %}
-          欢迎您，<a href="{% url account:show_user user.id %}"><b>{{ user }}</a></b>
-          {% if user.is_staff %} | <a href="{% url admin:index %}">管理界面</a> | {% endif %}
-          <a href="{% url account:logout %}">退出</a>
-          {% else %}
-          <p><a href="{% url account:login %}">登录</a> <a href="{% url account:register %}"><b>注册</b></a></p>
-          {% endif %}
+        <div id="tools">
+            <form method="get" action="http://www.google.com/search" target="google_window">
+              <input type="text" name="as_q" size="16" maxlength="255" value=""/>
+              <input type="submit" name="sa" value="Google搜索本站"/>
+              <input name="as_sitesearch" value="ylinux.org" type="hidden"/>
+              <input name="newwindow" value="1" type="hidden"/>
+              <input name="complete" value="1" type="hidden"/>
+              <input name="forid" value="zh-CN" type="hidden"/>
+              <input type="hidden" name="num" value="10"/>
+              <input name="btnG" value="Google+%E6%90%9C%E7%B4%A2&" type="hidden"/>
+              <input name="as_ft" value="1" type="hidden"/>
+              <input name="as_qdr" value="all" type="hidden"/>
+              <input name="as_occt" value="any" type="hidden"/>
+              <input name="as_dt" value="i" type="hidden"/>
+            </form>
+            <input type="button" onmouseout="helpline('tip')" onmouseover="helpline('ime')" onclick="sougoubutton()" style="width: 110px; font-size: 10pt; font-weight: bold; color: rgb(159, 76, 9);" value="搜狗云输入法" name="addlitsitem" accesskey="t" class="btnbbcode"/>
         </div>
-
-        <!-- SiteSearch Google -->
-        <div id="sitesearch">
-          <form method="get" action="http://www.google.com/search" target="google_window">
-
-            <input type="text" name="as_q" size="16" maxlength="255" value=""/>
-            <input type="submit" name="sa" value="搜索"/>
-            <input name="as_sitesearch" value="ylinux.org" type="hidden"/>
-            <input name="newwindow" value="1" type="hidden"/>
-            <input name="complete" value="1" type="hidden"/>
-            <input name="forid" value="zh-CN" type="hidden"/>
-            <input type="hidden" name="num" value="10"/>
-            <input name="btnG" value="Google+%E6%90%9C%E7%B4%A2&" type="hidden"/>
-            <input name="as_ft" value="1" type="hidden"/>
-            <input name="as_qdr" value="all" type="hidden"/>
-            <input name="as_occt" value="any" type="hidden"/>
-
-            <input name="as_dt" value="i" type="hidden"/>
-          </form>
-        </div>
-        <!-- SiteSearch Google -->
-
-        <div id="ime">
-          <input type="button" onmouseout="helpline('tip')" onmouseover="helpline('ime')" onclick="sougoubutton()" style="width: 110px; font-size: 10pt; font-weight: bold; color: rgb(159, 76, 9);" value="搜狗云输入法" name="addlitsitem" accesskey="t" class="btnbbcode"/>
-        </div>
-       </div>
+      </div>
       </div>
       <!-- 结束 header -->
-
-      <!-- Starting navigator -->
-      <div id="navigator">
-        <ul>
-          <li><a href="/">首页</a></li>
-          <li><a href="/coding">新闻</a></li>
-          <li><a href="/coding">论坛</a></li>
-          <li><a href="/blog">博客</a></li>
-          <li><a href="/coding">项目</a></li>
-          <li><a href="/wiki">知识库</a></li>
-        </ul>
-      </div>
-      <!-- End navigator -->
 
       <!-- 开始 content -->
       <div id="content">

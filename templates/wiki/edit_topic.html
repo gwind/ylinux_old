@@ -1,4 +1,5 @@
 {% extends 'wiki/base.html' %}
+{% block extend_header %}<script type="text/javascript" src="/ymedia/js/upload.js"></script>{% endblock %}
 {% block content %}
 
 <p>
@@ -6,7 +7,7 @@
   {% for id,name in parents %}
   | <a href="{% url wiki:show_catalog id %}">{{ name }}</a>
   {% endfor %}
-  | 编辑 {{ topic }}
+  | 编辑 {{ topic }} [<span id="topicID">{{topic.id}}</span>]
 </p>
 
 
@@ -28,5 +29,37 @@
   　 <p><input type="submit" value="保存"></p>
   {% endif %}
 </form>
+
+<div id="uploadList">
+  <p>附件管理</p>
+  <table>
+    <tbody id="upload">
+      <tr>
+        <th>ID</th>
+        <th>名字</th>
+        <th>描述</th>
+      </tr>
+      {% for a in attachments %}
+      <tr>
+        <td>{{ a.id }}</td>
+        <td><a href="{% url ydata:show_attachment a.id %}">{{ a.name }}</a> [<a href="{% url ydata:download_attachment a.id %}">下载</a>]</td>
+        <td>无</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<div id="uF">
+  <table>
+    <tr>
+      <td id="upload_form"></td>
+    </tr>
+    <tr>
+      <td><button onclick="CreateUploadForm();">添加附件</button></td>
+    </tr>
+  </table>
+</div>
+
 
 {% endblock %}

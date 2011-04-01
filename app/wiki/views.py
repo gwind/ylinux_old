@@ -1,8 +1,5 @@
 # coding: utf-8
 
-# Topic 表示一篇 Wiki 文章
-# Post 表示一则回复
-
 from django.http import Http404, HttpResponse, HttpResponseRedirect, HttpResponseForbidden
 from django.shortcuts import get_object_or_404
 from django.core.urlresolvers import reverse
@@ -10,7 +7,7 @@ from django.core.urlresolvers import reverse
 from syndication.views import Feed
 
 from account.decorators import login_required, permission_required
-from ydata.models import Catalog,Topic,Post
+from ydata.models import Catalog,Topic,Post,Attachment
 from ydata.forms import AddPostForm, \
     AddTopicForm, EditTopicForm
 
@@ -101,7 +98,6 @@ def add_post(request, id):
         return HttpResponseForbidden('<h1>您没有这个权限！请 <a href="/account/login">登录</a></h1>')
 
     topic = get_object_or_404(Topic,pk=id)
-    posts = topic.posts.all().select_related()
     if not topic.catalog.has_access(request.user):
         return HttpResponseForbidden('<h1>您没有权限回复此帖！</h1>')
     
@@ -119,6 +115,7 @@ def add_post(request, id):
         url = reverse ('wiki:show_topic', args=[post.topic.id])
         return HttpResponseRedirect(url)
 
+    posts = topic.posts.all().select_related()
     return {'form':form, 'posts':posts, 'topic':topic}
 
 
@@ -169,7 +166,8 @@ def edit_topic(request, id):
         url = reverse ('wiki:show_topic', args=[id])
         return HttpResponseRedirect(url)
 
-    return {'form':form,'parents':parents,'topic':topic}
+    attachments = Attachment.objects.filter(topic=topic)
+    return {'form':form,'parents':parents,'topic':topic, 'attachments':attachments}
 
 
 @login_required
