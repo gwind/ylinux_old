@@ -18,6 +18,8 @@ from admin.forms import \
     AddCatalogForm, EditCatalogForm, \
     AddPermissionForm, EditPermissionForm
 
+from home.forms import ContactForm
+
 from ydata.util import render_to, build_form, get_parents
 
 
@@ -351,7 +353,8 @@ def del_catalog (request, id):
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
 
-# 重启 fastcgi
+# 重启 fastcgi , 先随便选个高级点的权限
+@permission_required('ydata.delete_catalog')
 def reboot(request):
 
     import os
@@ -366,3 +369,37 @@ def reboot(request):
 # 1. permission_required 的用法
 # @permission_required('account.createe_perm', login_url='/admin/')
 # login_url 指定认证失败的跳转路径
+
+@permission_required('ydata.delete_catalog')
+def email_to_all(request):
+    ''' 管理员群发邮件 '''
+
+
+    if request.method == 'POST':
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            subject = form.cleaned_data['subject']
+            message = form.cleaned_data['message']
+            sender = form.cleaned_data['sender']
+
+            recipients = []
+            #recipients = ['ylinux.admin@gmail.com','lijian.gnu@gmail.com',]
+            #recipients.append(sender)
+            from django.core.mail import send_mail
+            users = User.objects.all()
+            for u in users:
+                recipients.append(u.email)
+            #for id in range(29,35):
+            #    u = User.objects.get(pk=id)
+                recipient = [u.email]
+                send_mail (subject,message,sender,recipient)
+                
+            return render_to_response('home/thanks.html',{'title':"感谢", 'recipients':recipients},
+                                      context_instance=RequestContext(request))
+        return HttpResponse("%s" % form.errors)
+    else:
+        form = ContactForm()
+
+        return render_to_response('home/contact.html',
+                                  {'title':"联系",'form':form,},
+                                  context_instance=RequestContext(request))

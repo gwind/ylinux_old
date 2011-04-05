@@ -1,0 +1,29 @@
+{% extends "home/base.html" %}
+
+{% block content %}
+
+<p>感谢您的关注，社区正在开发中。欢迎您也能参与进来：<a href="/coding" onmouseover="this.style.color='green'" onMouseOut="this.style.color='#808284'">这里</a> 。{% if new_register_user %}欢迎新用户：<a href="{% url account:show_user new_register_user.id %}">{{ new_register_user }}</a>{% endif %}</p>
+
+<div id="Stopic">
+{% if topics %}
+<h3>最近主题(top 10)：</h3>
+  <ul>
+  {% for t in topics %}
+    <li>[{{ t.catalog }}] <a href="{% url wiki:show_topic t.id %}">{{ t.name }}</a></li>
+  {% endfor %}
+  </ul>
+{% endif %}
+</div>
+
+<div id="Spost">
+{% if posts %}
+<h3>最近回复(top 10)：</h3>
+  <ul>
+  {% for p in posts %}
+    <li>[{{ p.topic.catalog }}] <a href="{% url wiki:show_post p.id %}" title="{{ p }}">{{ p.topic }}</a> by <a href="{% url account:show_user p.user.id %}">{{ p.user }}</a></li>
+  {% endfor %}
+  </ul>
+{% endif %}
+</div>
+
+{% endblock %}

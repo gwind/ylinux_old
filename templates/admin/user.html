@@ -14,6 +14,8 @@
 {% endfor %}
 </ul>
 
+{% if create_user %}<p><a href="{% url admin:email2all %}">管理员群发邮件</a></p>{% endif %}
+
 {% if create_user %}<p><a href="{% url admin:add_user %}">创建用户</a></p>{% endif %}
 
 {% endblock %}

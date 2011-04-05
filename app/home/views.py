@@ -76,3 +76,6 @@ def sitemap(request):
 def robots(request):
     return HttpResponse('User-agent: * ' + '\n' + 'Allow: /')
 
+@render_to('home/index_foolday.html')
+def index_foolday(request):
+    return {}

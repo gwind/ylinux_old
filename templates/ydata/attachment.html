@@ -1,0 +1,43 @@
+{% extends 'wiki/base.html' %}
+{% block content %}
+
+<p><span class="title">查看附件</span> <a href="{% url ydata:download_attachment attachment.id %}">下载附件</a> </p>
+
+<table>
+  <tbody>
+    <tr>
+      <th>名字</th>
+      <td>{{ attachment.name }}</td>
+    </tr>
+    <tr>
+      <th>大小</th>
+      <td>{{ attachment.size }}</td>
+    </tr>
+    <tr>
+      <th>所有者</th>
+      <td><a href="{% url account:show_user attachment.user.id %}">{{ attachment.user }}<a></td>
+    </tr>
+    <tr>
+      <th>描述</th>
+      <td>{{ attachment.description }}</td>
+    </tr>
+    <tr>
+      <th>创建时间</th>
+      <td>{{ attachment.created }}</td>
+    </tr>
+    <tr>
+      <th>更新时间</th>
+      <td>{{ attachment.updated }}</td>
+    </tr>
+    <tr>
+      <th>下载次数</th>
+      <td>{{ attachment.dtimes }}</td>
+    </tr>
+    <tr>
+      <th>引用次数</th>
+      <td>{{ attachment.qtimes }}</td>
+    </tr>
+  <tbody>
+</table>
+
+{% endblock %}

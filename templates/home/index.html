@@ -2,28 +2,30 @@
 
 {% block content %}
 
-<p>感谢您的关注，社区正在开发中。欢迎您也能参与进来：<a href="/coding" onmouseover="this.style.color='green'" onMouseOut="this.style.color='#808284'">这里</a> 。{% if new_register_user %}欢迎新用户：<a href="{% url account:show_user new_register_user.id %}">{{ new_register_user }}</a>{% endif %}</p>
+<p>{% if new_register_user %}欢迎新用户：<a href="{% url account:show_user new_register_user.id %}">{{ new_register_user }}</a>{% endif %}</p>
 
-<div id="Stopic">
-{% if topics %}
-<h3>最近主题(top 10)：</h3>
-  <ul>
-  {% for t in topics %}
-    <li>[{{ t.catalog }}] <a href="{% url wiki:show_topic t.id %}">{{ t.name }}</a></li>
-  {% endfor %}
-  </ul>
-{% endif %}
+<p>感谢您的关注，社区正在开发中，社区开发最新进展：</p>
+<div id="newProgress">
+  <p><span class="asmalltitle">2011年3月31日：增加附件支持，增加Topic内容信息过滤功能</span></p>
+  <ol>
+    <li>Topic 可以上传附件，下载附件</li>
+    <li>Topic 自动过滤系统可以处理类似这样的字符串： [附件:ID] , [知识库:ID]</li>
+  </ol>
+  <p>参看：</p>
+  <ol>
+    <li><a href="/wiki/topic/72/">YLinux 内部信息过滤系统</a></li>
+    <li><a href="/wiki/topic/73/">YLinux 附件系统</a></li>
+  </ol>
 </div>
 
-<div id="Spost">
-{% if posts %}
-<h3>最近回复(top 10)：</h3>
-  <ul>
-  {% for p in posts %}
-    <li>[{{ p.topic.catalog }}] <a href="{% url wiki:show_post p.id %}" title="{{ p }}">{{ p.topic }}</a> by <a href="{% url account:show_user p.user.id %}">{{ p.user }}</a></li>
-  {% endfor %}
-  </ul>
-{% endif %}
-</div>
+<p>详细的开发进展，请查看： <a href="http://ylinux.org/wiki/topic/3/">社区网站开发进展</a></p>
 
+<p>你可能会对下列问题感兴趣：</p>
+<ul>
+  <li><a href="http://ylinux.org/wiki/topic/1/">YLinux 是什么</a></li>
+  <li><a href="http://ylinux.org/wiki/topic/5/">YLinux 的目标</a></li>
+  <li><a href="http://ylinux.org/wiki/topic/6/">YLinux 的架构</a></li>
+</ul>
+
+<p>如果您对YLinux感兴趣，那么加入我们吧： <a href="http://ylinux.org/contact/">联系我们</a></p>
 {% endblock %}

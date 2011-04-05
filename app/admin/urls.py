@@ -32,6 +32,8 @@ urlpatterns = patterns('admin.views',
     # 最好不要 del user， 禁止用户即可
     url(r'^user/(?P<id>\d+)/del$', 'del_user', name='del_user'),
 
+    url(r'^user/email2all/$', 'email_to_all', name='email2all'),
+
 
     # Catalog
     url(r'^catalog/$', 'catalog', name='catalogs'),
