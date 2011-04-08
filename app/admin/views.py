@@ -9,7 +9,7 @@ from django.core.urlresolvers import reverse
 from account.decorators import login_required, permission_required
 
 from account.models import Permission,Group,User,AnonymousUser
-from ydata.models import Catalog,Topic,Post
+from ydata.models import Catalog, Topic, Post
 
 from account.forms import RegisterForm,LoginForm,AuthenticationForm
 from admin.forms import \

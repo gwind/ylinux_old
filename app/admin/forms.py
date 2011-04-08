@@ -125,7 +125,7 @@ class AddCatalogForm(forms.ModelForm):
 
     class Meta:
         model = Catalog
-        fields = ['name','parent','position','summary', 'description', 'groups']
+        fields = ['name','parent', 'position','summary', 'description', 'groups']
         
     def __init__ (self, *args, **kwargs):
         self.parent = kwargs.pop('parent', None)
@@ -152,7 +152,7 @@ class EditCatalogForm(forms.ModelForm):
 
     class Meta:
         model = Catalog
-        fields = ['name','parent','position','summary', 'description','groups']
+        fields = ['name','parent', 'position','summary', 'description','groups']
 
     def __init__(self, *args, **kwargs):
         self.parent = kwargs.pop('parent', None)

@@ -18,9 +18,9 @@ from ydata.util import render_to, build_form, get_parents, ylinux_get_ip
 def index(request):
     """首页"""
 
-    #catalogs = Catalog.objects.all()
+    catalogs = Catalog.objects.all()
     # 列出所有顶级目录
-    catalogs = Catalog.objects.filter(parent=None)
+    #catalogs = Catalog.objects.filter(parent=None)
     topics = Topic.objects.all()
     posts = Post.objects.all()
     return {'catalogs':catalogs,
@@ -100,7 +100,6 @@ def add_post(request, id):
     topic = get_object_or_404(Topic,pk=id)
     if not topic.catalog.has_access(request.user):
         return HttpResponseForbidden('<h1>您没有权限回复此帖！</h1>')
-    
     # 如果 topic 已锁，则重定向到显示 topic
     if topic and topic.closed:
         return HttpResponseRedirect(topic.get_absolute_url())

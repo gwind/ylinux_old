@@ -1,0 +1,9 @@
+{% extends "bbs/base.html" %}
+
+{% block content %}
+
+{% if new_register_user %}<p>欢迎新用户：<a href="{% url account:show_user new_register_user.id %}">{{ new_register_user }}</a></p>{% endif %}
+
+<p>ID 为 {{ id }} 的 {{ type }} 不存在！</p>
+
+{% endblock %}

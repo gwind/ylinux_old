@@ -17,8 +17,7 @@
   <!-- body 用 container 包容，分4块： header,navigator,content,footer -->  
   <body>
     <div id="container">
-      <!-- 开始 header (分2块: logo,account) -->
-      <div id="header">
+      <div id="nav">
         <p>
           <a href="/">首页</a> |
           <a href="/coding">新闻</a> |
@@ -27,15 +26,27 @@
           <a href="/coding">项目</a> |
           <a href="/wiki">知识库</a> |
           <a href="/wiki/topic/news/"><img src="{{ MEDIA_URL }}images/feed.gif" alt="订阅最近动态"/></a>
-
-          {% if user.is_authenticated %}
-          欢迎您，<a href="{% url account:show_user user.id %}"><b>{{ user }}</a></b>
-          {% if user.is_staff %} | <a href="{% url admin:index %}">管理界面</a> | {% endif %}
-          <a href="{% url account:logout %}">退出</a>
-          {% else %}
-          <p><a href="{% url account:login %}">登录</a> <a href="{% url account:register %}"><b>注册</b></a></p>
-          {% endif %}
         </p>
+      </div>
+      <!-- 开始 header (分2块: logo,account) -->
+      <div id="header">
+        <div id="header_welcome">
+          <p><a href="{% url bbs:index %}">YLinux 论坛系统</a></p>
+        </div>
+        <div id="header_account">
+          <ul>
+            {% if user.is_authenticated %}
+            <li>欢迎您，<a href="{% url account:show_user user.id %}"><b>{{ user }}</a></b></li>
+            {% if user.is_staff %}
+            <li><a href="{% url admin:index %}">管理界面</a></li>
+            {% endif %}
+            <li><a href="{% url account:logout %}">退出</a></li>
+            {% else %}
+            <li><a href="{% url account:login %}">登录</a></li>
+            <li><a href="{% url account:register %}">注册</a></li>
+          {% endif %}
+          </ul>
+        </div>
       </div>
       <!-- 结束 header -->
 

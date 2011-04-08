@@ -1,0 +1,35 @@
+{% extends "bbs/base.html" %}
+{% block content %}
+
+{% if new_register_user %}<p>欢迎新用户：<a href="{% url account:show_user new_register_user.id %}">{{ new_register_user }}</a></p>{% endif %}
+
+<div>
+  <p><a href="{% url bbs:index %}">YLinux论坛</a>
+    {% for id,name in parents %}
+    >> <a href="{% url bbs:catalog id %}">{{ name }}</a>
+    {% endfor %}
+    => 查看主题： <span class="the_title"> {{ topic }}</span>
+  </p>
+  <p>{% ifequal user topic.user %}<a href="{% url wiki:edit_topic topic.id %}">编辑</a> |{% endifequal %} <a href="{% url wiki:add_post topic.id %}">发表新回复</a></p>
+</div>
+<div class="topic_header">
+  <div class="tdc1"><strong>作者</strong></div>
+  <div class="tdc2"><strong>内容</strong></div>
+</div>
+<div class="topic_body">
+  <div class="tdc1"><a href="{% url account:show_user topic.user.id %}">{{ topic.user }}</a></div>
+  <div class="tdc2">
+    <h2>标题： {{ topic.name }}</h2>
+    {{ topic.body_html|safe }}
+  </div>
+</div>
+{% for p in posts %}
+<div class="post_body">
+  <div class="tdc1"><a href="{% url account:show_user p.user.id %}">{{ p.user }}</a></div>
+  <div class="tdc2">
+    {{ p.body_html|safe }}
+  </div>
+</div>
+{% endfor %}
+
+{% endblock %}

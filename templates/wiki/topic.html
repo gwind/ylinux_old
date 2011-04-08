@@ -13,10 +13,12 @@
   <p class="topic-title">{{ topic }}</p>
   <p class="topic-info">
     <b>作   者：</b> <a href="{% url account:show_user topic.user.id %}">{{ topic.user }}</a>
-    <br>
+    <br/>
     <b>发布时间：</b> {{ topic.created }}
-    <br>
+    <br/>
     <b>最近更新：</b> {{ topic.updated }}
+    <br/>
+    <b>查看次数:</b> {{ topic.view_count }}
     <!--在 <a href="http://www.ip138.com/ips.asp?ip={{ topic.user_ip }}&action=2">{{ topic.user_ip }}</a>-->
   </p>
 

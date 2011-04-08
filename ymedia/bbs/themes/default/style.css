@@ -40,6 +40,21 @@ h2 {
    font-size: 102%;
 }
 
+.atitle {
+    border-bottom: 1px solid #DADADA;
+    /*clear: both;*/
+    /*color: #666666;*/
+    font: 24px Georgia,"Times New Roman",Times,serif;
+    margin: 5px 0 0 -4px;
+    padding: 0 0 7px;
+}
+
+.asmalltitle {
+    font: 18px Georgia,"Times New Roman",Times,serif;
+    margin: 5px 0 0 -4px;
+    padding: 0 0 7px;
+}
+
 a:link {color: blue}
 a:visited {color: #9F4C09}
 a:hover {color: green}
@@ -70,10 +85,6 @@ a:active {color: #0000FF}
     padding: 5px 10px 5px 10px;
 }
 
-#header {
-    margin-top: 2px;
-    /*height: 60px;*/
-}
 
 #logo {
     height: 60px;
@@ -124,6 +135,7 @@ a:active {color: #0000FF}
     padding: 5px;
     text-align: center;
     list-style: none;
+    background-color: #DAE1E5;
 }
 
 label
@@ -188,3 +200,161 @@ img {
 hr.HrWhite {
     color: white;
 }
+
+#header {
+    margin-top: 2px;
+    border: 1px solid #DDE4EB;
+    /*height: 60px;*/
+}
+
+#header_nav {
+    border-buttom: 1px solid #DDE4EB;
+    padding: 0.5px 20px 0 20px;
+    width: auto;
+}
+
+#header_welcome {
+    height: 80px;
+    padding: 5px 20px 0 20px;
+    background-color: #517CA1;
+}
+
+#header_welcome a {
+    color: white;
+}
+
+#header_account {
+    width: auto;
+    height: 30px;
+    padding: 10px 20px 5px 20px;
+    /*float: right;*/
+    color: white;
+    background-color: #313D47;
+}
+
+#header_account ul, #header_account li {
+    margin: 0;
+    padding: 0;
+}
+#header_account ul {
+    float: right;
+}
+#header_account li {
+    list-style-type: none;
+    height: 28px;
+    margin-left: 10px;
+    float: left;
+}
+#header_account a {
+    color: white;
+}
+
+
+.forum_list {
+    margin-bottom: 20px;
+}
+
+.forum_header {
+    background-color: #294F6E;
+    color: white;
+}
+
+.catalog_header, .topic_header {
+    clear: both;
+    /*border: 1px solid #DDE4EB;*/
+    background-color: #DFE6ED;
+}
+
+.catalog_title {
+    clear: both;
+    /*background-color: #294F6E;*/
+    background-color: #DFE6ED;
+}
+
+.catalog_title, .catalog_list, .topic_list, .topic_body, .post_body {
+    clear: both;
+    border-left: 3px solid #DDE4EB;
+    border-right: 3px solid #DDE4EB;
+    border-bottom: 1px solid #DDE4EB;
+}
+
+.subcatalogs {
+}
+
+
+.catalog_title:after, .catalog_list:after, .catalog_header:after, .topic_list:after, .topic_header:after, .topic_body:after, .post_body:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+}
+/* Hides from IE-mac \*/
+* html .topic_header {height: 1%;}
+/* End hide from IE-mac */
+
+.c41 {
+    width: 20%;
+}
+
+.c42 {
+    width: 50%;
+    border-left: 1px solid #DDE4EB;
+}
+
+.c43 {
+    width: 10%;
+    border-left: 1px solid #DDE4EB;
+}
+
+.c44 {
+    width: 10%;
+    border-left: 1px solid #DDE4EB;
+}
+
+.c41, .c42, .c43, .c44 {
+    float: left;
+    height: 100%;
+}
+
+.tdc1 {
+    padding-left: 20px;
+    width: 16%;
+    float: left;
+}
+
+.tdc2 {
+    padding-left: 20px;
+    border-left: 1px solid #DDE4EB;
+    width: 78%;
+    float: left;
+}
+
+#contents ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    background-color: #DDE4EB;
+    clear: both;
+    float: right;
+    padding: 5px 10px 5px 10px;
+    margin: 5px 10px 5px 10px;
+}
+
+.the_title {
+    color: #517CA1;
+    font: 18px Georgia,"Times New Roman",Times,serif;
+}
+
+
+/* 解决 DIV 内部对象 float 后不能撑开的问题 */
+.clearfix:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+}
+/* Hides from IE-mac \*/
+* html .clearfix {height: 1%;}
+/* End hide from IE-mac */

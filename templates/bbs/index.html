@@ -4,32 +4,24 @@
 
 {% if new_register_user %}<p>欢迎新用户：<a href="{% url account:show_user new_register_user.id %}">{{ new_register_user }}</a></p>{% endif %}
 
-{% if catalogs %}
-
-
-<table colspan="2">
-  <tr>
-    <th>版面</th>
-    <th>主题</th>
-    <th>回复</th>
-  </tr>
 {% for c in catalogs %}
-  <tr>
-    <th>{{ c.name }}</th>
-  </tr>
-  {% for child in c.child.all %}
-  <tr>
-    <td><a href="{% url bbs:subforum child.id %}">{{ child.name }}</a></td>
-    <td>主题：{{ child.topic_count }}</td>
-    <td>回复：{{ child.posts }}</td>
-  </tr>
+<div class="forum_list">
+  <div class="forum_header"><span>{{ c }}</span></div>
+  <div class="catalog_title">
+    <div class="c41"><strong>子论坛</strong></div>
+    <div class="c42"><strong>新帖</strong></div>
+    <div class="c43"><strong>帖子</strong></div>
+    <div class="c44"><strong>回复</strong></div>
+  </div>
+  {% for sc in c.children %}
+  <div class="catalog_list">
+    <div class="c41"><a href="{% url bbs:catalog sc.id %}">{{ sc }}</a></div>
+    <div class="c42">{{ sc.last_topic }}</div>
+    <div class="c43">{{ sc.topic_count }}</div>
+    <div class="c44">{{ sc.post_count }}</div>
+  </div>
   {% endfor %}
+</div>
 {% endfor %}
-</table>
-
-
-{% else %}
-<p>管理员睡觉去了，还没有配置论坛。 ;-)</p>
-{% endif %}
 
 {% endblock %}

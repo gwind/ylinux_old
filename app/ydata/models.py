@@ -45,8 +45,7 @@ PRIVACY_CHOICES = (
 # Category 下分很多 Catalog
 class Catalog(models.Model):
     # parent 键可以搜索 child
-    parent = models.ForeignKey('self', blank=True,
-               null=True, verbose_name='Catalog', related_name='child')
+    parent = models.ForeignKey('self', blank=True, null=True, verbose_name='Catalog', related_name='child')
     name = models.CharField('名字', max_length=30)
     summary = models.CharField('概述', max_length=80)
     groups = models.ManyToManyField(Group, blank=True,
@@ -80,8 +79,12 @@ class Catalog(models.Model):
         return ('wiki:show_catalog', [self.id])
 
     @property
-    def posts(self):
-        return Post.objects.filter(topic__catalog=self).select_related().count()
+    def children(self):
+        return Catalog.objects.filter(parent=self.id)
+
+    #@property
+    #def posts(self):
+    #    return Post.objects.filter(topic__catalog=self).select_related().count()
 
     def has_access(self, user):
         ''' 判断用户是否有权限，如果一个 Catalog 还未指定用户组，所有用户都有权限 '''
@@ -103,7 +106,7 @@ class Topic(models.Model):
     # 预计修改为 Subject
     name = models.CharField('标题', max_length=256)
     created = models.DateTimeField('Created', auto_now_add=True)
-    updated = models.DateTimeField('Updated', auto_now=True)
+    updated = models.DateTimeField('Updated')
     user = models.ForeignKey(User, related_name='topics', verbose_name='User')
     user_ip = models.IPAddressField('User IP', blank=True, null=True)
     views = models.IntegerField('查看次数', blank=True, default=0)
@@ -126,7 +129,7 @@ class Topic(models.Model):
 
     # Tags
     tags = models.ManyToManyField('Tag', blank=True, verbose_name="标签")
-
+    view_count = models.IntegerField('查看次数', blank=True, default=0)
     post_count = models.IntegerField('回复数', blank=True, default=0)
     last_post = models.ForeignKey('Post', related_name='last_topic_post', blank=True, null=True)
 
@@ -162,6 +165,9 @@ class Topic(models.Model):
 
     @property
     def body_html(self):
+        self.view_count += 1
+        self.save()
+
         try:
             f = file(self.body_html_path, 'r')
             html = f.read()

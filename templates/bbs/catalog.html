@@ -1,0 +1,53 @@
+{% extends "bbs/base.html" %}
+
+{% block content %}
+
+{% if new_register_user %}<p>欢迎新用户：<a href="{% url account:show_user new_register_user.id %}">{{ new_register_user }}</a></p>{% endif %}
+
+<div>
+  <p><a href="{% url bbs:index %}">YLinux论坛</a>
+    {% for id,name in parents %}
+    >> <a href="{% url bbs:catalog id %}">{{ name }}</a>
+    {% endfor %}
+  </p>
+  <p><a href="{% url wiki:add_topic catalog.id %}">发表新主题</a></p>
+</div>
+
+{% if catalog.children %}
+<div id="subcatalogs">
+  <div class="catalog_title">
+    <div class="c41"><strong>子论坛</strong></div>
+    <div class="c42"><strong>新帖</strong></div>
+    <div class="c43"><strong>帖子</strong></div>
+    <div class="c44"><strong>回复</strong></div>
+  </div>
+  {% for sc in catalog.children %}
+  <div class="catalog_list">
+    <div class="c41"><a href="{% url bbs:catalog sc.id %}">{{ sc }}</a></div>
+    <div class="c42">{{ sc.last_topic }}</div>
+    <div class="c43">{{ sc.topic_count }}</div>
+    <div class="c44">{{ sc.post_count }}</div>
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
+
+{% if topics %}
+<div class="catalog_header">
+  <div class="c41"><strong>主题</strong></div>
+  <div class="c42"><strong>最新回复</strong></div>
+  <div class="c43"><strong>回复</strong></div>
+  <div class="c44"><strong>查看</strong></div>
+</div>
+{% for t in topics %}
+<div class="topic_list">
+  <div class="c41"><a href="{% url bbs:topic t.id %}">{{ t }}</a></div>
+  <div class="c42">{{ t.last_post }}</div>
+  <div class="c43">{{ t.post_count }}</div>
+  <div class="c44">{{ t.view_count }}</div>
+</div>
+{% endfor %}
+{% endif %}
+
+
+{% endblock %}

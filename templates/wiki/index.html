@@ -1,37 +1,33 @@
 {% extends 'wiki/base.html' %}
-
-
 {% block content %}
-<h1><a href="{% url home:index %}">YLinux</a> => 知识库系统</h1>
-<hr class="HrWhite"/>
 
 {% if catalogs %}
+<div id="catalogs">
 <h3>分类：</h3>
-  <ul>
   {% for c in catalogs %}
-    <li><a href="{% url wiki:show_catalog c.id %}">{{ c.name }}</a></li>
+    <div class="catalog"><span><a href="{% url wiki:show_catalog c.id %}">{{ c.name }}</a></span></div>
   {% endfor %}
-  </ul>
+</div>
 {% else %}
   <p>WiKi 现在还没有内容. 请通过管理接口添加目录</p>
 {% endif %}
 
 {% if topics %}
+<div id="topics">
 <h3>最近主题：</h3>
-  <ul>
   {% for t in topics %}
-    <li><a href="{% url wiki:show_topic t.id %}">{{ t.name }}</a></li>
+    <div class="topic">[<span><a href="{% url wiki:show_catalog t.catalog.id %}">{{ t.catalog }}</a></span>] <span><a href="{% url wiki:show_topic t.id %}">{{ t.name }}</a></span></div>
   {% endfor %}
-  </ul>
+</div>
 {% endif %}
 
 {% if posts %}
+<div id="posts">
 <h3>最近回复：</h3>
-  <ul>
   {% for p in posts %}
-    <li><a href="{% url wiki:show_post p.id %}">{{ p }}</a></li>
+    <div class="post"><span><a href="{% url wiki:show_topic p.topic.id %}">{{ p.topic }}</a></span> by <span><a href="{% url account:show_user p.user.id %}">{{ p.user }}</a></span></div>
   {% endfor %}
-  </ul>
+</div>
 {% endif %}
 
 {% endblock %}

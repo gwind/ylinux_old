@@ -43,7 +43,6 @@ urlpatterns = patterns('admin.views',
     url(r'^catalog/(?P<parent_id>\d+)/add/$', 'add_catalog', name='add_sub_catalog'),
     url(r'^catalog/add/$', 'add_catalog', {'parent_id':None}, name='add_top_catalog'),
 
-
     # 危险！
     url(r'^reboot/$', 'reboot'),
 )

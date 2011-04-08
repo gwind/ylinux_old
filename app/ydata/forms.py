@@ -1,5 +1,5 @@
 # coding: utf-8
-import os
+import os, datetime
 
 from django.conf import settings
 from django import forms
@@ -44,6 +44,10 @@ class AddPostForm(forms.ModelForm):
 
     def save(self):
         post = Post(topic=self.topic, user=self.user, user_ip=self.ip, markup='none', body=self.cleaned_data['body'])
+        self.topic.post_count += 1
+        self.topic.save()
+        self.topic.catalog.post_count += 1
+        self.topic.catalog.save()
         post.save()
         if ydata_settings.ATTACHMENT_SUPPORT:
             self.save_attachment(post, self.cleaned_data['attachment'])
@@ -85,7 +89,10 @@ class AddTopicForm(forms.ModelForm):
                 markup=self.cleaned_data['markup'])
         topic.catalog=self.catalog
         topic.user=self.user
+        topic.updated = datetime.datetime.now()
         topic.save()
+        self.catalog.topic_count += 1
+        self.catalog.save()
         text = self.cleaned_data['text'].encode('utf8')
         topic.save_file(text)
         return topic
@@ -113,6 +120,7 @@ class EditTopicForm(forms.ModelForm):
         topic.user_ip = self.user_ip
         topic.markup = self.cleaned_data['markup']
         topic.catalog=self.cleaned_data['catalog']
+        topic.updated = datetime.datetime.now()
         topic.save()
         text = self.cleaned_data['text'].encode('utf8')
         topic.save_file(text)
