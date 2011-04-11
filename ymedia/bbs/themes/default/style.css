@@ -97,6 +97,7 @@ a:active {color: #0000FF}
 #navigator {
     margin-top: 2px;
     height: 35px;
+    float: right;
 }
 
 #navigator ul{
