@@ -181,6 +181,9 @@ class Topic(models.Model):
         return ''.join(self.body.split('\n')[:4])
 
     def save_file(self, text):
+        dirname = os.path.dirname(self.body_path)
+        if not os.path.exists(dirname):
+            os.makedirs(dirname)	
         f = file(self.body_path, 'w')
         f.write(text)
         f.close()
