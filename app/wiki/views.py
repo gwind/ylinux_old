@@ -111,6 +111,9 @@ def add_post(request, id):
 
     if form.is_valid():
         post = form.save()
+        # set last post
+        topic.last_post = Post.objects.filter(topic=topic).latest('updated')
+        topic.save()
         url = reverse ('wiki:show_topic', args=[post.topic.id])
         return HttpResponseRedirect(url)
 
@@ -137,6 +140,9 @@ def add_topic(request,id):
 
     if form.is_valid():
         topic = form.save()
+        # set last topic
+        catalog.last_topic = topic
+        catalog.save()
         url = reverse('wiki:show_topic', args=[topic.id])
         return HttpResponseRedirect(url)
 

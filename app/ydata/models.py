@@ -65,7 +65,9 @@ class Catalog(models.Model):
                blank=True, default=0)
     last_post = models.ForeignKey('Post', blank=True, 
                null=True, related_name='last_catalog_post')
-
+    # There should be many topics here! FIXME!
+    last_topic = models.ForeignKey('Topic', blank=True, 
+               null=True, related_name='last_catalog_topic')
     class Meta:
         ordering = ['position']
         verbose_name = '目录'
