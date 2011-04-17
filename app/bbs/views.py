@@ -55,6 +55,16 @@ def topic(request, id):
 
     return {'topic':topic, 'parents': parents, 'posts':posts}
 
+@render_to('bbs/post.html')
+def post(request, id):
+
+    try:
+        post = Post.objects.get(pk=id)
+    except Post.DoesNotExist:
+        url = reverse ('bbs:post_not_exist', args=[id])
+        return HttpResponseRedirect(url)
+
+    return {'post':post}
 
 # 一些 DoesNotExist 的页面这里处理
 @render_to('bbs/DoesNotExist.html')

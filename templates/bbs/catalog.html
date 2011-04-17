@@ -24,7 +24,8 @@
   {% for sc in catalog.children %}
   <div class="catalog_list">
     <div class="c41"><a href="{% url bbs:catalog sc.id %}">{{ sc }}</a></div>
-    <div class="c42">{{ sc.last_topic }}</div>
+    <div class="c42"><a href="{% url bbs:topic sc.last_topic.id %}">{{ sc.last_topic }}</a> by 
+      <a href="{% url account:show_user sc.last_topic.user.id %}">{{sc.last_topic.user}}</a></div>
     <div class="c43">{{ sc.topic_count }}</div>
     <div class="c44">{{ sc.post_count }}</div>
   </div>
@@ -42,7 +43,8 @@
 {% for t in topics %}
 <div class="topic_list">
   <div class="c41"><a href="{% url bbs:topic t.id %}">{{ t }}</a></div>
-  <div class="c42">{{ t.last_post }}</div>
+  <div class="c42"><a href="{% url bbs:post t.last_post.id %}"> {{ t.last_post }}</a> by
+    <a href="{% url account:show_user t.last_post.user.id %}">{{t.last_post.user}}</a></div>
   <div class="c43">{{ t.post_count }}</div>
   <div class="c44">{{ t.view_count }}</div>
 </div>
