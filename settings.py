@@ -37,13 +37,20 @@ EMAIL_SUBJECT_PREFIX = '[YLinux]'
 
 MANAGERS = ADMINS
 
-# 为了方便，我使用 mysql 数据库，可以自行修改为 sqlite3 数据库
-DATABASE_ENGINE = 'mysql'           # 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-DATABASE_NAME = 'ylinux'             # Or path to database file if using sqlite3.
-DATABASE_USER = 'root'             # Not used with sqlite3.
-DATABASE_PASSWORD = 'ylinux'         # Not used with sqlite3.
-DATABASE_HOST = ''             # Set to empty string for localhost. Not used with sqlite3.
-DATABASE_PORT = ''             # Set to empty string for default. Not used with sqlite3.
+# 数据库
+# 示例使用 mysql 数据库
+DATABASES = {
+    'default': {
+        # 可选数据库: postgresql_psycopg2 postgresql mysql sqlite3 oracle
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'ylinux',
+        'USER': 'ylinux',
+        'PASSWORD': '123456',
+        'HOST': '',
+        'PORT': '',
+        }
+    }
+
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
