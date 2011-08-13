@@ -1,0 +1,62 @@
+h1 {
+    font-size: 18px;
+}
+
+#topic {
+    border: 1px solid #CDEAB9;
+    margin: 20px, 0, 0, 15px;
+    padding-left: 20px;
+}
+
+.topic-header {
+    border-bottom: 1px solid #7CA95A;
+}
+
+.topic-title {
+    /*border-bottom: 1px solid #7CA95A;*/
+    /*margin-right: 30px;*/
+    font-family:  Times, TimesNR, 'New Century Schoolbook', Georgia, 'New York', serif;
+    font-size: 22px;
+}
+
+.topic-body {
+    margin-top: 20px;
+}
+
+
+#post {
+    margin: 20px, 0, 0, 15px;
+    border-top: 3px solid blue;
+}
+
+#post > p {
+    color: blue;
+}
+
+.post-item {
+    border: 1px solid #7CA95A;
+    padding: 10px;
+    margin-top: 15px;
+}
+
+.post-header {
+    border-bottom: 1px solid #DFDFDF;
+}
+
+.time {
+    color: green;
+    font-family:  Times, TimesNR, 'New Century Schoolbook', Georgia, 'New York', serif;
+    /*font-size: 18px;*/
+}
+
+.user {
+    font-size: 26px;
+}
+
+
+.louzhu {
+    border: 1px;
+    margin-right: 10px;
+    font-size: 28px;
+    color: #7CA95A;
+}
