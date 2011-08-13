@@ -8,41 +8,63 @@
   {% endfor %}
 </p>
 
+<div id="topic">
 
-<div id="topic-header">
-  <p class="topic-title">{{ topic }}</p>
-  <p class="topic-info">
-    <b>作   者：</b> <a href="{% url account:show_user topic.user.id %}">{{ topic.user }}</a>
-    <br/>
-    <b>发布时间：</b> {{ topic.created }}
-    <br/>
-    <b>最近更新：</b> {{ topic.updated }}
-    <br/>
-    <b>查看次数:</b> {{ topic.view_count }}
-    <!--在 <a href="http://www.ip138.com/ips.asp?ip={{ topic.user_ip }}&action=2">{{ topic.user_ip }}</a>-->
-  </p>
+  <div class="topic-header">
+    <p class="topic-title">{{ topic }}</p>
+    <p class="topic-info">
+      <b>作   者：</b> <span class="user"><a href="{% url account:show_user topic.user.id %}">{{ topic.user }}</a></span>
+      <br/>
+      <b>发布时间：</b> <span class="time">{{ topic.created|date:"Y年m月d日 H:i" }}</span>
+      <br/>
+      <b>最近更新：</b> <span class="time">{{ topic.updated|date:"Y年m月d日 H:i" }}</span>
+      <br/>
+      <b>查看次数:</b> {{ topic.view_count }}
+      <!--在 <a href="http://www.ip138.com/ips.asp?ip={{ topic.user_ip }}&action=2">{{ topic.user_ip }}</a>-->
+    </p>
 
-  <p class="topic-action">
-    {% ifequal user topic.user %}<a href="{% url wiki:edit_topic topic.id %}">编辑</a> |{% endifequal %}
-    <a href="{% url wiki:add_post topic.id %}">回复</a>
-    {% ifequal user topic.user %}<!--[<a href="{% url wiki:del_topic topic.id %}">删除</a>]-->| [<a href="{% url wiki:hidden_topic topic.id %}">隐藏</a>] [<a href="{% url wiki:recycled_topic topic.id %}">移入回收站</a>]{% endifequal %}
-  </p>
+    <p class="topic-action">
+      {% ifequal user topic.user %}<a href="{% url wiki:edit_topic topic.id %}">编辑</a> |{% endifequal %}
+      <a href="{% url wiki:add_post topic.id %}">回复</a>
+      {% ifequal user topic.user %}
+      <!--[<a href="{% url wiki:del_topic topic.id %}">删除</a>]-->| 
+      [<a href="{% url wiki:hidden_topic topic.id %}">隐藏</a>] 
+      [<a href="{% url wiki:recycled_topic topic.id %}">移入回收站</a>]
+      {% endifequal %}
+    </p>
 
+  </div>
+
+  <div class="topic-body">
+    {{ topic.body_html|safe }}
+  </div>
 </div>
 
 
-
-
-{{ topic.body_html|safe }}
-
-
 {% if posts %}
-<hr/>
-<p>网友回复：</p>
-{% for index,post in posts %}
-<p>[{{ index }}/{{ total }}] <a href="{% url account:show_user post.user.id %}">{{ post.user }}</a> 在 {{ post.updated }} 于 <a href="http://www.ip138.com/ips.asp?ip={{ post.user_ip }}&action=2">{{ post.user_ip }}</a>{% ifequal user post.user %} [<a href="{% url wiki:del_post post.id %}">删除</a>{% endifequal %}]</p>
-<p>{{ post.body }}</p>
-{% endfor %}
+<div id="post">
+  <p>最新回复：</p>
+
+  {% for index,post in posts %}
+  <div class="post-item">
+    <div class="post-header">
+      <p>
+        <span class="louzhu">{{ index }} 楼</span>
+        <span class="user"><a href="{% url account:show_user post.user.id %}">{{ post.user }}</a></span>
+        <span class="time">{{ post.updated|date:"Y年m月d日 H:i" }}</span>
+        <!-- 于 <a href="http://www.ip138.com/ips.asp?ip={{ post.user_ip }}&action=2">{{ post.user_ip }}</a>-->
+        {% ifequal user post.user %}
+        [<span class="delete"><a href="{% url wiki:del_post post.id %}">删除</a></span>]
+        {% endifequal %}
+      </p>
+    </div>
+    <div class="post-body">
+      <p>{{ post.body }}</p>
+    </div>
+  </div>
+  {% endfor %}
+
+</div>
 {% endif %}
 
 <p><a href="{% url wiki:add_post topic.id %}">我来说两句</a></p>

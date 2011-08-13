@@ -66,13 +66,15 @@ def topic(request, id):
         return HttpResponseRedirect(url)
 
     parents = get_parents (Catalog, topic.catalog.id)
-    posts = Post.objects.filter(topic=id).order_by('-updated')
-    length = len(posts)
-    posts = [(length-i, posts[i]) for i in xrange(length)]
+    posts = Post.objects.filter(topic=id).order_by('updated')
+    #length = len(posts)
+    PL = [] # posts list
+    for i, p in enumerate(posts):
+        PL.append((i, p))
+    #posts = [(i, posts[i]) for i in xrange(length)]
     edit_topic_perm = request.user.has_perm ('ydata.edit_topic')
 
-    return {'parents':parents, 'topic':topic, 
-            'posts':posts, 'total':length,
+    return {'parents':parents, 'topic':topic, 'posts':PL,
             'edit_topic_perm':edit_topic_perm}
 
 
