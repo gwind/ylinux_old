@@ -403,3 +403,26 @@ def email_to_all(request):
         return render_to_response('home/contact.html',
                                   {'title':"联系",'form':form,},
                                   context_instance=RequestContext(request))
+
+
+# 更新 Catalog 和 Topic 的部分信息 , 先随便选个高级点的权限
+@permission_required('ydata.delete_catalog')
+def update_bbs(request):
+
+    # [DEBUG] Update the newest topic
+    for c in Catalog.objects.all():
+        print "[DD] c = ", c
+        t = Topic.objects.filter(catalog = c).order_by('-updated')
+        print "[DD] t = ", t
+        if t:
+            c.last_topic = t[0]
+            c.save()
+
+    # [DEBUG] Updated the newest post
+    for t in Topic.objects.all():
+        p = Post.objects.filter(topic = t).order_by('-updated')
+        if p:
+            t.last_post = p[0]
+            t.save()
+
+    return HttpResponseRedirect(reverse('bbs:index'))

@@ -45,4 +45,6 @@ urlpatterns = patterns('admin.views',
 
     # 危险！
     url(r'^reboot/$', 'reboot'),
+
+    url(r'^update_bbs/$', 'update_bbs'),
 )

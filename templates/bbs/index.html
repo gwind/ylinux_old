@@ -16,8 +16,14 @@
   {% for sc in c.children %}
   <div class="catalog_list">
     <div class="c41"><a href="{% url bbs:catalog sc.id %}">{{ sc }}</a></div>
-    <div class="c42"><a href="{% url bbs:topic sc.last_topic.id %}">{{ sc.last_topic }}</a> by 
-      <a href="{% url account:show_user sc.last_topic.user.id %}">{{sc.last_topic.user}}</a> </div>
+    <div class="c42">
+      {% if sc.last_topic %}
+      <a href="{% url bbs:topic sc.last_topic.id %}">{{ sc.last_topic }}</a> by 
+      <a href="{% url account:show_user sc.last_topic.user.id %}">{{sc.last_topic.user}}</a>
+      {% else %}
+      无主题
+      {% endif %}
+    </div>
     <div class="c43">{{ sc.topic_count }}</div>
     <div class="c44">{{ sc.post_count }}</div>
   </div>

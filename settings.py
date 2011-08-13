@@ -88,7 +88,8 @@ LOGIN_REDIRECT_URL = '/account/profile/'
 # 定义如何加载模板，本处只在指定目录加载
 
 TEMPLATE_LOADERS = (
-    'django.template.loaders.filesystem.load_template_source',
+    'django.template.loaders.filesystem.Loader',
+    #'django.template.loaders.filesystem.load_template_source',
     #'django.template.loaders.app_directories.load_template_source',
     #'django.template.loaders.eggs.load_template_source',
 )
