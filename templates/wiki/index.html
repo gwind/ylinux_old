@@ -1,33 +1,92 @@
 {% extends 'wiki/base.html' %}
+
+{% block extend_header %}
+{% if theme %}
+<link rel="stylesheet" href="{{ MEDIA_URL }}themes/{{ theme }}/wiki_index.css" />
+{% else %}
+<link rel="stylesheet" href="{{ MEDIA_URL }}themes/default/wiki_index.css" />
+{% endif %}
+{% endblock %}
+
 {% block content %}
 
-{% if catalogs %}
-<div id="catalogs">
-<h3>分类：</h3>
-  {% for c in catalogs %}
-    <div class="catalog"><span><a href="{% url wiki:show_catalog c.id %}">{{ c.name }}</a></span></div>
-  {% endfor %}
-</div>
-{% else %}
-  <p>WiKi 现在还没有内容. 请通过管理接口添加目录</p>
-{% endif %}
+<div id="update-container" class="clearfix">
 
-{% if topics %}
-<div id="topics">
-<h3>最近主题：</h3>
-  {% for t in topics %}
-    <div class="topic">[<span><a href="{% url wiki:show_catalog t.catalog.id %}">{{ t.catalog }}</a></span>] <span><a href="{% url wiki:show_topic t.id %}">{{ t.name }}</a></span></div>
-  {% endfor %}
-</div>
-{% endif %}
+  <div id="newest-topic-container">
+    {% if topics %}
+    <div class="newest-container-title">
+      <h3>最新文章：</h3>
+    </div>
+    {% for t in topics %}
+    <div class="newtopic">
+      <div class="newtopic-title">
+        <!--[<span><a href="{% url wiki:show_catalog t.catalog.id %}">{{ t.catalog }}</a></span>]-->
+        <span><a href="{% url wiki:show_topic t.id %}">{{ t.name }}</a></span>
+      </div>
+      <div class="newtopic-info">
+        <span class="user"><a href="{% url account:show_user t.user.id %}">{{ t.user }}</a></span>
+        <span class="time">{{ t.updated|date:"Y年m月d日 H:i" }}</span>
+      </div>
+    </div>
+    {% endfor %}
+    {% else %}
+    <p>无新文章</p>
+    {% endif %}
+  </div>
 
-{% if posts %}
-<div id="posts">
-<h3>最近回复：</h3>
-  {% for p in posts %}
-    <div class="post"><span><a href="{% url wiki:show_topic p.topic.id %}">{{ p.topic }}</a></span> by <span><a href="{% url account:show_user p.user.id %}">{{ p.user }}</a></span></div>
-  {% endfor %}
+
+  <div id="newest-post-container">
+    {% if posts %}
+    <div class="newest-container-title">
+      <h3>最新回复：</h3>
+    </div>
+    {% for p in posts %}
+    <div class="newpost">
+      <div class="newpost-title">
+        <a href="/wiki/topic/{{ p.topic.id }}#post{{ p.id }}">{{ p.topic }}</a>
+      </div>
+      <div class="newpost-info">
+        <span class="user"><a href="{% url account:show_user p.user.id %}">{{ p.user }}</a></span>
+        <span class="time">{{ p.updated|date:"Y年m月d日 H:i" }}</span>
+      </div>
+    </div>
+    {% endfor %}
+    {% endif %}
+  </div>
+
 </div>
-{% endif %}
+
+
+<div id="wiki-container" class="clearfix">
+
+  <div id="wiki-container-catalog" class="clearfix">
+    {% if catalogs %}
+    <ul>
+      {% for l0 in catalogs %}
+      <li>{{ l0 }}</li>
+      {% if l0.children %}
+      <ul>
+        {% for l1 in l0.children %}
+        <li>{{ l1 }}</li>
+        {% if l1.children %}
+        <ul>
+          {% for l2 in l1.children %}
+          <li><a href="{% url wiki:show_catalog l2.id %}">{{ l2 }}</a></li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+        {% endfor %}
+      </ul>
+      {% endif %}
+      {% endfor %}
+    </ul>
+    {% endif %}
+  </div>
+
+  <div id="wiki-container-main">
+    <p>显示当前目录下的主题</p>
+  </div>
+
+</div>
 
 {% endblock %}

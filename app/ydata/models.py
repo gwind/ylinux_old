@@ -52,6 +52,9 @@ class Catalog(models.Model):
                verbose_name="只有在组中的用户可以访问此目录")
     position = models.IntegerField('位置', blank=True, 
                default=0, help_text="决定目录排序，默认0")
+    level = models.IntegerField(
+        '目录层次', blank = True, default = 0,
+        help_text = "描述本目录属于几级目录，默认0,表示顶级")
     description = models.TextField('描述', blank=True, 
                                    default='')
     # auto_now_add 在 create object 自动保存为当前时间

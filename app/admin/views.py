@@ -411,9 +411,7 @@ def update_bbs(request):
 
     # [DEBUG] Update the newest topic
     for c in Catalog.objects.all():
-        print "[DD] c = ", c
         t = Topic.objects.filter(catalog = c).order_by('-updated')
-        print "[DD] t = ", t
         if t:
             c.last_topic = t[0]
             c.save()
@@ -426,3 +424,20 @@ def update_bbs(request):
             t.save()
 
     return HttpResponseRedirect(reverse('bbs:index'))
+
+
+# 更新目录级别
+@permission_required('ydata.delete_catalog')
+def update_catalog(request):
+    for c in Catalog.objects.all():
+        level = 0
+        if c.parent:
+            p = c.parent
+            while p:
+                p = p.parent
+                level += 1
+        c.level = level
+        c.save()
+        #print "[%s] %s" % (c.level, c)
+
+    return HttpResponseRedirect(reverse('wiki:index'))

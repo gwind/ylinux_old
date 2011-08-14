@@ -1,0 +1,107 @@
+a:link {
+    text-decoration: none;
+}
+
+.clearfix:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+}
+/* Hides from IE-mac \*/
+* html .clearfix {height: 1%;}
+/* End hide from IE-mac */
+
+#update-container {
+    border: 2px solid #DFE6ED;
+}
+
+#newest-topic-container {
+    width: 49%;
+    height: 100%;
+    /*padding: 5px;*/
+    float: left;
+    /*background: green;*/
+    border-right: 1px solid #DFE6ED;
+}
+
+#newest-post-container {
+    width: 49%;
+    height: 100%;
+    /*padding: 5px;*/
+    float: right;
+    /*background: black;*/
+    border-left: 1px solid #DFE6ED;
+}
+
+#catalog-list {
+    clear: both;
+}
+
+
+.newest-container-title {
+    background: #313D47;
+    color: white;
+    padding: 2px 10px 5px 10px;
+}
+
+.newtopic, .newpost {
+    margin: 1px;
+    border-bottom: 1px solid #DFE6ED;
+    padding: 1px 10px 2px 10px;
+    background: #DFE6ED;
+}
+
+.newtopic-title, .newpost-title {
+    font-size: 1.1em;
+}
+
+.newtopic-info, .newpost-info {
+    font-size: 0.6em;
+    color: gray;
+}
+
+#catalog-list-container {
+    margin-top: 20px;
+    border: 2px solid #DFE6ED;
+    clear: both;
+}
+
+
+#catalog-list-container h3 {
+    color: green;
+}
+
+.level-item {
+    float: left;
+    width: 30%;
+}
+
+
+#wiki-container {
+    border: 2px solid #DFE6ED;
+}
+
+#wiki-container-catalog {
+    width: 250px;
+    height: 100%;
+    /*padding: 5px;*/
+    float: left;
+    /*background: green;*/
+    border-right: 1px solid #DFE6ED;
+}
+
+#wiki-container-catalog ul {
+    padding: 10px;
+    margin: 5px;
+}
+
+#wiki-container-main {
+    width: auto;
+    height: 100%;
+    /*padding: 5px;*/
+    float: left;
+    /*background: black;*/
+    border-left: 1px solid #DFE6ED;
+}

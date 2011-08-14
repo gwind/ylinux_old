@@ -268,22 +268,6 @@ strong {
     color: red;
 }
 
-#topic-header {
-    border: 1px solid #CCCCCC;
-    background-color: #EDEDED;
-    padding-left: 10px;
-    margin-buttom: 50px;
-}
-
-.topic-title {
-    font-family: sans-serif;
-    font-size:20px;
-}
-
-.topic-info {
-    padding: 5px;
-}
-
 #catalogs {
     width:100px;
     float:left;

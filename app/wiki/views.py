@@ -12,17 +12,17 @@ from ydata.forms import AddPostForm, \
     AddTopicForm, EditTopicForm
 
 from ydata.util import render_to, build_form, get_parents, ylinux_get_ip
+import xml.etree.ElementTree as ET
 
 
 @render_to('wiki/index.html')
 def index(request):
     """首页"""
 
-    catalogs = Catalog.objects.all()
     # 列出所有顶级目录
-    #catalogs = Catalog.objects.filter(parent=None)
-    topics = Topic.objects.all()
-    posts = Post.objects.all()
+    catalogs = Catalog.objects.filter(parent=None)
+    topics = Topic.objects.all().order_by('-updated')[:10]
+    posts = Post.objects.all().order_by('-updated')[:10]
     return {'catalogs':catalogs,
             'topics':topics,
             'posts':posts}

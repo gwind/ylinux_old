@@ -7,30 +7,11 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     {% if theme %}
     <link rel="stylesheet" href="{{ MEDIA_URL }}themes/{{ theme }}/style.css" />
-    <link rel="stylesheet" href="{{ MEDIA_URL }}themes/{{ theme }}/topic.css" />
     {% else %}
     <link rel="stylesheet" href="{{ MEDIA_URL }}themes/default/style.css" />
-    <link rel="stylesheet" href="{{ MEDIA_URL }}themes/default/topic.css" />
     {% endif %}
     {% block title %}{% if title %}<title>{{ title }} - YLinux.org</title>{% else %}<title>YLinux.org</title>{% endif %}{% endblock %}
     <script type="text/javascript" src="http://code.jquery.com/jquery-1.5.1.min.js" ></script>
-    <script type="text/javascript" src="{{ MEDIA_URL }}js/ajaxupload.3.6.js"></script>
-    <script type="text/javascript" src="{{ MEDIA_URL }}js/editor.js" ></script>
-    <script type="text/javascript" src="{{ MEDIA_URL }}js/syntaxhighlighter/scripts/shCore.js"></script>
-    <script type="text/javascript" src="{{ MEDIA_URL }}js/syntaxhighlighter/scripts/shBrushJScript.js"></script>
-    <script type="text/javascript" src="{{ MEDIA_URL }}js/syntaxhighlighter/scripts/shBrushCpp.js"></script>
-    <script type="text/javascript" src="{{ MEDIA_URL }}js/syntaxhighlighter/scripts/shBrushBash.js"></script>
-    <script type="text/javascript" src="{{ MEDIA_URL }}js/syntaxhighlighter/scripts/shBrushCss.js"></script>
-    <script type="text/javascript" src="{{ MEDIA_URL }}js/syntaxhighlighter/scripts/shBrushPython.js"></script>
-    <script type="text/javascript" src="{{ MEDIA_URL }}js/syntaxhighlighter/scripts/shBrushPerl.js"></script>
-    <script type="text/javascript" src="{{ MEDIA_URL }}js/syntaxhighlighter/scripts/shBrushXml.js"></script>
-    <script type="text/javascript" src="{{ MEDIA_URL }}js/syntaxhighlighter/scripts/shBrushSql.js"></script>
-    <link type="text/css" rel="stylesheet" href="{{ MEDIA_URL }}js/syntaxhighlighter/styles/shThemeDefault.css"/>
-    <script type="text/javascript">
-      SyntaxHighlighter.config.tagName = 'code';
-      SyntaxHighlighter.defaults['toolbar'] = false;
-      SyntaxHighlighter.all();
-    </script>
     {% block extend_header %}{% endblock %}
   </head>
 

@@ -5,8 +5,13 @@
 
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    {% if theme %}<link rel="stylesheet" href="{{ MEDIA_URL }}themes/{{ theme }}/style.css" />{% else %}
-    <link rel="stylesheet" href="{{ MEDIA_URL }}home/themes/default/style.css" />{% endif %}
+    {% if theme %}
+    <link rel="stylesheet" href="{{ MEDIA_URL }}themes/{{ theme }}/style.css" />
+    <link rel="stylesheet" href="{{ MEDIA_URL }}themes/{{ theme }}/home.css" />
+    {% else %}
+    <link rel="stylesheet" href="{{ MEDIA_URL }}themes/default/style.css" />
+    <link rel="stylesheet" href="{{ MEDIA_URL }}themes/default/home.css" />
+    {% endif %}
     {% block title %}{% if title %}<title>{{ title }} - YLinux.org</title>{% else %}<title>YLinux.org</title>{% endif %}{% endblock %}
     <link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="/wiki/topic/news/" />
     <!--<link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="/backend.php?atom" />-->
