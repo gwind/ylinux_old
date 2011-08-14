@@ -88,7 +88,7 @@
       </p>
     </div>
     <div class="post-body">
-      <p>{{ post.body }}</p>
+      <p>{{ post.body_html|safe }}</p>
     </div>
   </div>
   {% endfor %}

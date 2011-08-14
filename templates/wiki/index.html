@@ -6,72 +6,55 @@
 {% else %}
 <link rel="stylesheet" href="{{ MEDIA_URL }}themes/default/wiki_index.css" />
 {% endif %}
+<script type="text/javascript" src="{{ MEDIA_URL }}js/ylinux_wiki.js" ></script>
 {% endblock %}
+
 
 {% block content %}
 
-<div id="update-container" class="clearfix">
+<script type="text/javascript">
 
-  <div id="newest-topic-container">
-    {% if topics %}
-    <div class="newest-container-title">
-      <h3>最新文章：</h3>
-    </div>
-    {% for t in topics %}
-    <div class="newtopic">
-      <div class="newtopic-title">
-        <!--[<span><a href="{% url wiki:show_catalog t.catalog.id %}">{{ t.catalog }}</a></span>]-->
-        <span><a href="{% url wiki:show_topic t.id %}">{{ t.name }}</a></span>
-      </div>
-      <div class="newtopic-info">
-        <span class="user"><a href="{% url account:show_user t.user.id %}">{{ t.user }}</a></span>
-        <span class="time">{{ t.updated|date:"Y年m月d日 H:i" }}</span>
-      </div>
-    </div>
-    {% endfor %}
-    {% else %}
-    <p>无新文章</p>
-    {% endif %}
-  </div>
+    $(document).ready( function () {
 
+        $("#cmenu > ul:not(:first)").hide();
+        $("#cmenu > ul:first ul").hide();
 
-  <div id="newest-post-container">
-    {% if posts %}
-    <div class="newest-container-title">
-      <h3>最新回复：</h3>
-    </div>
-    {% for p in posts %}
-    <div class="newpost">
-      <div class="newpost-title">
-        <a href="/wiki/topic/{{ p.topic.id }}#post{{ p.id }}">{{ p.topic }}</a>
-      </div>
-      <div class="newpost-info">
-        <span class="user"><a href="{% url account:show_user p.user.id %}">{{ p.user }}</a></span>
-        <span class="time">{{ p.updated|date:"Y年m月d日 H:i" }}</span>
-      </div>
-    </div>
-    {% endfor %}
-    {% endif %}
-  </div>
+        $("#cmenu li").click( function () {
 
-</div>
+            $(".catalog-selected").removeClass("catalog-selected");
+            $(this).addClass("catalog-selected");
+
+            $(this).next("ul").slideToggle("slow");
+
+            return false;
+
+        });
+
+        // 显示更新信息
+        $("#wiki-container-main").load("{% url wiki:ajax_show_update %}", function () {
+            $(this).addClass("list-catalog-done");
+        });
+
+    });
+
+</script>
 
 
 <div id="wiki-container" class="clearfix">
 
   <div id="wiki-container-catalog" class="clearfix">
     {% if catalogs %}
-    <ul>
+    <ul id="cmenu">
       {% for l0 in catalogs %}
-      <li>{{ l0 }}</li>
+      <li class="catalog-link" class="catalog-level0" {% if l0.children %}class="have-subcatalog"{% endif %} onclick="ajax_list_catalog('{% url wiki:ajax_show_catalog l0.id %}')">{{ l0 }}</li>
       {% if l0.children %}
       <ul>
         {% for l1 in l0.children %}
-        <li>{{ l1 }}</li>
+        <li class="catalog-link" class="catalog-level1" {% if l1.children %}class="have-subcatalog"{% endif %} onclick="ajax_list_catalog('{% url wiki:ajax_show_catalog l1.id %}')">{{ l1 }}</li>
         {% if l1.children %}
         <ul>
           {% for l2 in l1.children %}
-          <li><a href="{% url wiki:show_catalog l2.id %}">{{ l2 }}</a></li>
+          <li class="catalog-link" class="catalog-level2" {% if l2.children %}class="have-subcatalog"{% endif %} onclick="ajax_list_catalog('{% url wiki:ajax_show_catalog l2.id %}')">{{ l2 }}</li>
           {% endfor %}
         </ul>
         {% endif %}
@@ -84,9 +67,9 @@
   </div>
 
   <div id="wiki-container-main">
-    <p>显示当前目录下的主题</p>
   </div>
 
 </div>
+
 
 {% endblock %}

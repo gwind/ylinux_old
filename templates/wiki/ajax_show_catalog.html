@@ -1,0 +1,102 @@
+{% if error %}
+{{ error }}
+{% else %}
+<script type="text/javascript">
+
+    $(document).ready( function () {
+       $('tbody tr:odd').addClass("tr-odd");
+    });
+</script>
+
+<div id="wiki-container-main-title">
+  <span>
+    <a href="javascript: void(0)" onclick="ajax_list_catalog('{% url wiki:ajax_show_update %}')">开始</a>
+    {% for id,name in parents %}
+    > <a href="javascript: void(0)" onclick="ajax_list_catalog('{% url wiki:ajax_show_catalog id %}')">{{ name }}</a>
+    {% endfor %}
+
+    {% if user.is_authenticated %}
+    <span class="right"><a href="{% url wiki:add_topic catalog.id %}" target="_blank">写文章</a></span>
+    {% endif %}
+
+  </span>
+</div>
+
+
+
+{% if catalog.children %}
+<table colspan="2">
+  <caption>子论坛信息</caption>
+
+  <thead>
+    <tr>
+      <th>版面</th>
+      <th>主题数</th>
+      <th>最新主题</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    {% for c in catalog.children %}
+    <tr>
+      <td><a href="javascript: void(0)" onclick="ajax_list_catalog('{% url wiki:ajax_show_catalog c.id %}')">{{ c.name }}</a></td>
+      <td>{{ c.topic_count }}</td>
+      <td>
+        <span class="newest-topic">
+          {% if c.last_topic %}
+          <a href="{% url wiki:show_topic c.last_topic.id %}" target="_blank">{{ c.last_topic }}</a> by 
+          <a href="{% url account:show_user c.last_topic.user.id %}" target="_blank">{{c.last_topic.user}}</a>
+          {% else %}
+          无新帖
+          {% endif %}
+        </span>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+
+</table>
+{% endif %}
+
+
+{% if topics %}
+<table>
+  <caption>主题列表</caption>
+
+  <thead>
+    <tr>
+      <th>主题</th>
+      <th>最新回复</th>
+      <th>回复</th>
+      <th>查看</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    {% for t in topics %}
+    <tr>
+      <td><a href="{% url wiki:show_topic t.id %}" target="_blank">{{ t.name }}</a></td>
+      <td>
+        <span class="newest-post">
+          {% if t.last_post %}
+          <span><a href="/wiki/topic/{{ t.id }}#post{{ t.last_post.id }}" target="_blank">{{ t.last_post }}</a></span><br/>
+          By
+          <a href="{% url account:show_user t.last_post.user.id %}" target="_blank">{{t.last_post.user}}</a>
+          <span class="time">{{ t.updated|date:"Y年m月d日 H:i" }}</span>
+          {% else %}
+          无回复
+          {% endif %}
+        </span>
+      </td>
+      <td>{{ t.post_count }}</td>
+      <td>{{ t.view_count }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+
+</table>
+{% endif %}
+
+
+
+{% endif %}

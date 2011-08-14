@@ -1,0 +1,44 @@
+<div id="update-container" class="clearfix">
+
+  <div id="newest-topic-container">
+    {% if topics %}
+    <div class="newest-container-title">
+      <h3>最新文章：</h3>
+    </div>
+    {% for t in topics %}
+    <div class="newtopic">
+      <div class="newtopic-title">
+        <span><a href="{% url wiki:show_topic t.id %}" target="_blank">{{ t.name }}</a></span>
+      </div>
+      <div class="newtopic-info">
+        <span class="user"><a href="{% url account:show_user t.user.id %}" target="_blank">{{ t.user }}</a></span>
+        <span class="time">{{ t.updated|date:"Y年m月d日 H:i" }}</span>
+      </div>
+    </div>
+    {% endfor %}
+    {% else %}
+    <p>无新文章</p>
+    {% endif %}
+  </div>
+
+
+  <div id="newest-post-container">
+    {% if posts %}
+    <div class="newest-container-title">
+      <h3>最新回复：</h3>
+    </div>
+    {% for p in posts %}
+    <div class="newpost">
+      <div class="newpost-title">
+        <a href="/wiki/topic/{{ p.topic.id }}#post{{ p.id }}" target="_blank">{{ p.topic }}</a>
+      </div>
+      <div class="newpost-info">
+        <span class="user"><a href="{% url account:show_user p.user.id %}" target="_blank">{{ p.user }}</a></span>
+        <span class="time">{{ p.updated|date:"Y年m月d日 H:i" }}</span>
+      </div>
+    </div>
+    {% endfor %}
+    {% endif %}
+  </div>
+
+</div>

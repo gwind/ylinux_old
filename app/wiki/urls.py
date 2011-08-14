@@ -40,4 +40,8 @@ urlpatterns = patterns('wiki.views',
     # Feeds
     url(r'^topic/news/$', LatestTopicFeed(), name='topic_news'),
     url(r'^post/news/$', LatestPostFeed(), name='post_news'),
+
+    # AJAX Call
+    url(r'^show_update/ajax/$', 'ajax_show_update', name='ajax_show_update'),
+    url(r'^catalog/(?P<id>\d+)/ajax/$', 'ajax_show_catalog', name='ajax_show_catalog'),
 )

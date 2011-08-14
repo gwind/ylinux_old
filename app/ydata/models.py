@@ -251,7 +251,8 @@ class Post(models.Model):
             self.body_html = unicode(Markdown(self.body, safe_mode='escape'))
             #self.body_html = markdown(self.body, 'safe')
         elif self.markup == 'none':
-            self.body_html = self.body
+            #self.body_html = self.body
+            self.body_html = Markdown(extensions=['fenced_code']).convert(self.body)
         else:
             raise Exception('Invalid markup property: %s' % self.markup)
         #self.body_text = strip_tags(self.body_html)
@@ -286,7 +287,7 @@ class Post(models.Model):
         return ('wiki:show_post', [self.id])
 
     def summary(self):
-        LIMIT = 50
+        LIMIT = 30
         tail = len(self.body) > LIMIT and '...' or '' 
         return self.body[:LIMIT] + tail
 

@@ -234,12 +234,15 @@ textarea {
 }
 
 pre {
-    white-space: pre;
-    font-family : Monospace, sans-serif;
+    /*font-family : Monospace, sans-serif;*/
     /*font-size: 95%;*/
     overflow: auto;
-    /*max-height: 3in;*/
     color: black;
+white-space: pre-wrap; /* css-3 */
+white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
+white-space: -pre-wrap; /* Opera 4-6 */
+white-space: -o-pre-wrap; /* Opera 7 */
+word-wrap: break-word; /* Internet Explorer 5.5+ */
 }
 
 img {
@@ -248,12 +251,6 @@ img {
 
 hr.HrWhite {
     color: white;
-}
-
-
-ul {
-    /* list-style 简写属性在一个声明中设置所有的列表属性 */
-    list-style: square inside url('/ymedia/images/eg_arrow.gif')
 }
 
 #toplink {

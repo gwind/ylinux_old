@@ -25,6 +25,7 @@ def index(request):
     posts = Post.objects.all().order_by('-updated')[:10]
     return {'catalogs':catalogs,
             'topics':topics,
+            'title': u'[知识库]',
             'posts':posts}
 
 
@@ -53,6 +54,7 @@ def catalog(request, id):
             'parents':parents,
             'subcatalogs':subcatalogs,
             'topics':topics,
+            'title': u'[知识库] 目录浏览',
             'edit_topic_perm':edit_topic_perm}
 
 
@@ -75,7 +77,8 @@ def topic(request, id):
     edit_topic_perm = request.user.has_perm ('ydata.edit_topic')
 
     return {'parents':parents, 'topic':topic, 'posts':PL,
-            'edit_topic_perm':edit_topic_perm}
+            'edit_topic_perm':edit_topic_perm,
+            'title': u"[知识库]%s" % topic.name}
 
 
 @render_to('wiki/post.html')
@@ -261,3 +264,38 @@ class LatestPostFeed(Feed):
 
     def item_description(self, item):
         return item.body_html
+
+
+# AJAX Call
+@render_to('wiki/ajax_show_update.html')
+def ajax_show_update(request):
+
+    catalogs = Catalog.objects.filter(parent=None)
+    topics = Topic.objects.all().order_by('-updated')[:10]
+    posts = Post.objects.all().order_by('-updated')[:10]
+    return {'catalogs':catalogs,
+            'topics':topics,
+            'title': u'[知识库]',
+            'posts':posts}
+
+
+@render_to('wiki/ajax_show_catalog.html')
+def ajax_show_catalog(request, id):
+
+    try:
+        catalog = Catalog.objects.get(pk=id)
+    except Catalog.DoesNotExist:
+        #url = reverse ('wiki:catalog_not_exist', args=[id])
+        #return HttpResponseRedirect(url)
+        return { 'error': u'此目录不存在： %s' % id }
+
+    parents = get_parents (Catalog, id)
+    topics = Topic.objects.filter(catalog=id).exclude(hidden=1).exclude(recycled=1)
+
+    edit_topic_perm = request.user.has_perm ('ydata.edit_topic')
+
+    return {'catalog':catalog,
+            'parents': parents,
+            'topics':topics,
+            'title': u'[知识库] 目录浏览',
+            'edit_topic_perm':edit_topic_perm}

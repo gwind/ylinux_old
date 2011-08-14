@@ -1,46 +1,43 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh" lang="zh">
 
+
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    {% if theme %}
-    <link rel="stylesheet" href="{{ MEDIA_URL }}themes/{{ theme }}/style.css" />
-    {% else %}
-    <link rel="stylesheet" href="{{ MEDIA_URL }}themes/default/style.css" />
-    {% endif %}
-    {% block title %}{% if title %}<title>{{ title }} - YLinux.org</title>{% else %}<title>YLinux.org</title>{% endif %}{% endblock %}
-    <script type="text/javascript" src="http://code.jquery.com/jquery-1.5.1.min.js" ></script>
+    <link rel="stylesheet" href="{{ MEDIA_URL }}themes/{% if theme %}{{ theme }}{% else %}default{% endif %}/style.css" />
+    <title>{{ title }}{% if title %} - {% endif %}YLinux.org</title>
+    <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery-1.6.2.min.js" ></script>
     {% block extend_header %}{% endblock %}
   </head>
 
 
   <!-- body 用 container 包容，分4块： header,navigator,content,footer -->  
   <body id="RoundAngle">
-    <b class="rtop"><b class="r1"></b><b class="r2"></b><b class="r3"></b><b class="r4"></b></b>
+
     <div id="container">
 
 
       <!-- 开始 header (分2块: logo,account) -->
       <div id="header">
-      
-      <div id="header1">
-        <div id="logo" class="left"><a href="/"><img src="{{ MEDIA_URL }}images/ylinux-logo.gif" alt="YLinux"/></a></div>
+        
+        <div id="header1">
+          <div id="logo" class="left"><a href="/"><img src="{{ MEDIA_URL }}images/ylinux-logo.gif" alt="YLinux"/></a></div>
 
-        <div id="navigator"><p>
-          <a href="/wiki/topic/news/"><img src="{{ MEDIA_URL }}images/feed.gif" alt="订阅最近动态"/></a>
-          <a href="/">首页</a>
-          <a href="/coding">新闻</a>
-          <a href="/bbs">论坛</a>
-          <a href="/blog">博客</a>
-          <a href="/coding">项目</a>
-          <a href="/wiki">知识库</a>
-        </p></div>
-      </div>
+          <div id="navigator"><p>
+              <a href="/wiki/topic/news/"><img src="{{ MEDIA_URL }}images/feed.gif" alt="订阅最近动态"/></a>
+              <a href="/">首页</a>
+              <a href="/coding">新闻</a>
+              <a href="/bbs">论坛</a>
+              <a href="/blog">博客</a>
+              <a href="/coding">项目</a>
+              <a href="/wiki">知识库</a>
+          </p></div>
+        </div>
 
-      <div id="header2">
-        <div id="login">
+        <div id="header2">
+          <div id="login">
             {% if user.is_authenticated %}
             欢迎您，<a href="{% url account:show_user user.id %}"><b>{{ user }}</a></b>
             {% if user.is_staff %} | <a href="{% url admin:index %}">管理界面</a> | {% endif %}
@@ -48,9 +45,9 @@
             {% else %}
             <p><a href="{% url account:login %}">登录</a> <a href="{% url account:register %}"><b>注册</b></a></p>
             {% endif %}
-        </div>
+          </div>
 
-        <div id="tools">
+          <div id="tools">
             <form method="get" action="http://www.google.com/search" target="google_window">
               <input type="text" name="as_q" size="16" maxlength="255" value=""/>
               <input type="submit" name="sa" value="Google搜索本站"/>
@@ -65,15 +62,15 @@
               <input name="as_occt" value="any" type="hidden"/>
               <input name="as_dt" value="i" type="hidden"/>
             </form>
-            <input type="button" onmouseout="helpline('tip')" onmouseover="helpline('ime')" onclick="sougoubutton()" style="width: 110px; font-size: 10pt; font-weight: bold; color: rgb(159, 76, 9);" value="搜狗云输入法" name="addlitsitem" accesskey="t" class="btnbbcode"/>
+            <input type="button" onclick="sougoubutton()" style="width: 110px; font-size: 10pt; font-weight: bold; color: rgb(159, 76, 9);" value="搜狗云输入法" name="addlitsitem" accesskey="t" class="btnbbcode"/>
+          </div>
         </div>
-      </div>
       </div>
       <!-- 结束 header -->
 
       <!-- 开始 main -->
       <div id="main">
-      {% block content %}{% endblock %}
+        {% block content %}{% endblock %}
       </div>
       <!-- 结束 main -->
 
@@ -82,13 +79,13 @@
         版权 &copy <a href="http://ylinux.org">YLinux.org</a> |
         <a href="/about">关于</a> |
         <a href="/contact">联系</a> |
-<script language="javascript" type="text/javascript" src="http://js.users.51.la/3151082.js"></script>
-  <noscript><a href="http://www.51.la/?3151082" target="_blank"><img alt="51统计" src="http://ylinux.org/ylinux/media/default/ylinux/images/51.gif"/></a></noscript>
+        <script language="javascript" type="text/javascript" src="http://js.users.51.la/3151082.js"></script>
+        <noscript><a href="http://www.51.la/?3151082" target="_blank"><img alt="51统计" src="http://ylinux.org/ylinux/media/default/ylinux/images/51.gif"/></a></noscript>
       </div>
       <!-- 结束 footer -->
       
     </div>
     <!-- 结束 container -->
-    <b class="rbottom"><b class="r4"></b><b class="r3"></b><b class="r2"></b><b class="r1"></b></b> 
-    </body>
-  </html>
+
+  </body>
+</html>
