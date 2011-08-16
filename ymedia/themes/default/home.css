@@ -86,3 +86,75 @@
 }
 
 /* End header */
+
+.intro {
+    /*background: #313D47;
+    color: white;*/
+    padding: 80px 100px 100px 100px;
+    font-size: 1.1em;
+}
+
+.welcome-newuser {
+    float: right;
+}
+
+.ylinux-goal {
+    font-size: 1.2em;
+    /*color: blue;*/
+}
+
+/* Start show-update */
+#update-container {
+    /*border: 2px solid #DFE6ED;*/
+}
+
+#newest-topic-container {
+    width: 49%;
+    height: 100%;
+    /*padding: 5px;*/
+    float: left;
+    /*background: green;*/
+    border-left: 1px solid #DFE6ED;
+    border-right: 1px solid #DFE6ED;
+}
+
+#newest-post-container {
+    width: 49%;
+    height: 100%;
+    /*padding: 5px;*/
+    float: right;
+    /*background: black;*/
+    border-left: 1px solid #DFE6ED;
+    border-right: 1px solid #DFE6ED;
+}
+
+#catalog-list {
+    clear: both;
+}
+
+
+.newest-container-title {
+    /*background: #CAE8EA;*/
+    background: #EDF5FF;
+    color: #608088;
+    padding: 2px 10px 5px 10px;
+    border-top: 1px solid #DFE6ED;
+    border-bottom: 1px solid #DFE6ED;
+}
+
+.newtopic, .newpost {
+    margin: 1px;
+    border-bottom: 1px solid #DFE6ED;
+    padding: 1px 10px 2px 10px;
+    /*background: #EDF5FF;*/
+}
+
+.newtopic-title, .newpost-title {
+    font-size: 1.1em;
+}
+
+.newtopic-info, .newpost-info {
+    font-size: 0.6em;
+    color: gray;
+}
+/* End show-update */

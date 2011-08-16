@@ -1,23 +1,29 @@
 {% extends "home/base.html" %}
 
 {% block content %}
+<script type="text/javascript">
 
-<p>{% if new_register_user %}欢迎新用户：<a href="{% url account:show_user new_register_user.id %}">{{ new_register_user }}</a>{% endif %}</p>
+    $(document).ready( function () {
 
-<p>感谢您的关注，社区正在开发中，社区开发最新进展：</p>
-<div id="newProgress">
-  <p><span class="asmalltitle">2011年4月8日：完成论坛雏形</span></p><p>访问 <a href="http://ylinux.org/bbs/">YLinux论坛</a></p>
+        // 显示更新信息
+        $("#show-update").load("{% url wiki:ajax_show_update %}", function () {
+            $(this).addClass("list-catalog-done");
+        });
+
+    });
+
+</script>
+
+<span class="welcome-newuser">{% if new_register_user %}欢迎新用户：<a href="{% url account:show_user new_register_user.id %}">{{ new_register_user }}</a>{% endif %}</span>
+<div class="intro">
+
+<p>
+  YLinux 社区研究中文计算机科学，不只是 GNU/Linux 。中文计算机科学应该是这样：“<span class="ylinux-goal">任何以中文为母语的人，都能够使用中文和计算机进行交流</span>”。始学之，未存则建之。
+</p>
+
 </div>
 
-<p>详细的开发进展，请查看： <a href="http://ylinux.org/wiki/topic/3/">社区网站开发进展</a></p>
 
-<p>你可能会对下列问题感兴趣：</p>
-<ul>
-  <li><a href="http://ylinux.org/wiki/topic/1/">YLinux 是什么</a></li>
-  <li><a href="http://ylinux.org/wiki/topic/5/">YLinux 的目标</a></li>
-  <li><a href="http://ylinux.org/wiki/topic/6/">YLinux 的架构</a></li>
-</ul>
-
-<p>如果您对YLinux感兴趣，那么加入我们吧： <a href="http://ylinux.org/contact/">联系我们</a></p>
-<p>如果您想参与YLinux的开发，请查看： <a href="http://ylinux.org/wiki/topic/75/">如何参与YLinux的开发</a></p>
+<div id="show-update">
+</div>
 {% endblock %}
