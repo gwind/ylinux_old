@@ -426,18 +426,3 @@ def update_bbs(request):
     return HttpResponseRedirect(reverse('bbs:index'))
 
 
-# 更新目录级别
-@permission_required('ydata.delete_catalog')
-def update_catalog(request):
-    for c in Catalog.objects.all():
-        level = 0
-        if c.parent:
-            p = c.parent
-            while p:
-                p = p.parent
-                level += 1
-        c.level = level
-        c.save()
-        #print "[%s] %s" % (c.level, c)
-
-    return HttpResponseRedirect(reverse('wiki:index'))

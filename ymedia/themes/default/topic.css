@@ -1,3 +1,88 @@
+/* Start header */
+#header {
+    border-bottom: 1px solid #DFE6ED;
+    padding-bottom: 5px;
+}
+
+#logo {
+    float: left;
+}
+
+#welcome {
+    float: left;
+}
+
+#welcome span {
+    color: #80A9B3;
+    padding: 5px 10px 5px 30px;
+    font-size: 1.6em;
+}
+
+.right {
+    float: right;
+}
+
+#logo {
+    text-align: right;
+}
+
+#tools form {
+    float: right;
+}
+#tools form { 
+    width: 201px; 
+    height: 31px; 
+    background: url(/ymedia/images/bg_search_box.gif); 
+} 
+#s { 
+    float: left; 
+    padding: 0; 
+    margin: 6px 0 0 6px; 
+    border: 0; 
+    width: 159px; 
+    background: none; 
+    font-size: .8em; 
+} 
+#go { 
+    float: right; 
+    margin: 3px 4px 0 0; 
+}
+
+
+#account {
+    margin-top: 10px;
+    float: right;
+}
+
+#account input {
+    width: 80px;
+}
+
+.login-text {
+    font-size: 0.5em;
+    color: #80A9B3;
+    margin: 5px 10px 5px 10px;
+}
+
+#navigator > span {
+    clear: both;
+    background: #DFE6ED;
+    text-align: center;
+}
+
+#navigator > span > a {
+    margin: 2px 3px 2px 3px;
+    padding: 1px 2px 1px 2px;
+    /*font-size: 1.3em;*/
+}
+
+#navigator > span > a:hover {
+    background: #313D47;
+    color: white;
+}
+
+/* End header */
+
 h1 {
     font-size: 1.8em;
 }
@@ -107,6 +192,27 @@ h6 {
 }
 
 
-code {
-
+pre {
+    border: 1px solid #DFDFDF;
+    width: auto;
 }
+
+code {
+}
+
+
+.atitle {
+    border-bottom: 1px solid #DADADA;
+    /*clear: both;*/
+    /*color: #666666;*/
+    font: 24px Georgia,"Times New Roman",Times,serif;
+    margin: 5px 0 0 -4px;
+    padding: 0 0 7px;
+}
+
+.asmalltitle {
+    font: 18px Georgia,"Times New Roman",Times,serif;
+    margin: 5px 0 0 -4px;
+    padding: 0 0 7px;
+}
+

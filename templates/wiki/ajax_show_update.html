@@ -30,7 +30,7 @@
     {% for p in posts %}
     <div class="newpost">
       <div class="newpost-title">
-        <a href="/wiki/topic/{{ p.topic.id }}#post{{ p.id }}" target="_blank">{{ p.topic }}</a>
+        <a href="/wiki/topic/{{ p.topic.id }}#post{{ p.id }}" target="_blank">{{ p }}</a>
       </div>
       <div class="newpost-info">
         <span class="user"><a href="{% url account:show_user p.user.id %}" target="_blank">{{ p.user }}</a></span>

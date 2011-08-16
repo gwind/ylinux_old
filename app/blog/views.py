@@ -9,7 +9,6 @@ from ydata.util import render_to, build_form, get_parents
 @render_to('blog/index.html')
 def index(request):
 
-    print 'Here'
     return {'title':'YLinux Blog'}
 
 
@@ -17,7 +16,6 @@ def index(request):
 def homepage(request, id):
     ''' 指定 id 的用户 Blog 首页 '''
 
-    print 'Here'
     try:
         user = User.objects.get(pk=id)
     except User.DoesNotExist:

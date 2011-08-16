@@ -52,9 +52,6 @@ class Catalog(models.Model):
                verbose_name="只有在组中的用户可以访问此目录")
     position = models.IntegerField('位置', blank=True, 
                default=0, help_text="决定目录排序，默认0")
-    level = models.IntegerField(
-        '目录层次', blank = True, default = 0,
-        help_text = "描述本目录属于几级目录，默认0,表示顶级")
     description = models.TextField('描述', blank=True, 
                                    default='')
     # auto_now_add 在 create object 自动保存为当前时间
@@ -252,7 +249,7 @@ class Post(models.Model):
             #self.body_html = markdown(self.body, 'safe')
         elif self.markup == 'none':
             #self.body_html = self.body
-            self.body_html = Markdown(extensions=['fenced_code']).convert(self.body)
+            self.body_html = Markdown(extensions=['fenced_code']).convert(ylinux_text_filter(self.body))
         else:
             raise Exception('Invalid markup property: %s' % self.markup)
         #self.body_text = strip_tags(self.body_html)
@@ -388,7 +385,7 @@ def ylinux_text_filter(text):
                 id = m.group('id')
                 try:
                     a = Attachment.objects.get(pk=id)
-                    place_html = u'<a href="%s">%s</a>' % (a.get_absolute_url(), a.name)
+                    place_html = u'<a href="%s" target="_blank">%s</a>' % (a.get_absolute_url(), a.name)
                 except Attachment.DoesNotExist:
                     place_html = u'<span style="color:red;">[ID为%s的附件不存在]</span>' % id
 
@@ -406,7 +403,7 @@ def ylinux_text_filter(text):
                 id = m.group('id')
                 try:
                     t = Topic.objects.get(pk=id)
-                    place_html = u'<a href="%s">%s</a>' % (t.get_absolute_url(), t.name)
+                    place_html = u'<a href="%s" target="_blank">%s</a>' % (t.get_absolute_url(), t.name)
                 except Topic.DoesNotExist:
                     place_html = u'<span style="color:red;">[ID为%s的附件不存在]</span>' % id
 

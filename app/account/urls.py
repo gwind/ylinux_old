@@ -11,4 +11,7 @@ urlpatterns = patterns('account.views',
     url(r'^(?P<id>\d+)/$', 'user', name='show_user'),
     url(r'^password/reset/$', 'password_reset_request', name='password_reset_request'),
     url(r'^password/reset/(?P<key>.+)/$', 'password_reset', name='password_reset'),
+
+    url(r'^login/ajax/$', 'ajax_login', name='ajax_login'),
+    url(r'^logout/ajax/$', 'ajax_logout', name='ajax_logout'),
 )

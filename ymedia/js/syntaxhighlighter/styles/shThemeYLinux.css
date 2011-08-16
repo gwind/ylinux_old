@@ -31,10 +31,14 @@
   color: black !important;
 }
 .syntaxhighlighter table caption {
-  color: black !important;
+  color: #608088 !important;
+}
+.syntaxhighlighter table caption a {
+  color: white !important;
+  text-decoration: none;
 }
 .syntaxhighlighter .gutter {
-  color: #afafaf !important;
+  color: #0fafaf !important;
 }
 .syntaxhighlighter .gutter .line {
   border-right: 2px solid #618BB0 !important;
@@ -75,7 +79,7 @@
   color: black !important;
 }
 .syntaxhighlighter .comments, .syntaxhighlighter .comments a {
-  color: #008200 !important;
+  color: #a08200 !important;
 }
 .syntaxhighlighter .string, .syntaxhighlighter .string a {
   color: blue !important;

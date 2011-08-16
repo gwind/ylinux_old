@@ -47,5 +47,4 @@ urlpatterns = patterns('admin.views',
     url(r'^reboot/$', 'reboot'),
 
     url(r'^update_bbs/$', 'update_bbs'),
-    url(r'^update_catalog/$', 'update_catalog'),
 )

@@ -222,3 +222,33 @@ def password_reset (request, key=None):
 
     return {'NEW_REQUEST':True, 'form':form}
 
+
+
+@render_to("account/ajax_login.html")
+def ajax_login (request):
+
+    if request.method != "POST":
+        return HttpResponse("ajax_login: Just for POST!")
+
+    username = request.POST.get("username", None)
+    password = request.POST.get("password", None)
+    from account import authenticate,login
+    user = authenticate(username=username, password=password)
+    if user is not None:
+        if user.is_active:
+            login(request, user)
+            if request.session.test_cookie_worked():
+                request.session.delete_test_cookie()
+            return {}
+        else:
+            return HttpResponseForbidden(u'用户未被激活，请联系管理员： ylinux.admin@gmail.com')
+    else:
+        return { "error": "用户名或密码错误" }
+
+
+@render_to("account/ajax_login.html")
+def ajax_logout(request):
+
+    from account import logout
+    logout(request)
+    return {}

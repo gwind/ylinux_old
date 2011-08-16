@@ -1,3 +1,98 @@
+/* Start global style */
+.error {
+    color: red;
+    font-size: 0.6em;
+}
+/* End global style */
+
+
+
+/* Start header */
+#header {
+    border-bottom: 1px solid #DFE6ED;
+    padding-bottom: 5px;
+}
+
+#logo {
+    float: left;
+}
+
+#welcome {
+    float: left;
+}
+
+#welcome span {
+    color: #80A9B3;
+    padding: 5px 10px 5px 30px;
+    font-size: 1.6em;
+}
+
+.right {
+    float: right;
+}
+
+#logo {
+    text-align: right;
+}
+
+#tools form {
+    float: right;
+}
+#tools form { 
+    width: 201px; 
+    height: 31px; 
+    background: url(/ymedia/images/bg_search_box.gif); 
+} 
+#s { 
+    float: left; 
+    padding: 0; 
+    margin: 6px 0 0 6px; 
+    border: 0; 
+    width: 159px; 
+    background: none; 
+    font-size: .8em; 
+} 
+#go { 
+    float: right; 
+    margin: 3px 4px 0 0; 
+}
+
+
+#account {
+    margin-top: 10px;
+    float: right;
+}
+
+#account input {
+    width: 80px;
+}
+
+.login-text {
+    font-size: 0.5em;
+    color: #80A9B3;
+    margin: 5px 10px 5px 10px;
+}
+
+#navigator > span {
+    clear: both;
+    background: #DFE6ED;
+    text-align: center;
+}
+
+#navigator > span > a {
+    margin: 2px 3px 2px 3px;
+    padding: 1px 2px 1px 2px;
+    /*font-size: 1.3em;*/
+}
+
+#navigator > span > a:hover {
+    background: #313D47;
+    color: white;
+}
+
+/* End header */
+
+
 
 /* 未访问的链接 */
 a:link {
@@ -37,7 +132,7 @@ a:active {
 /* End hide from IE-mac */
 
 #update-container {
-    border: 2px solid #DFE6ED;
+    /*border: 2px solid #DFE6ED;*/
 }
 
 #newest-topic-container {
@@ -85,22 +180,15 @@ a:active {
     color: gray;
 }
 
-#catalog-list-container {
-    margin-top: 20px;
-    border: 2px solid #DFE6ED;
-    clear: both;
-}
-
-
 .level-item {
     float: left;
     width: 30%;
 }
 
 #wiki-container {
-    margin-top: 20px;
-    padding-top: 20px;
-    border-top: 5px double #DFE6ED;
+    clear: both;
+    /*margin-top: 20px;*/
+    /*border-top: 5px double #DFE6ED;*/
 }
 
 #wiki-container-catalog {
@@ -114,26 +202,7 @@ a:active {
 }
 
 #wiki-container-catalog ul {
-    padding: 10px; /* 多级 ul 如何缩进？ */
-}
-
-#wiki-container-main {
-    width: auto;
-    height: 100%;
-    padding: 5px 20px 10px 20px;
-    /*float: right;*/
-    margin-left: 255px;
-    /*background: black;*/
-    border-left: 2px solid #DFE6ED;
-}
-
-.list-catalog-done {
-    color: red;
-}
-
-.have-subcatalog {
-    color: red;
-    border-left: 1px solid #DFE6ED;
+    padding: 0 10px 0 10px; /* 多级 ul 如何缩进？ */
 }
 
 #cmenu li {
@@ -144,12 +213,43 @@ a:active {
     cursor: pointer;
 }
 
+.cmenu-li {
+    background: #98BAC0;
+}
+.cmenu-ul-li {
+    background: #CAE8EA;
+}
+.cmenu-ul-ul-li {
+    background: #EDF5FF;
+}
 
 .catalog-selected {
     background: #313D47;
     color: white;
 }
 
+
+#wiki-container-main {
+    width: auto;
+    height: 100%;
+    padding-top: 18px;
+    padding-left: 30px;
+    /*padding: 0 20px 10px 20px;*/
+    /*float: right;*/
+    /*margin-top: 20px;*/
+    margin-left: 255px;
+    /*background: black;*/
+    /*border-left: 2px solid #DFE6ED;*/
+}
+
+.list-catalog-done {
+    color: red;
+}
+
+.have-subcatalog {
+    color: red;
+    border-left: 1px solid #DFE6ED;
+}
 
 #wiki-container-main-title {
     padding: 5px 15px 5px 15px;

@@ -1,0 +1,19 @@
+{% if error %}
+<span class="login-text">用户</span><input id="username" type="text" maxlength="30"/>
+<span class="login-text">密码</span><input id="password" type="password"/>
+<button type="button" onclick="javascript:ajax_login()">登录</button>
+<br/>
+<span class="error">{{ error }}</span>
+
+{% else %}
+
+{% if user.is_authenticated %}
+欢迎回来，<a href="{% url account:show_user user.id %}"><b>{{ user }}</a></b>
+{% if user.is_staff %} | <a href="{% url admin:index %}">管理界面</a> | {% endif %}
+<span id="logout"><button type="button" onclick="javascript: ajax_logout()">退出</button></span>
+{% else %}
+<span id="login"><button type="button" onclick="javascript: ajax_create_login()">登录</button></span>
+<span id="register"><button type="button">注册</button></span>
+{% endif %}
+
+{% endif %}

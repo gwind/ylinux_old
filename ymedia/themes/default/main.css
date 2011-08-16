@@ -1,0 +1,58 @@
+body {
+    /*
+    -moz-border-radius: 11px 11px 11px 11px;
+    background: none repeat scroll 0 0 #FFFFFF;
+    border: 1px solid #DFDFDF;
+    */
+    color: #333333;
+    margin: 10px 20px 10px 20px;
+    font-family: "Lucida Grande",Verdana,Arial,"Bitstream Vera Sans",sans-serif;
+}
+
+
+h1, h2, h3, h4, h5, h6 {
+    border-width: thin medium thick 10px;
+    display: inline;
+}
+
+
+a:link {color: blue}
+a:visited {color: #9F4C09} 
+a:hover {color: green}
+a:active {color: #0000FF}
+
+
+.left {
+    float:left;
+}
+
+.right {
+    float:right;
+}
+
+#footer {
+    clear: both; /* 此属性定义了元素的哪边上不允许出现浮动元素: left,right,both,none */
+    margin-top: 10px;
+    margin-right: auto;
+    margin-left: auto;
+    bottom: 0;
+    border: 0.1em solid #dcdce9;
+    padding: 5px;
+    text-align: center;
+    list-style: none;
+}
+
+img {
+    border: 0 none;
+}
+
+.clearfix:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+}
+/* Hides from IE-mac \*/
+* html .clearfix {height: 1%;}
+/* End hide from IE-mac */
