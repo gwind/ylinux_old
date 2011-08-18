@@ -1,0 +1,30 @@
+{% ifequal method "POST" %}
+<div class="post-item">
+
+  <div class="post-header">
+    <span class="louzhu"><a name="post{{ post.id }}">{{ post.id }}</a></span>
+    <span class="user"><a href="{% url account:show_user post.user.id %}">{{ post.user }}</a></span>
+    <span class="time">{{ post.updated|date:"Y年m月d日 H:i" }}</span>
+    {% ifequal user post.user %}
+    [<span class="delete"><a href="{% url wiki:del_post post.id %}">删除</a></span>]
+    {% endifequal %}
+    <span><button type="button" onclick="javascript: ajax_new_post(this, 'POST', '{{ post.id }}')">盖楼</button></span>
+  </div>
+
+  <div class="post-body">
+    {{ post.body_html|safe }}
+  </div>
+
+</div>
+{% endifequal %}
+
+{% ifequal method "GET" %}
+<div class="new-post">
+  <textarea id="new-post-body" rows="10" cols="60" name="body" class="bbcode"></textarea>
+  <button type="button" onclick="javascript: {{ ajaxFunc }}">提交</button>
+</div>
+{% endifequal %}
+
+{% if error %}
+<p>{{ error }}</p>
+{% endif %}

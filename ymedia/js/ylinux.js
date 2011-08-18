@@ -52,6 +52,24 @@ function load_syntaxhighlighter () {
 
 }
 
+// 返回无参数函数
+function _hello(_name){
+       return function(){
+             refresh_wiki_index(_name);
+       }
+}
+
+function set_wiki_update ( time ) {
+    setInterval(_hello(time), 30000);
+}
+
+function refresh_wiki_index ( time ) {
+    //alert(time);
+    $("#wiki-update").load("/wiki/query_update/" + time + "/ajax/", function () {
+        $(this).addClass("list-catalog-done");
+    });
+}
+
 
 function ajax_list_catalog (url) {
     $("#wiki-container-main").load(url, function () {
@@ -88,3 +106,46 @@ function ajax_create_login () {
     loginHtml += '<button type="button" onclick="javascript:ajax_login()">登录</button>'
     $("#account").html(loginHtml);
 }
+
+
+function ajax_new_post(obj, method, id) {
+
+    $.ajax({
+        url: "/wiki/" + method.toLowerCase() + "/" + id + "/replayAJAX/",
+        type: "GET",
+        success: function (retData) {
+            if ( method == 'TOPIC' ) {
+                $(retData).appendTo($(obj).parents(".create-post").parent());
+            } else if ( method == 'POST' ) {
+                var postItem = $(obj).parent().parent().parent();
+                $(retData).appendTo(postItem);
+            } else {
+                alert("Error method: " + method);
+            }
+        }
+    });
+}
+
+
+function ajax_replay (obj, method, id) {
+    // new-post-body 是 textarea
+    var postBody = $("#new-post-body").val();
+
+    $.ajax({
+        url: "/wiki/" + method.toLowerCase() + "/" + id + "/replayAJAX/",
+        type: "POST",
+        data: { body: postBody },
+        success: function (retData) {
+            if ( method == 'TOPIC' ) {
+                //$(obj).parent().parent().html();
+                $(obj).parents(".new-post").remove();
+                $(retData).appendTo("#posts");
+            } else if ( method == 'POST' ) {
+                $(obj).parent().parent().load("/wiki/post/" + id + "/ajax_show_posts/");
+            } else {
+                alert("POST textarea have not remove!");
+            }
+        }
+    });
+}
+

@@ -141,7 +141,7 @@ h6 {
 }
 
 
-#post {
+#posts {
     margin: 20px, 0, 0, 15px;
     border-top: 3px solid #DFE6ED;
 }
@@ -152,6 +152,7 @@ h6 {
 
 .post-item {
     margin-top: 15px;
+    margin-left: 15px;
     padding: 7px;
     border: 1px solid #DFDFDF;
     -moz-box-shadow: 3px 3px 4px #DFDFDF;
@@ -162,13 +163,19 @@ h6 {
 }
 
 /* 鼠标悬停效果 */
+/*
 .post-item:hover {
     border: 1px solid #CBCBCB;
     background: #f0f0f0;
 }
+*/
 
 .post-header {
     border-bottom: 1px solid #DFDFDF;
+}
+.post-body {
+    padding: 1px 0 1px 10px;
+    background: #EDF5FF;
 }
 
 .time {

@@ -1,5 +1,6 @@
 # coding: utf-8
 
+import time, datetime
 from django.http import Http404, HttpResponse, HttpResponseRedirect, HttpResponseForbidden
 from django.shortcuts import get_object_or_404
 from django.core.urlresolvers import reverse
@@ -14,6 +15,7 @@ from ydata.forms import AddPostForm, \
 from ydata.util import render_to, build_form, get_parents, ylinux_get_ip
 import xml.etree.ElementTree as ET
 
+from wiki.utils import render_post
 
 @render_to('wiki/index.html')
 def index(request):
@@ -23,10 +25,12 @@ def index(request):
     catalogs = Catalog.objects.filter(parent=None)
     topics = Topic.objects.all().order_by('-updated')[:10]
     posts = Post.objects.all().order_by('-updated')[:10]
+    lastUpdataTime = int(time.time())
     return {'catalogs':catalogs,
             'topics':topics,
             'title': u'[知识库]',
-            'posts':posts}
+            'posts':posts,
+            'lastUpdataTime': lastUpdataTime}
 
 
 # 一些 DoesNotExist 的页面这里处理
@@ -68,7 +72,7 @@ def topic(request, id):
         return HttpResponseRedirect(url)
 
     parents = get_parents (Catalog, topic.catalog.id)
-    posts = Post.objects.filter(topic=id).order_by('updated')
+    posts = Post.objects.filter(topic=id, parent=None).order_by('updated')
     #length = len(posts)
     PL = [] # posts list
     for i, p in enumerate(posts):
@@ -267,6 +271,16 @@ class LatestPostFeed(Feed):
 
 
 # AJAX Call
+@render_to('wiki/ajax_query_update.html')
+def ajax_query_update(request, time):
+
+    lastUpdataTime = datetime.datetime.fromtimestamp(float(time))
+    topics = Topic.objects.filter(updated__gt = lastUpdataTime)
+    posts = Post.objects.filter(updated__gt = lastUpdataTime)
+    return {'topics':topics,
+            'posts':posts}
+
+
 @render_to('wiki/ajax_show_update.html')
 def ajax_show_update(request):
 
@@ -299,3 +313,71 @@ def ajax_show_catalog(request, id):
             'topics':topics,
             'title': u'[知识库] 目录浏览',
             'edit_topic_perm':edit_topic_perm}
+
+
+def ajax_show_posts(request, topicID=None, postID=None):
+
+    if topicID:
+        posts = Post.objects.filter(topic=topicID, parent=None).order_by('updated')
+    elif postID:
+        posts = [get_object_or_404(Post,pk=postID),]
+    else:
+        return HttpResponse(u'显示 posts 出错')
+        
+    HTML = ''
+    for p in posts:
+        HTML += render_post(p)
+    return HttpResponse(HTML)
+
+
+# 回复分为：
+# 1. 回复 Topic
+# 2. 回复 Post
+@login_required
+@render_to('wiki/replayAJAX.html')
+def replayAJAX(request, topicID = None, postID = None):
+    """ 通过 AJAX 方式回复 """
+
+    replayID = None # 需要回复的 id
+    parent_post = None
+
+    if topicID:
+        topic = get_object_or_404(Topic, pk = topicID)
+        replayID = topicID
+    elif postID:
+        parent_post = get_object_or_404(Post, pk = postID)
+        topic = get_object_or_404(Topic, pk = parent_post.topic.id)
+        replayID = postID
+    else:
+        return HttpResponse(u'topicID 和 postID 必需要指定一个！')
+
+    if request.method == 'GET':
+        m = 'POST' if postID else 'TOPIC'
+        ajaxFunc = 'ajax_replay(this, "%s", "%s")' % (m, replayID)
+        return { 'method': 'GET',
+                 'ajaxFunc' : ajaxFunc }
+
+    else:
+
+        if not request.user.is_authenticated():
+            return HttpResponse(u'<h1>您没有权限！请 <a href="/account/login">登录</a></h1>')
+
+        if not topic.catalog.has_access(request.user):
+            return HttpResponse(u'<h1>您没有权限回复此帖！</h1>')
+
+        # 如果 topic 已锁，则重定向到显示 topic
+        if topic and topic.closed:
+            return HttpResponse(u'主题已锁定，不可回复！')
+
+        ip = ylinux_get_ip(request)
+
+        post_body = request.POST.get("body", None)
+        if len(post_body) < 2:
+            return {'error': u'您的回复太短，至少2个字符！'}
+        post = Post(topic = topic, user = request.user, user_ip = ip, markup = 'none', body = post_body, parent = parent_post)
+        topic.post_count += 1
+        topic.save()
+        topic.catalog.post_count += 1
+        topic.catalog.save()
+        post.save()
+        return {'method': 'POST', 'topic': topic, 'post': post}

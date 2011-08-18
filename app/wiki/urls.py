@@ -42,6 +42,13 @@ urlpatterns = patterns('wiki.views',
     url(r'^post/news/$', LatestPostFeed(), name='post_news'),
 
     # AJAX Call
+    url(r'^query_update/(?P<time>\d+)/ajax/$', 'ajax_query_update', name='ajax_query_update'),
     url(r'^show_update/ajax/$', 'ajax_show_update', name='ajax_show_update'),
     url(r'^catalog/(?P<id>\d+)/ajax/$', 'ajax_show_catalog', name='ajax_show_catalog'),
+    url(r'^topic/(?P<topicID>\d+)/ajax_show_posts/$', 'ajax_show_posts', name='ajax_show_topic_posts'),
+    url(r'^post/(?P<postID>\d+)/ajax_show_posts/$', 'ajax_show_posts', name='ajax_show_post_posts'),
+
+    # 回复
+    url(r'^topic/(?P<topicID>\d+)/replayAJAX/$', 'replayAJAX', name="replayTopicAJAX"),
+    url(r'^post/(?P<postID>\d+)/replayAJAX/$', 'replayAJAX', name="replayPostAJAX"),
 )

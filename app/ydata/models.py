@@ -221,6 +221,8 @@ class Topic(models.Model):
 
 class Post(models.Model):
     topic = models.ForeignKey(Topic, related_name='posts', verbose_name='Topic')
+    # parent 是 Post 间的继承关系
+    parent = models.ForeignKey('self', blank=True, null=True, verbose_name='Post', related_name='child')
     user = models.ForeignKey(User, related_name='posts', verbose_name='User')
     created = models.DateTimeField('Created', auto_now_add=True)
     updated = models.DateTimeField('Updated', auto_now=True)
@@ -282,6 +284,12 @@ class Post(models.Model):
     @models.permalink
     def get_absolute_url(self):
         return ('wiki:show_post', [self.id])
+
+
+    @property
+    def children(self):
+        return Post.objects.filter(parent=self.id)
+
 
     def summary(self):
         LIMIT = 30

@@ -78,6 +78,10 @@
             $(this).addClass("list-catalog-done");
         });
 
+        // 定时刷新
+        set_wiki_update("{{ lastUpdataTime }}");
+
+
     });
 
 </script>
@@ -100,7 +104,8 @@
     </form>
   </div>
 
-
+<div id="wiki-update">
+</div>
 <div id="wiki-container" class="clearfix">
 
   <div id="wiki-container-catalog" class="clearfix">

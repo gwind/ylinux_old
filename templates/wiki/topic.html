@@ -15,6 +15,7 @@
 <script type="text/javascript">
   $(document).ready(function () {
     load_syntaxhighlighter();
+    $("#posts").load("{% url wiki:ajax_show_topic_posts topic.id %}");
   })
 </script>
 
@@ -116,31 +117,13 @@
 
 
 {% if posts %}
-<div id="post">
-  <p>最新回复：</p>
-
-  {% for index,post in posts %}
-  <div class="post-item">
-    <div class="post-header">
-      <p>
-        <span class="louzhu"><a name="post{{ post.id }}">{{ index }} 楼</a></span>
-        <span class="user"><a href="{% url account:show_user post.user.id %}">{{ post.user }}</a></span>
-        <span class="time">{{ post.updated|date:"Y年m月d日 H:i" }}</span>
-        <!-- 于 <a href="http://www.ip138.com/ips.asp?ip={{ post.user_ip }}&action=2">{{ post.user_ip }}</a>-->
-        {% ifequal user post.user %}
-        [<span class="delete"><a href="{% url wiki:del_post post.id %}">删除</a></span>]
-        {% endifequal %}
-      </p>
-    </div>
-    <div class="post-body">
-      <p>{{ post.body_html|safe }}</p>
-    </div>
-  </div>
-  {% endfor %}
-
+<div id="posts">
 </div>
 {% endif %}
 
-<p><a href="{% url wiki:add_post topic.id %}">我来说两句</a></p>
+<div class="create-post">
+  <button type="button" onclick="javascript: ajax_new_post(this, 'TOPIC', '{{ topic.id }}')">快速回复</button>
+  <a href="{% url wiki:add_post topic.id %}">回复</a>
+</div>
 
 {% endblock %}
