@@ -130,6 +130,25 @@ def add_post(request, id):
     return {'form':form, 'posts':posts, 'topic':topic}
 
 
+# 代码实现 Plux <yfwz100@gmail.com>
+@login_required
+@render_to('wiki/ajax_add_topic.html')
+def ajax_add_topic(request, id):
+    if not id:
+        return {'errors':'没有指定 Catalog'}
+
+    catalog = get_object_or_404(Catalog,pk=id)
+    if not catalog.has_access(request.user):
+        return HttpResponseForbidden(u'<h2>你没有权限在此组中发贴！</h2>')
+    parents = get_parents (Catalog, id)
+    ip = ylinux_get_ip(request)
+
+    form = build_form (AddTopicForm, request, 
+           catalog=catalog, user=request.user, user_ip=ip)
+
+    return {'parents':parents, 'form':form, 'id': id}
+
+
 @login_required
 @render_to('wiki/add_topic.html')
 def add_topic(request,id):

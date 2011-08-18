@@ -47,6 +47,7 @@ urlpatterns = patterns('wiki.views',
     url(r'^catalog/(?P<id>\d+)/ajax/$', 'ajax_show_catalog', name='ajax_show_catalog'),
     url(r'^topic/(?P<topicID>\d+)/ajax_show_posts/$', 'ajax_show_posts', name='ajax_show_topic_posts'),
     url(r'^post/(?P<postID>\d+)/ajax_show_posts/$', 'ajax_show_posts', name='ajax_show_post_posts'),
+    url(r'^catalog/(?P<id>\d+)/addtopic/ajax/$', 'ajax_add_topic', name='ajax_add_topic'), # Plux <yfwz100@gmail.com>
 
     # 回复
     url(r'^topic/(?P<topicID>\d+)/replayAJAX/$', 'replayAJAX', name="replayTopicAJAX"),

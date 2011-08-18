@@ -5,6 +5,10 @@
 
     $(document).ready( function () {
        $('tbody tr:odd').addClass("tr-odd");
+       $('#write_new').click(function(event) {
+	  event.preventDefault();
+	  ajax_list_catalog($(this).attr('href') + 'ajax');
+       });
     });
 </script>
 
@@ -12,11 +16,11 @@
   <span>
     <a href="javascript: void(0)" onclick="ajax_list_catalog('{% url wiki:ajax_show_update %}')">开始</a>
     {% for id,name in parents %}
-    > <a href="javascript: void(0)" onclick="ajax_list_catalog('{% url wiki:ajax_show_catalog id %}')">{{ name }}</a>
+    &gt; <a href="javascript: void(0)" onclick="ajax_list_catalog('{% url wiki:ajax_show_catalog id %}')">{{ name }}</a>
     {% endfor %}
 
     {% if user.is_authenticated %}
-    <span class="right"><a href="{% url wiki:add_topic catalog.id %}" target="_blank">写文章</a></span>
+    <span class="right"><a href="{% url wiki:add_topic catalog.id %}" target="_blank" id="write_new">写文章</a></span>
     {% endif %}
 
   </span>

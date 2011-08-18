@@ -1,0 +1,84 @@
+<div id="wiki-container-main-title">
+  <span>
+    <a href="javascript: void(0)" onclick="ajax_list_catalog('{% url wiki:ajax_show_update %}')">开始</a>
+    {% for pid,name in parents %}
+      &gt; <a href="javascript: void(0)" onclick="ajax_list_catalog('{% url wiki:ajax_show_catalog pid %}')">{{ name }}</a>
+    {% endfor %}
+
+    {% if user.is_authenticated %}
+    <!-- <span class="right"><a href="{% url wiki:index %}" target="_self" id="write_new">返回</a></span> -->
+    {% endif %}
+
+  </span>
+</div>
+<!--
+<p>
+  <a href="{% url wiki:index %}">知识库</a>
+  {% for id,name in parents %}
+  | <a href="{% url wiki:show_catalog id %}">{{ name }}</a>
+  {% endfor %}
+  | 发表新主题
+</p>
+-->
+
+
+{% if form.errors %}
+<div id="form-error">
+  <p>提交表格有错误发生：</p>
+  <ul>
+    {% for field in form %}
+    {% if field.errors %}
+    <li>{{ field.name }}： {{ field.errors|striptags }}</li>
+    {% endif %}
+    {% endfor %}
+  </ul>
+</div>
+{% endif %}
+
+<form action="{% url wiki:add_topic id%}" method="POST">
+<!--  
+  <p><label for="id_name">标题:</label> <input id="id_name" type="text" name="name" maxlength="256" /></p>
+  <p>
+    <label for="id_markup">语法:</label>
+    <select name="markup" id="id_markup">
+      <option value="bbcode">bbcode</option>
+      <option value="markdown" selected="selected">markdown</option>
+    </select>
+    <span><a href="/wiki/topic/8/" target="_blank">Markdown 标记语言使用帮助</a></span>
+  </p>
+  <p>
+    <label for="id_text">正文:</label>
+    <textarea id="id_text" rows="20" cols="60" name="text"></textarea>
+    <input type="hidden" name="catalog" value="4" id="id_catalog" />
+  </p>
+  　 <p><input type="submit" value="发表"></p>
+-->
+{% csrf_token %}
+{{ form.as_p }}
+<input type="submit" value="发表" />
+</form>
+
+<!--
+<div id="uploadList">
+  <p>附件管理</p>
+  <table>
+    <tbody id="upload">
+      <tr>
+        <th>ID</th>
+        <th>名字</th>
+        <th>描述</th>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div id="uF">
+  <table>
+    <tr>
+      <td id="upload_form"></td>
+    </tr>
+    <tr>
+      <td><button onclick="CreateUploadForm();">添加附件</button></td>
+    </tr>
+  </table>
+</div>
+-->
