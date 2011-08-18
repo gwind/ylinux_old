@@ -343,9 +343,15 @@ def ajax_show_posts(request, topicID=None, postID=None):
     else:
         return HttpResponse(u'显示 posts 出错')
         
-    HTML = ''
+    HTML = '''
+<script type="text/javascript">
+  $(document).ready(function () {
+    $(".post-item").draggable();
+  })
+</script>
+'''
     for p in posts:
-        HTML += render_post(p)
+        HTML += render_post(request.user, p)
     return HttpResponse(HTML)
 
 
@@ -394,9 +400,35 @@ def replayAJAX(request, topicID = None, postID = None):
         if len(post_body) < 2:
             return {'error': u'您的回复太短，至少2个字符！'}
         post = Post(topic = topic, user = request.user, user_ip = ip, markup = 'none', body = post_body, parent = parent_post)
+        post.save()
         topic.post_count += 1
+        topic.last_post = post
         topic.save()
         topic.catalog.post_count += 1
+        topic.catalog.last_post = post
         topic.catalog.save()
-        post.save()
+
         return {'method': 'POST', 'topic': topic, 'post': post}
+
+
+@login_required
+@render_to('wiki/editPostAJAX.html')
+def editPostAJAX(request, postID):
+
+    post = get_object_or_404(Post, pk = postID)
+
+    if request.method == 'GET':
+        return {'method': 'GET', 'post': post}
+
+    post_body = request.POST.get('body', None)
+    if not post_body:
+        return HttpResponse(u'error: No contents found!')
+    post.body = post_body
+    post.save()
+
+    post.topic.last_post = post
+    post.topic.save()
+    post.topic.catalog.last_post = post
+    post.topic.catalog.save()
+
+    return {'method': 'POST', 'post': post}

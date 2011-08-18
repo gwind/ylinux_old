@@ -117,8 +117,7 @@ function ajax_new_post(obj, method, id) {
             if ( method == 'TOPIC' ) {
                 $(retData).appendTo($(obj).parents(".create-post").parent());
             } else if ( method == 'POST' ) {
-                var postItem = $(obj).parent().parent().parent();
-                $(retData).appendTo(postItem);
+                $(obj).parent().parent().parent().children(".post-body").after(retData);
             } else {
                 alert("Error method: " + method);
             }
@@ -137,11 +136,12 @@ function ajax_replay (obj, method, id) {
         data: { body: postBody },
         success: function (retData) {
             if ( method == 'TOPIC' ) {
-                //$(obj).parent().parent().html();
                 $(obj).parents(".new-post").remove();
                 $(retData).appendTo("#posts");
             } else if ( method == 'POST' ) {
-                $(obj).parent().parent().load("/wiki/post/" + id + "/ajax_show_posts/");
+                //$(obj).parent().parent().load("/wiki/post/" + id + "/ajax_show_posts/");
+                $(retData).appendTo($(obj).parents(".new-post").parent());
+                $(obj).parents(".new-post").remove();
             } else {
                 alert("POST textarea have not remove!");
             }
@@ -149,3 +149,31 @@ function ajax_replay (obj, method, id) {
     });
 }
 
+
+
+function ajax_edit_post(obj, id) {
+    var postBodyObj = $(obj).parent().parent().parent().children(".post-body");
+    $(postBodyObj).load('/wiki/post/' + id + '/editAJAX');
+}
+
+
+function ajax_edit_post_submit(obj, id) {
+
+    var postBody = $("#edit-post-body").val();
+
+    $.ajax({
+        url: "/wiki/post/" + id + "/editAJAX/",
+        type: "POST",
+        data: { body: postBody },
+        success: function (retData) {
+            re = /error/;
+            if (re.test(retData)) {
+                alert("Fail: " + retData);
+            } else {
+                //alert("Success: " + retData);
+                $(obj).parent().parent().html(retData);
+            }
+
+        }
+    });
+}
