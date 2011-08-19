@@ -16,7 +16,10 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 
-a:link {color: blue}
+a:link {
+    color: blue;
+    text-decoration: none;    
+}
 a:visited {color: #9F4C09} 
 a:hover {color: green}
 a:active {color: #0000FF}

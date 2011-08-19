@@ -262,14 +262,14 @@ a:active {
     font-size: 1.6em;
 }
 
-table {
+#wiki-container-main table {
     width: 100%;
     border-collapse: collapse;
     border: 1px solid #DFE6ED;
     color: #6D929B;
 }
 
-caption {
+#wiki-container-main caption {
   font-size: 1.2em;
   font-weight: bold;
   margin: 1em 0;
@@ -277,7 +277,7 @@ caption {
   text-align: left;
 }
 
-th {
+#wiki-container-main th {
     font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica,
     sans-serif;
     color: #6D929B;
@@ -293,16 +293,16 @@ th {
 }
 
 
-td {
+#wiki-container-main td {
     padding: 0.5em 1em 0.5em 1em;
     border-right: 1px solid #C1DAD7;
 }
 
-.tr-odd {
+#wiki-container-main .tr-odd {
     background-color: #edf5ff;
 }
 
-tr:hover {
+#wiki-container-main tr:hover {
     background-color: #A9D2A8;
 }
 
