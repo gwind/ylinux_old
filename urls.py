@@ -29,6 +29,9 @@ urlpatterns = patterns('',
     (r'^ydata/', include('ylinux.app.ydata.urls', namespace='ydata')),
     (r'^lab/', include('ylinux.app.ylab.urls', namespace='lab')),
 
+    # 静态地址
+    (r'^favicon\.ico$', 'django.views.generic.simple.redirect_to', {'url': settings.MEDIA_URL+'images/favicon.ico'}),
+
     # Uncomment the admin/doc line below and add 'django.contrib.admindocs' 
     # to INSTALLED_APPS to enable admin documentation:
     # (r'^admin/doc/', include('django.contrib.admindocs.urls')),
