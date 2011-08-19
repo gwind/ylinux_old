@@ -72,15 +72,9 @@ def topic(request, id):
         return HttpResponseRedirect(url)
 
     parents = get_parents (Catalog, topic.catalog.id)
-    posts = Post.objects.filter(topic=id, parent=None).order_by('updated')
-    #length = len(posts)
-    PL = [] # posts list
-    for i, p in enumerate(posts):
-        PL.append((i, p))
-    #posts = [(i, posts[i]) for i in xrange(length)]
     edit_topic_perm = request.user.has_perm ('ydata.edit_topic')
 
-    return {'parents':parents, 'topic':topic, 'posts':PL,
+    return {'parents':parents, 'topic':topic,
             'edit_topic_perm':edit_topic_perm,
             'title': u"[知识库]%s" % topic.name}
 
@@ -337,7 +331,7 @@ def ajax_show_catalog(request, id):
 def ajax_show_posts(request, topicID=None, postID=None):
 
     if topicID:
-        posts = Post.objects.filter(topic=topicID, parent=None).order_by('updated')
+        posts = Post.objects.filter(topic=topicID, parent=None).order_by('created')
     elif postID:
         posts = [get_object_or_404(Post,pk=postID),]
     else:
