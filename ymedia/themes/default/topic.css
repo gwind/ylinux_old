@@ -153,7 +153,7 @@ h6 {
 .post-item {
     margin-top: 15px;
     margin-left: 15px;
-    padding: 7px;
+    /*padding: 7px 0 7px 0;*/
     border: 1px solid #DFDFDF;
     -moz-box-shadow: 3px 3px 4px #DFDFDF;
     -webkit-box-shadow: 3px 3px 4px #DFDFDF;
@@ -172,6 +172,7 @@ h6 {
 
 .post-header {
     border-bottom: 1px solid #DFDFDF;
+    background: #DDFFCC;
 }
 .post-body {
     padding: 1px 0 1px 10px;

@@ -6,6 +6,8 @@
 <link rel="stylesheet" href="{{ MEDIA_URL }}themes/{% if theme %}{{ theme }}{% else %}default{% endif %}/main.css" />
 <link rel="stylesheet" href="{{ MEDIA_URL }}themes/{% if theme %}{{ theme }}{% else %}default{% endif %}/topic.css" />
 
+<script src="{{ MEDIA_URL }}js/jquery-ui/js/jquery-ui-1.8.15.custom.min.js"></script>
+
 <link href="{{ MEDIA_URL }}js/syntaxhighlighter/styles/shCoreYLinux.css" rel="stylesheet" type="text/css"/>
 <link href="{{ MEDIA_URL }}js/syntaxhighlighter/styles/shThemeYLinux.css" rel="stylesheet" type="text/css"/>
 
@@ -116,14 +118,12 @@
 </div>
 
 
-{% if posts %}
 <div id="posts">
 </div>
-{% endif %}
 
 <div class="create-post">
-  <button type="button" onclick="javascript: ajax_new_post(this, 'TOPIC', '{{ topic.id }}')">快速回复</button>
-  <a href="{% url wiki:add_post topic.id %}">回复</a>
+  <button type="button" onclick="javascript: ajax_new_post(this, 'TOPIC', '{{ topic.id }}')">回复主题</button>
+  <!--<a href="{% url wiki:add_post topic.id %}">回复</a>-->
 </div>
 
 {% endblock %}

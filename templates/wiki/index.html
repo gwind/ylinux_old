@@ -87,6 +87,24 @@
 </script>
 
   <div id="tools" class="clearfix">
+    <div style="float: left">
+      <!-- 亦歌控制栏开始 -->
+      <table id="controller_1g1g" cellspacing="4px" cellpadding="0" border="0" style="table-layout:fixed;width:220px;height:24px;cursor:pointer;background-color:#5a82b5;border:solid 1px #444444;"> <!-- 控制器界面部分 -->
+	<tr>
+	  <td id="playPauseBtn_1g1g" style="width:16px;height:16px;background-image:url('{{ MEDIA_URL }}1g1gasset/play-pause-next.png');cursor:pointer;background-position:0px 0px;overflow:hidden;">
+	  </td><!-- 播放/暂停按钮 -->
+	  <td id="nextBtn_1g1g" style="width:16px;height:16px;background-image:url('{{ MEDIA_URL }}1g1gasset/play-pause-next.png');background-position:0px -64px;cursor:pointer;overflow:hidden;">
+	  </td><!-- 下一首按钮 -->
+	  <td valign="middle" id="displayText_1g1g" style="font-size:12px; line-height:12px; color: #ffffff;white-space:nowrap;overflow:hidden;">
+	    开始听歌
+	  </td><!-- 歌名/歌词显示 -->
+	</tr>
+      </table>
+      <script type="text/javascript">var playerUrl = "http://www.1g1g.com/"</script> <!-- 播放器地址 -->
+      <script type="text/javascript" src="{{ MEDIA_URL }}1g1gasset/controller.js"></script>  <!-- 控制播放器所需程序 -->
+      <!-- 亦歌控制栏结束 -->
+    </div>
+
     <form method="get" action="http://www.google.com/search" target="google_window">
       <input type="text" name="as_q" size="16" maxlength="255" value="" id="s"/>
       <input type="image" src="/ymedia/images/btn_search_box.gif" width="27" height="24" id="go" alt="Search" title="Search" />

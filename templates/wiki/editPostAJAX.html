@@ -1,6 +1,9 @@
-{% ifequal method "POST" %}
-<div class="post-item">
+{% ifequal method "GET" %}
+<textarea id="edit-post-body" rows="10" cols="60" name="body" class="bbcode">{{ post.body }}</textarea>
+<button type="button" onclick="javascript: ajax_edit_post_submit(this, '{{ post.id }}')">提交</button>
+{% endifequal %}
 
+{% ifequal method "POST" %}
   <div class="post-header">
     <span class="louzhu"><a name="post{{ post.id }}">{{ post.id }}</a></span>
     <span class="user"><a href="{% url account:show_user post.user.id %}">{{ post.user }}</a></span>
@@ -15,17 +18,4 @@
   <div class="post-body">
     {{ post.body_html|safe }}
   </div>
-
-</div>
 {% endifequal %}
-
-{% ifequal method "GET" %}
-<div class="new-post">
-  <textarea id="new-post-body" rows="10" cols="60" name="body" class="bbcode"></textarea>
-  <button type="button" onclick="javascript: {{ ajaxFunc }}">提交</button>
-</div>
-{% endifequal %}
-
-{% if error %}
-<p>{{ error }}</p>
-{% endif %}

@@ -72,15 +72,9 @@ def topic(request, id):
         return HttpResponseRedirect(url)
 
     parents = get_parents (Catalog, topic.catalog.id)
-    posts = Post.objects.filter(topic=id, parent=None).order_by('updated')
-    #length = len(posts)
-    PL = [] # posts list
-    for i, p in enumerate(posts):
-        PL.append((i, p))
-    #posts = [(i, posts[i]) for i in xrange(length)]
     edit_topic_perm = request.user.has_perm ('ydata.edit_topic')
 
-    return {'parents':parents, 'topic':topic, 'posts':PL,
+    return {'parents':parents, 'topic':topic,
             'edit_topic_perm':edit_topic_perm,
             'title': u"[知识库]%s" % topic.name}
 
@@ -337,15 +331,21 @@ def ajax_show_catalog(request, id):
 def ajax_show_posts(request, topicID=None, postID=None):
 
     if topicID:
-        posts = Post.objects.filter(topic=topicID, parent=None).order_by('updated')
+        posts = Post.objects.filter(topic=topicID, parent=None).order_by('created')
     elif postID:
         posts = [get_object_or_404(Post,pk=postID),]
     else:
         return HttpResponse(u'显示 posts 出错')
         
-    HTML = ''
+    HTML = '''
+<script type="text/javascript">
+  $(document).ready(function () {
+    $(".post-item").draggable();
+  })
+</script>
+'''
     for p in posts:
-        HTML += render_post(p)
+        HTML += render_post(request.user, p)
     return HttpResponse(HTML)
 
 
@@ -394,9 +394,35 @@ def replayAJAX(request, topicID = None, postID = None):
         if len(post_body) < 2:
             return {'error': u'您的回复太短，至少2个字符！'}
         post = Post(topic = topic, user = request.user, user_ip = ip, markup = 'none', body = post_body, parent = parent_post)
+        post.save()
         topic.post_count += 1
+        topic.last_post = post
         topic.save()
         topic.catalog.post_count += 1
+        topic.catalog.last_post = post
         topic.catalog.save()
-        post.save()
+
         return {'method': 'POST', 'topic': topic, 'post': post}
+
+
+@login_required
+@render_to('wiki/editPostAJAX.html')
+def editPostAJAX(request, postID):
+
+    post = get_object_or_404(Post, pk = postID)
+
+    if request.method == 'GET':
+        return {'method': 'GET', 'post': post}
+
+    post_body = request.POST.get('body', None)
+    if not post_body:
+        return HttpResponse(u'error: No contents found!')
+    post.body = post_body
+    post.save()
+
+    post.topic.last_post = post
+    post.topic.save()
+    post.topic.catalog.last_post = post
+    post.topic.catalog.save()
+
+    return {'method': 'POST', 'post': post}

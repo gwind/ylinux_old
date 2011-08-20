@@ -5,6 +5,7 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.http import HttpResponseRedirect,HttpResponse
 from django.core.urlresolvers import reverse
+from django.core.mail.message import EmailMessage
 
 from account.decorators import login_required, permission_required
 
@@ -426,3 +427,55 @@ def update_bbs(request):
     return HttpResponseRedirect(reverse('bbs:index'))
 
 
+# 推送更新给用户
+@permission_required('ydata.delete_catalog')
+def push_news(request):
+
+    #def __init__(self, subject='', body='', from_email=None, to=None, bcc=None,
+    #             connection=None, attachments=None, headers=None, cc=None):
+    Ysubject = "[来自 YLinux] 最近动态"
+    Ybody = u'''
+<h3>最新更新主题</h3>
+<ul>
+'''
+
+    topics = Topic.objects.all().order_by('-updated')[:10]
+    for t in topics:
+        Ybody += u'<li><a href="http://www.ylinux.org/wiki/topic/%s/">%s</a></li>\n' % (t.id, t.name)
+    Ybody += u'''
+</ul>
+
+<h3>最新回复</h3>
+<ul>
+'''
+
+    posts = Post.objects.all().order_by('-updated')[:10]
+    for p in posts:
+        Ybody += u'<li><a href="http://www.ylinux.org/wiki/topic/%s#post%s">%s</a></li>\n' % (p.topic.id, p.id, p)
+    Ybody += u'''
+</ul>
+
+<p>这些都是刚开始试验，欢迎反馈最新动态推送体验！
+请在这里反馈内容： <a href="http://ylinux.org/wiki/topic/115/">[开发动态] -- 添加更新推送功能</a>
+</p>
+
+'''
+
+    Yfrom_email = "ylinux.admin@gmail.com"
+    toL = ['lijian.gnu@gmail.com']
+
+    bccL = []
+    users = User.objects.all()
+    for u in users:
+        bccL.append(u.email)
+
+    Yheaders = {'Reply-To': 'lijian.gnu@gmail.com'}
+
+    YMSG = EmailMessage(
+        subject = Ysubject, body = Ybody, from_email = Yfrom_email, 
+        to = toL, bcc = bccL, headers = Yheaders)
+
+    YMSG.content_subtype = "html"
+    ret = YMSG.send()
+
+    return HttpResponse(u'发送邮件成功： %s' % ret)
