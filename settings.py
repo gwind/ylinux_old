@@ -43,6 +43,7 @@ DATABASES = {
     'default': {
         # 可选数据库: postgresql_psycopg2 postgresql mysql sqlite3 oracle
         'ENGINE': 'django.db.backends.mysql',
+        #'ENGINE': 'django.db.backends.sqlite3',
         'NAME': 'ylinux',
         'USER': 'ylinux',
         'PASSWORD': '123456',
@@ -145,6 +146,7 @@ INSTALLED_APPS = (
     'ylinux.app.wiki',
     'ylinux.app.blog',
     'ylinux.app.ylab',
+    'django_xmlrpc',
 )
 
 
@@ -153,4 +155,16 @@ LANGUAGES = (
     ('en', 'English'),
     ('zh-cn', '简体中文'),
     ('zh-tw', '繁体中文'),
+)
+
+# XML-RPC Public interface for YLinux
+XMLRPC_DEBUG=True
+#XMLRPC_METHODS = ylinux_xmlrpc.XMLRPC_METHODS
+XMLRPC_METHODS = (
+    ('ylinux_xmlrpc.list_all_topic', 'list_all_topic'),
+    ('ylinux_xmlrpc.add_topic', 'add_topic'),
+    ('ylinux_xmlrpc.show_topic', 'show_topic'),
+    ('ylinux_xmlrpc.delete_topic', 'delete_topic'),
+    ('ylinux_xmlrpc.delete_all_topic', 'delete_all_topic'),
+
 )

@@ -9,6 +9,7 @@ except ImportError:
 
 
 from django.conf.urls.defaults import *
+from django_xmlrpc.views import handle_xmlrpc
 
 # Uncomment the next two lines to enable the admin:
 # from django.contrib import admin
@@ -40,6 +41,10 @@ urlpatterns = patterns('',
     #(r'^admin/', include(admin.site.urls)),
 )
 
+urlpatterns += patterns('django_xmlrpc.views',
+
+    url(r'^xmlrpc/$', handle_xmlrpc, {}, name='xmlrpc'),
+)
 
 # 开发使用 django 自带的 web 服务器，需按照下面方法设置静态目录。如果放
 # 到公网上，那么需要用你所有的 web 服务器设置静态目录。一般在共享主机的
