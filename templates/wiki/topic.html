@@ -81,7 +81,7 @@
 <div>
   <a href="{% url wiki:index %}">知识库</a>
   {% for id,name in parents %}
-  > <!--<a href="{% url wiki:show_catalog id %}">{{ name }}</a>-->{{ name }}
+  > <a href="{% url wiki:show_catalog id %}">{{ name }}</a>
   {% endfor %}
 </div>
 

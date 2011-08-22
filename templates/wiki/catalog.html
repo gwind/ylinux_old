@@ -1,36 +1,141 @@
 {% extends 'wiki/base.html' %}
+
+{% block extend_header %}
+<style type="text/css">
+body {
+  margin: 10px;
+}
+ul {
+  margin: 0 4ex;
+  padding: 0px;
+}
+p {
+  margin: 0;
+  padding: 0.2ex;
+}
+
+.title {
+  background-color: lightblue;
+  font-size: 14pt;
+}
+.box {
+  border: 1px solid lightblue;
+  margin: 1ex 0;
+}
+.manage {
+  margin: 1ex 0;
+}
+.manage .path {
+  float: left;
+}
+
+#new_knowlg_div {
+  float: right;
+}
+#topic-content {
+  text-indent: 2em;
+}
+
+.clear-fix {
+  clear: both;
+}s
+</style>
+<link rel="stylesheet" href="{{ MEDIA_URL }}themes/default/main.css" />
+<link rel="stylesheet" href="{{ MEDIA_URL }}themes/default/wiki_index.css" />
+{% endblock %}
+
+{% block header %}
+<div id="logo"><a href="/"><img src="{{ MEDIA_URL }}images/ylinux-logo.gif" alt="YLinux"/></a></div>
+<div class="right">
+
+  <div id="navigator">
+    <a href="/wiki/topic/news/"><img src="{{ MEDIA_URL }}images/feed.gif" alt="订阅最近动态"/></a>
+    <span>
+      <a href="/">首页</a>
+      <a href="/coding">新闻</a>
+      <a href="/bbs">论坛</a>
+      <a href="/blog">博客</a>
+      <a href="/coding">项目</a>
+      <a href="/wiki">知识库</a>
+    </span>
+  </div>
+
+  <div id="account">
+    {% if user.is_authenticated %}
+    欢迎回来，<a href="{% url account:show_user user.id %}"><b>{{ user }}</a></b>
+    {% if user.is_staff %} | <a href="{% url admin:index %}">管理界面</a> | {% endif %}
+    <span id="logout"><input type="button" onclick="javascript: ajax_logout()" value="退出" /></span>
+    {% else %}
+    <!--<a href="{% url account:login %}">登录</a> <a href="{% url account:register %}"><b>注册</b></a>-->
+    <span id="login"><button type="button" onclick="javascript: ajax_create_login()">登录</button></span>
+    <span id="register"><button type="button">注册</button></span>
+    {% endif %}
+  </div>
+
+</div>
+
+{% endblock %}
+
 {% block content %}
 
-<p>
-  <a href="{% url wiki:index %}">知识库</a>
-  {% for id,name in parents %}
-  | <a href="{% url wiki:show_catalog id %}">{{ name }}</a>
-  {% endfor %}
-</p>
+<div class="manage">
+  <div class="path"> 
+  当前位置：
+    <a href="{% url wiki:catalogs %}">知识库</a>
+    {% for id,name in parents %}
+    &gt; <a href="{% url wiki:show_catalog id %}">{{ name }}</a>
+    {% endfor %}
+  </div>
+  {% if user.is_authenticated and catalog %}
+  <div id="new_knowlg_div"><a id="new_knowlg_btn" href="{% url wiki:add_topic catalog.id %}">新建知识点</a></div>
+  {% endif %}
+  </div>
+  <div class="clear-fix"></div>
+</div>
 
 {% if subcatalogs %}
+<div id="catalog-nav" class="box">
+<p class="title">下设分类：</p>
 <ul>
   {% for c in subcatalogs %}
   <li><a href="{% url wiki:show_catalog c.id %}">{{ c.name }}</a></li>
   {% endfor %}
 </ul>
+</div>
 {% endif %}
 
+{% if catalog %}
+<div id="topics-list" class="box">
+<p class="title">主题列表：</p>
 {% if topics %}
 <ul>
   {% for t in topics %}
   <li>
     <a href="{% url wiki:show_topic t.id %}">{{ t }}</a>
     {% if edit_topic_perm %}
-    [<a href="{% url wiki:edit_topic t.id %}">编辑</a>]
+    [ <a href="{% url wiki:edit_topic t.id %}">编辑</a> ]
     {% endif %}
   </li>
   {% endfor %}
 </ul>
-{% endif %}
 
-{% if user.is_authenticated %}
-<p><a href="{% url wiki:add_topic catalog.id %}">新建知识点</a></p>
+{% else %}
+<span class="no-topics">
+<ul>
+  <li>该分类下没有主题。你可以新建一个。 :-)</li>
+</ul>
+</span>
+{% endif %}
+{% endif %}
+</div>
+
+{% if catalog %}
+<div id="topic-view" class="box">
+<div id="topic-title" class="title">欢迎光临本知识库！</div>
+<div id="topic-content">此处为主题浏览区。</div>
+</div>
+{% else %}
+
 {% endif %}
 
 {% endblock %}

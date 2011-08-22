@@ -40,15 +40,18 @@ def doesnotexist(request, type, id):
 
 
 @render_to('wiki/catalog.html')
-def catalog(request, id):
+def catalog(request, id=None):
 
-    try:
-        catalog = Catalog.objects.get(pk=id)
-    except Catalog.DoesNotExist:
-        url = reverse ('wiki:catalog_not_exist', args=[id])
-        return HttpResponseRedirect(url)
-
-    parents = get_parents (Catalog, id)
+    if id:
+        try:
+            catalog = Catalog.objects.get(pk=id)
+        except Catalog.DoesNotExist:
+            url = reverse ('wiki:catalog_not_exist', args=[id])
+            return HttpResponseRedirect(url)
+        parents = get_parents (Catalog, id)
+    else:
+        catalog = None
+        parents = None
     subcatalogs = Catalog.objects.filter(parent=id)
     topics = Topic.objects.filter(catalog=id).exclude(hidden=1).exclude(recycled=1)
 
