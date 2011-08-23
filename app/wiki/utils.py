@@ -12,6 +12,7 @@ POST_MAIN = '''
   <span class="post-edit"><button type="button" onclick="javascript: ajax_edit_post(this, '{{ post.id }}')">编辑</button></span>
   {% endifequal %}
   <span><button type="button" onclick="javascript: ajax_new_post(this, 'POST', '{{ post.id }}')">回复</button></span>
+  <span class="right"><a onclick="javascript: scrollTo(0,0);" href="javascript:;">TOP</a></span>
 </div>
 <div class="post-body">
   <p>{{ post.body_html|safe }}</p>
