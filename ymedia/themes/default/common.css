@@ -1,0 +1,93 @@
+ul {
+    margin: 0 4ex;
+    padding: 0px;
+}
+
+ul li {
+    margin: 10px 10px;
+}
+
+p {
+    margin: 0;
+    padding: 0.2ex;
+}
+
+label {
+    width: 6em;
+    float: left;
+    text-align: right;
+    margin-right: 0.5em;
+    display: block;
+}
+
+input[type="text"] {
+    width: 20ex;
+}
+
+.title {
+    font-family:  Times, TimesNR, 'New Century Schoolbook', Georgia, 'New York', serif;
+    font-size: 22px;
+    color: white;
+    background-color: #313D47;
+    padding: 5px 20px 5px 20px;
+}
+.content {
+    margin-top: 10px;
+    padding: 10px 20px 10px 20px;
+}
+.box {
+    border-left: 1px solid #CDEAB9;
+    border-right: 1px solid #CDEAB9;
+    border-bottom: 2px solid #CDEAB9;
+    margin: 1ex 0;
+}
+
+.manage {
+    margin: 1ex 0;
+    line-height: 31px;
+}
+.manage .path {
+    float: left;
+}
+
+#tools form { 
+    float: right;
+    width: 201px; 
+    height: 31px; 
+    background: url(/ymedia/images/bg_search_box.gif); 
+} 
+#tools #new-knowlg-btn {
+    float: right;
+    border-radius: 8px;
+}
+#tools #new-knowlg-btn {
+    height: 31px;
+    line-height: 31px;
+    margin: 0 5px;
+    padding: 0 2px;
+    background-color: lightgreen;
+    color: black;
+    text-decoration: none;
+}
+#tools #new-knowlg-btn:hover {
+    background-color: green;
+    color: white;
+}
+
+.manage .path a {
+    height: 31px;
+    color: black;
+}
+
+#topic-content {
+    text-indent: 2em;
+}
+
+.clear-fix {
+    clear: both;
+    line-height: 0;
+    height: 0;
+    margin: 0;
+    padding: 0;
+    background-color: yellow;
+}

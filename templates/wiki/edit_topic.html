@@ -1,16 +1,87 @@
 {% extends 'wiki/base.html' %}
-{% block extend_header %}<script type="text/javascript" src="/ymedia/js/upload.js"></script>{% endblock %}
+{% block extend_header %}
+<link rel="stylesheet" href="{{ MEDIA_URL }}themes/default/main.css" />
+<link rel="stylesheet" href="{{ MEDIA_URL }}themes/default/common.css" />
+<link rel="stylesheet" href="{{ MEDIA_URL }}themes/default/wiki_index.css" />
+
+<script type="text/javascript" src="/ymedia/js/upload.js"></script>
+{% endblock %}
+
+{% block header %}
+<div id="logo"><a href="/"><img src="{{ MEDIA_URL }}images/ylinux-logo.gif" alt="YLinux"/></a></div>
+<div id="welcome"><span>我们不只关注 GNU/Linux ！</span></div>
+
+<div class="right">
+
+  <div id="navigator">
+    <a href="/wiki/topic/news/"><img src="{{ MEDIA_URL }}images/feed.gif" alt="订阅最近动态"/></a>
+    <span>
+      <a href="/">首页</a>
+      <a href="/coding">新闻</a>
+      <a href="/blog">博客</a>
+      <a href="/coding">项目</a>
+      <a href="/wiki">知识库</a>
+    </span>
+  </div>
+
+  <div id="account">
+    {% if user.is_authenticated %}
+    欢迎回来，<a href="{% url account:show_user user.id %}"><b>{{ user }}</a></b>
+    {% if user.is_staff %} | <a href="{% url admin:index %}">管理界面</a> | {% endif %}
+    <span id="logout"><button type="button" onclick="javascript: ajax_logout()">退出</button></span>
+    {% else %}
+    <!--<a href="{% url account:login %}">登录</a> <a href="{% url account:register %}"><b>注册</b></a>-->
+    <span id="login"><button type="button" onclick="javascript: ajax_create_login()">登录</button></span>
+    <span id="register"><button type="button">注册</button></span>
+    {% endif %}
+  </div>
+
+</div>
+
+{% endblock %}
+
 {% block content %}
 
-<p>
+<!-- <p>
   <a href="{% url wiki:index %}">知识库</a>
   {% for id,name in parents %}
   | <a href="{% url wiki:show_catalog id %}">{{ name }}</a>
   {% endfor %}
-  | 编辑 {{ topic }} [<span id="topicID">{{topic.id}}</span>]
-</p>
+  | 发表新主题
+</p> -->
 
+<div class="manage">
+    <div class="path"> 
+    当前位置：
+        <a href="{% url wiki:catalogs %}">知识库</a>
+        {% for id,name in parents %}
+        &gt; <a href="{% url wiki:show_catalog id %}">{{ name }}</a>
+        {% endfor %}
+    </div>
+    <div id="tools">
+        <form method="get" action="http://www.google.com/search" target="google_window">
+            <input type="text" name="as_q" size="16" maxlength="255" value="" id="s"/>
+            <input type="image" src="/ymedia/images/btn_search_box.gif" width="27" height="24" id="go" alt="Search" title="Search" />
+            <!--<input type="submit" name="sa" value="搜索"/>-->
+            <input name="as_sitesearch" value="ylinux.org" type="hidden"/>
+            <input name="newwindow" value="1" type="hidden"/>
+            <input name="complete" value="1" type="hidden"/>
+            <input name="forid" value="zh-CN" type="hidden"/>
+            <input type="hidden" name="num" value="10"/>
+            <input name="btnG" value="Google+%E6%90%9C%E7%B4%A2&" type="hidden"/>
+            <input name="as_ft" value="1" type="hidden"/>
+            <input name="as_qdr" value="all" type="hidden"/>
+            <input name="as_occt" value="any" type="hidden"/>
+            <input name="as_dt" value="i" type="hidden"/>
+        </form>
+    </div>
+  
+    <div class="clear-fix"></div>
+</div>
 
+<div class="box">
+<div class="title">修改主题</div>
+<div class="content">
 <form action="" method="POST">
   {% if form.errors %}
   <div id="form-error">
@@ -61,5 +132,7 @@
   </table>
 </div>
 
+</div> {# class:content #}
+</div> {# class:box #}
 
 {% endblock %}
