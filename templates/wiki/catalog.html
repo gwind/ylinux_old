@@ -4,9 +4,61 @@
 <link rel="stylesheet" href="{{ MEDIA_URL }}themes/default/main.css" />
 <link rel="stylesheet" href="{{ MEDIA_URL }}themes/default/common.css" />
 <link rel="stylesheet" href="{{ MEDIA_URL }}themes/default/wiki_index.css" />
+<style type="text/css">
+body {
+    position: relative;
+}
+#catalogs-list {
+    position: relative;
+}
+.box {
+    background-color: white;
+}
+</style>
 
 <script src="{{ MEDIA_URL }}js/jquery-ui/js/jquery-ui-1.8.15.custom.min.js"></script>
-
+<script type="text/javascript">
+$(document).ready(function() {
+    $("#topic-view").css({"display":"none","position":"absolute","top":$("#topics-list").position().top-10,"left":"20%","width":"50%", "overflow":"auto"});
+    $("#topics-list li>a").click(function(event) {
+        event.preventDefault();
+        $("#topic-view").load($(this).attr('href')+" #topic", (function(addr) {
+            return function() {
+                $("#topic-view").slideDown();
+                $("#topic-view").animate({"width":"60%", "left":"40%","top":$("#topics-list").position().top-10}, function() {
+                    $("#topic-view").animate({"height": $("#topics-list").height()});
+                });
+                $("#topics-list").animate({"width":"40%"});
+                //$("#posts").load(addr + "ajax_show_posts/");
+                $("#topic-view .title").append("<a id='maximize' href='" + addr + "' style='float:right'>[+]</a><a id='minimize' style='float:right'>[-]</a>");
+                $("#topic-view .action").append("[<a id='posts-list' href='" + addr + "'>查看详情</a>]");
+                $("#posts-list").click(function(event) {
+                    event.preventDefault();
+                    if($(this).text() == "查看详情") {
+                        $("#posts").load(addr + "ajax_show_posts/");
+                        $("#topic-view").animate({"width": "100%", "left":"0", "height":"100%"});
+                        $("#topics-list").css({"display":"none"});
+                        $("#topic-view").css({"position":"static"});
+                        $(this).text("返回");
+                    } else {
+                        $("#topic-view").animate({"width": "60%", "left":"40%"});
+                        $("#topics-list").css({"display":"block"});
+                        $("#topic-view").css({"position":"absolute"});
+                        $(this).text("查看详情");
+                    }
+                });
+                $("#minimize").click(function(event) {
+                    $("#topics-list .title").click();
+                });
+            }
+        })($(this).attr('href')));
+    });
+    $("#topics-list .title").click(function(event) {
+        $("#topics-list").animate({"left": "0", "width":"100%"});
+        $("#topic-view").slideUp();
+    });
+});
+</script>
 {% endblock %}
 
 {% block header %}
@@ -81,9 +133,9 @@
 <div class="title">下设分类：</div>
 <div class="content">
 <ul>
-  {% for c in subcatalogs %}
-  <li><a href="{% url wiki:show_catalog c.id %}">{{ c.name }}</a></li>
-  {% endfor %}
+    {% for c in subcatalogs %}
+    <li><a href="{% url wiki:show_catalog c.id %}">{{ c.name }}</a></li>
+    {% endfor %}
 </ul>
 </div>
 </div>
@@ -95,31 +147,39 @@
 <div class="content">
 {% if topics %}
 <ul>
-  {% for t in topics %}
-  <li>
-    <a href="{% url wiki:show_topic t.id %}">{{ t }}</a>
-    {% if edit_topic_perm %}
-    [ <a href="{% url wiki:edit_topic t.id %}">编辑</a> ]
-    {% endif %}
-  </li>
-  {% endfor %}
+    {% for t in topics %}
+    <li>
+        <a href="{% url wiki:show_topic t.id %}">{{ t }}</a>
+        {% if edit_topic_perm %}
+         [ <a href="{% url wiki:edit_topic t.id %}">编辑</a> ]
+        {% endif %}
+    </li>
+    {% endfor %}
 </ul>
-
 {% else %}
 <span class="no-topics">
 <ul>
-  <li>该分类下没有主题。你可以<a id="new_knowlg_btn" href="{% url wiki:add_topic catalog.id %}">新建一个</a>。 :-)</li>
+    <li>该分类下没有主题。你可以<a id="new_knowlg_btn" href="{% url wiki:add_topic catalog.id %}">新建一个</a>。 :-)</li>
 </ul>
 </span>
 {% endif %}
 {% endif %}
 </div>
+<div class="pages-act">
+{% for num in pages %}
+    {% if num != curpage %}
+    <a href="{% url wiki:show_catalog_with_page catalog.id num %}">{{ num }}</a>
+    {% else %}
+    <span>{{ num }}</span>
+    {% endif %}
+{% endfor %}
+</div>
 </div>
 
 {% if catalog %}
 <div id="topic-view" class="box">
-<div id="topic-title" class="title">欢迎光临本知识库！</div>
-<div id="topic-content" class="content">此处为主题浏览区。</div>
+    <div id="topic-title" class="title">欢迎光临本知识库！</div>
+    <div id="topic-content" class="content">此处为主题浏览区。</div>
 </div>
 {% else %}
 

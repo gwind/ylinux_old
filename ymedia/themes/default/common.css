@@ -31,16 +31,34 @@ input[type="text"] {
     background-color: #313D47;
     padding: 5px 20px 5px 20px;
 }
+.pages-act {
+    background-color: #313D47;
+    padding: 5px 20px;
+    color: white;
+    text-align: right;
+}
+.pages-act * {
+    color: #cf0 !important;
+}
 .content {
     margin-top: 10px;
     padding: 10px 20px 10px 20px;
 }
+.info {
+    padding: 2px 20px;
+}
+.action {
+    background-color: lightblue;
+    text-align: right;
+}
+/*
 .box {
     border-left: 1px solid #CDEAB9;
     border-right: 1px solid #CDEAB9;
     border-bottom: 2px solid #CDEAB9;
-    margin: 1ex 0;
+    margin: 10px 0;
 }
+*/
 
 .manage {
     margin: 1ex 0;
@@ -83,6 +101,10 @@ input[type="text"] {
     text-indent: 2em;
 }
 
+#topic-view {
+    display: none;
+}
+
 .clear-fix {
     clear: both;
     line-height: 0;
@@ -90,4 +112,13 @@ input[type="text"] {
     margin: 0;
     padding: 0;
     background-color: yellow;
+}
+
+.box {
+    background-color: #FFFFFF;
+    background-position: 50% 100%, 50% 50%;
+    background-repeat: no-repeat;
+    border: 1px solid #BDC6D7;
+    border-radius: 6px 6px 6px 6px;
+    box-shadow: 0 2px rgba(0, 0, 0, 0.1), 0 -2px rgba(99, 149, 185, 0.1) inset, 0 -5px 15px rgba(223, 239, 249, 0.8) inset;
 }

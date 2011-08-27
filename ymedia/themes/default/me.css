@@ -108,29 +108,21 @@ h6 {
 }
 
 #topic {
-    /*
     border-left: 1px solid #CDEAB9;
     border-right: 1px solid #CDEAB9;
     border-bottom: 2px solid #CDEAB9;
-    */
-    margin-bottom: 20px;
-}
-
-.topic-navigator {
-    /*background-color: lightblue;*/
-    font-size: 1.2em;
+    /*padding: 5px;*/
 }
 
 .topic-header {
     /*padding: 0 5px 0 5px;*/
-    margin-top: 10px;
 }
 
 .topic-title {
     font-family:  Times, TimesNR, 'New Century Schoolbook', Georgia, 'New York', serif;
     font-size: 22px;
-    /*color: white;*/
-    /*background-color: #313D47;*/
+    color: white;
+    background-color: #313D47;
     padding: 5px 20px 5px 20px;
 }
 
@@ -139,16 +131,14 @@ h6 {
 }
 
 .topic-action {
-    background-color: #ECF1F6;
+    background-color: #E3EBF3;
     padding: 5px 20px 5px 20px;
 }
 
-/*
 .topic-body {
     margin-top: 20px;
     padding: 10px 20px 10px 20px;
 }
-*/
 
 
 #posts {
@@ -182,10 +172,11 @@ h6 {
 
 .post-header {
     border-bottom: 1px solid #DFDFDF;
-    background: #EDF5FF;
+    background: #DDFFCC;
 }
 .post-body {
     padding: 1px 0 1px 10px;
+    background: #EDF5FF;
 }
 
 .time {

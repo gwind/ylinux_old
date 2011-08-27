@@ -22,7 +22,7 @@ POST_MAIN = '''
 
 def render_post(user, post):
 
-    POST_ITERM = '<div class="post-item">\n'
+    POST_ITERM = '<div class="post-item box">\n'
 
     t = Template(POST_MAIN)
     c = Context({'post': post, 'user': user})
@@ -31,6 +31,6 @@ def render_post(user, post):
         for child in post.children:
             POST_ITERM += render_post(user, child)
 
-    POST_ITERM += '\n</div>'
+    POST_ITERM += '\n</div>\n'
 
     return POST_ITERM

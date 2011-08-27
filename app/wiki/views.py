@@ -4,6 +4,7 @@ import time, datetime
 from django.http import Http404, HttpResponse, HttpResponseRedirect, HttpResponseForbidden
 from django.shortcuts import get_object_or_404
 from django.core.urlresolvers import reverse
+from django.views.generic import TemplateView
 #from django.contrib.syndication.views import Feed
 from syndication.views import Feed
 
@@ -16,6 +17,8 @@ from ydata.util import render_to, build_form, get_parents, ylinux_get_ip
 import xml.etree.ElementTree as ET
 
 from wiki.utils import render_post
+
+import math
 
 @render_to('wiki/index.html')
 def index(request):
@@ -40,7 +43,7 @@ def doesnotexist(request, type, id):
 
 
 @render_to('wiki/catalog.html')
-def catalog(request, id=None):
+def catalog(request, id=None, curpage=0):
 
     if id:
         try:
@@ -52,8 +55,10 @@ def catalog(request, id=None):
     else:
         catalog = None
         parents = None
+
     subcatalogs = Catalog.objects.filter(parent=id)
-    topics = Topic.objects.filter(catalog=id).exclude(hidden=1).exclude(recycled=1)
+    topics = Topic.objects.filter(catalog=id).exclude(hidden=1).exclude(recycled=1).order_by('-updated')[curpage:10]
+    pages = [ i+1 for i in range(int(math.ceil(Topic.objects.filter(catalog=id).exclude(hidden=1).exclude(recycled=1).count()/10.0)))]
 
     edit_topic_perm = request.user.has_perm ('ydata.edit_topic')
 
@@ -62,8 +67,9 @@ def catalog(request, id=None):
             'subcatalogs':subcatalogs,
             'topics':topics,
             'title': u'[知识库] 目录浏览',
-            'edit_topic_perm':edit_topic_perm}
-
+            'edit_topic_perm':edit_topic_perm,
+            'curpage': curpage,
+            'pages': pages}
 
 @render_to('wiki/topic.html')
 def topic(request, id):
@@ -81,6 +87,19 @@ def topic(request, id):
             'edit_topic_perm':edit_topic_perm,
             'title': u"[知识库]%s" % topic.name}
 
+@render_to('wiki/ajax_topic.html')
+def ajax_topic(request, id):
+    try:
+        topic = Topic.objects.get(pk=id)
+    except Topic.DoesNotExist:
+        url = reverse ('wiki:topic_not_exist', args=[id])
+        return HttpResponseRedirect(url)
+
+    parents = get_parents (Catalog, topic.catalog.id)
+    edit_topic_perm = request.user.has_perm ('ydata.edit_topic')
+
+    return {'parents':parents, 'topic':topic,
+            'edit_topic_perm':edit_topic_perm}
 
 @render_to('wiki/post.html')
 def post(request, id):
@@ -320,7 +339,7 @@ def ajax_show_catalog(request, id):
         return { 'error': u'此目录不存在： %s' % id }
 
     parents = get_parents (Catalog, id)
-    topics = Topic.objects.filter(catalog=id).exclude(hidden=1).exclude(recycled=1)
+    topics = Topic.objects.filter(catalog=id).exclude(hidden=1).exclude(recycled=1).order_by('-updated')[:5]
 
     edit_topic_perm = request.user.has_perm ('ydata.edit_topic')
 
@@ -334,19 +353,21 @@ def ajax_show_catalog(request, id):
 def ajax_show_posts(request, topicID=None, postID=None):
 
     if topicID:
-        posts = Post.objects.filter(topic=topicID, parent=None).order_by('created')
+        #posts = Post.objects.filter(topic=topicID, parent=None).order_by('created')
+        posts = Post.objects.filter(topic=topicID).order_by('created')
     elif postID:
         posts = [get_object_or_404(Post,pk=postID),]
     else:
         return HttpResponse(u'显示 posts 出错')
-        
-    HTML = '''
-<script type="text/javascript">
-  $(document).ready(function () {
-    $(".post-item").draggable();
-  })
-</script>
-'''
+
+    HTML = ''
+#    HTML = '''
+#<script type="text/javascript">
+#  $(document).ready(function () {
+#    $(".post-item").draggable();
+#  })
+#</script>
+#'''
     for p in posts:
         HTML += render_post(request.user, p)
     return HttpResponse(HTML)

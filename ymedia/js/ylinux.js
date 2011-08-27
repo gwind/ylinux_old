@@ -60,7 +60,7 @@ function _hello(_name){
 }
 
 function set_wiki_update ( time ) {
-    setInterval(_hello(time), 30000);
+    setInterval(_hello(time), 180000);
 }
 
 function refresh_wiki_index ( time ) {
