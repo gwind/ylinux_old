@@ -1,17 +1,19 @@
 #!/usr/bin/env python
 
 import xmlrpclib
+from xmlrpclib import Fault
 import traceback
 import sys
+
+from optparse import OptionParser
 
 # product URL
 #YLINUX_XMLRPC="http://ylinux.org/xmlrpc/"
 # devel URL
 YLINUX_XMLRPC="http://127.0.0.1:8000/xmlrpc/"
 
-
 class YLinuxClient(object):
-    '''A Simple RPC client for YLinux'''
+    '''A Simple XML-RPC client for YLinux'''
 
     def __init__(self, user, passwd, blogid=0, url=YLINUX_XMLRPC, verbose=False):
         self.server = xmlrpclib.ServerProxy(url, verbose=verbose)
@@ -25,28 +27,36 @@ class YLinuxClient(object):
 
         try:
             return self.server.metaWeblog.newPost(self.blogid, self.user, self.passwd, struct, publish)
-        except:
-            traceback.print_exc()
+        except Fault, f:
+            #traceback.print_exc()
+            print str(f)
+            return False
 
     def edit_topic(self, postid, struct, publish=True):
 
         try:
             return self.server.metaWeblog.editPost(postid, self.user, self.passwd, struct, publish)
-        except:
-            traceback.print_exc()
+        except Fault, f:
+            #traceback.print_exc()
+            print str(f)
+            return False
 
     def delete_topic(self, id):
 
         try:
             return self.server.delete_topic(id, self.user, self.passwd)
-        except:
-            traceback.print_exc()
+        except Fault, f:
+            #traceback.print_exc()
+            print str(f)
+            return False
 
     def delete_all_topic(self):
         try:
             return self.server.delete_all_topic(self.user, self.passwd)
-        except:
-            traceback.print_exc()
+        except Fault, f:
+            #traceback.print_exc()
+            print str(f)
+            return False
 
     def list_recent_topics(self, numberOfPosts):
 
@@ -59,25 +69,164 @@ class YLinuxClient(object):
 
         # print 
         for struct in topics:
-            print struct
+            print "="*80
+            for key in struct.keys():
+                print "%s : %s" %(key, struct[key])
 
     def show_topic(self, postid):
         try:
             return self.server.metaWeblog.getPost(postid, self.user,self.passwd)
-        except:
-            traceback.print_exc()
+        except Fault, f:
+            print str(f)
+            return None
+
+        return True
 
     def show_category(self):
         try:
             return self.server.metaWeblog.getCategories(self.blogid, self.user,self.passwd)
-        except:
-            traceback.print_exc()
+        except Fault, f:
+            print str(f)
+            return []
 
     def test(self):
         print self.server.system.listMethods()
 
-if __name__ == "__main__":
 
+def option_parser():
+    usage="""
+    A simple Ylinux Client.
+
+    %s [-a][-d][-e][-l] [options] 
+
+    List of commands:
+
+    -a add     add one topic
+    -l list    list recent topics
+    -e edit    edit one topic
+    -d topci   delete one topic
+    """ % sys.argv[0]
+
+    parser = OptionParser(usage=usage)
+
+    # Onny add/delete/edit/list operations are supported
+    parser.add_option("-a", "--add", action="store_const", const=1, dest="mode",help="add one topic")
+    parser.add_option("-d", "--delete", action="store_const", const=2, dest="mode",help="delete one topic")
+    parser.add_option("-e", "--edit", action="store_const", const=3, dest="mode",help="edit one topic")
+    parser.add_option("-l", "--list", action="store_const", const=4, dest="mode",help="list recent topic")
+
+    parser.add_option("-u", "--user", dest="user", help="specify user account")
+    parser.add_option("-p", "--passwd", dest="passwd", help="specify account passwd")
+    parser.add_option("-t", "--title", default="No Title", help="topic title, default is 'No Title'")
+    parser.add_option("-c", "--category", help="specify which category to write")
+    parser.add_option("-i", "--id", help="specify which topic id")
+    parser.add_option("-m", "--body", help="topic body text. support 'markdown'")
+    parser.add_option("-f", "--file", dest="filename", help="Load topic body from file ")
+    parser.add_option("-n", "--number", default=5, type="int",dest="count", 
+                        help="specify how many counts to list, default is 5")
+
+    return parser.parse_args()
+
+def main():
+
+    (options, args) = option_parser()
+    # print options, args
+
+    if not options.user:
+        print "[-u] Ylinux user account is required!"
+        sys.exit()
+    else:
+        if not options.passwd:
+            print "[-p] user password is required!"
+            sys.exit()
+
+    # init a client
+    c = YLinuxClient(options.user, options.passwd)
+
+    # add topic
+    if options.mode == 1:
+
+        # get topic text first
+        text = ""
+        if options.body:
+            if options.filename:
+                print "[-m] or [-f] option is excluded!"
+                sys.exit()
+            else:
+                text = options.body
+        else:
+            if options.filename:
+                with open(options.filename, 'r') as f:
+                    text = f.read().decode('utf8')
+            else:
+                print "[-m] or [-f] option is required for topic text!"
+                sys.exit()
+
+        # specify which category
+        if not options.category:
+            print "[-c] option is required for topic category!"
+            sys.exit()
+
+        topic = {'title':options.title, 'category':options.category,
+                'description':text}
+        if c.add_topic(topic):
+            print "add topic successfully!"
+
+    elif options.mode == 2:
+        # delte topic
+        if not options.id:
+            print "[-i] topic id is required for delete topic!"
+            sys.exit()
+
+        if c.delete_topic(options.id):
+            print "delete topic successfully!"
+
+    elif options.mode == 3:
+        # edit topic
+        if not options.id:
+            print "[-i] topic id is required for delete topic!"
+            sys.exit()
+
+        # get topic text first
+        text = ""
+        if options.body:
+            if options.filename:
+                print "[-m] or [-f] option is excluded!"
+                sys.exit()
+            else:
+                text = options.body
+        else:
+            if options.filename:
+                with open(options.filename, 'r') as f:
+                    text = f.read().decode('utf8')
+            else:
+                print "[-m] or [-f] option is required for topic text!"
+                sys.exit()
+
+        topic = {'title':options.title, 'description':text}
+        if c.edit_topic(options.id, topic):
+            print "edit topic successfully!"
+
+    elif options.mode == 4:
+        # list topic
+        if options.id:
+            struct = c.show_topic(options.id)
+            if not struct:
+                print "list topic failed!"
+                sys.exit()
+
+            print "="*80
+            for key in struct.keys():
+                print "%s : %s" %(key, struct[key])
+        else:
+            c.list_recent_topics(options.count)
+    else:
+        print "Please input Support operation: [-a][-d][-e][-l]"
+        sys.exit()
+    
+    # end
+    
+def test():
 
     client = YLinuxClient('ray', 'ray')
     client.list_recent_topics(10)
@@ -106,3 +255,8 @@ if __name__ == "__main__":
 
     print "===== List all Topics ====="
     client.list_recent_topics(10)
+
+if __name__ == "__main__":
+
+    #test()
+    main()
