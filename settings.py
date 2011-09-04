@@ -42,8 +42,8 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         # 可选数据库: postgresql_psycopg2 postgresql mysql sqlite3 oracle
-        'ENGINE': 'django.db.backends.mysql',
-        #'ENGINE': 'django.db.backends.sqlite3',
+        #'ENGINE': 'django.db.backends.mysql',
+        'ENGINE': 'django.db.backends.sqlite3',
         'NAME': 'ylinux',
         'USER': 'ylinux',
         'PASSWORD': '123456',
@@ -161,10 +161,16 @@ LANGUAGES = (
 XMLRPC_DEBUG=True
 #XMLRPC_METHODS = ylinux_xmlrpc.XMLRPC_METHODS
 XMLRPC_METHODS = (
-    ('ylinux_xmlrpc.list_all_topic', 'list_all_topic'),
-    ('ylinux_xmlrpc.add_topic', 'add_topic'),
-    ('ylinux_xmlrpc.show_topic', 'show_topic'),
     ('ylinux_xmlrpc.delete_topic', 'delete_topic'),
     ('ylinux_xmlrpc.delete_all_topic', 'delete_all_topic'),
 
+    # MetaWebBlog API
+    ('ylinux_xmlrpc.new_topic', 'metaWeblog.newPost'),
+    ('ylinux_xmlrpc.new_media', 'metaWeblog.newMediaObject'),
+    ('ylinux_xmlrpc.edit_topic', 'metaWeblog.editPost'),
+    ('ylinux_xmlrpc.get_topic', 'metaWeblog.getPost'),
+    ('ylinux_xmlrpc.get_categories', 'metaWeblog.getCategories'),
+    ('ylinux_xmlrpc.get_recent_topics', 'metaWeblog.getRecentPosts'),
+
+    # TODO: AtomPub and Blogger API
 )

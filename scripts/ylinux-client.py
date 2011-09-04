@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 
 import xmlrpclib
+import traceback
+import sys
 
 # product URL
 #YLINUX_XMLRPC="http://ylinux.org/xmlrpc/"
@@ -8,68 +10,68 @@ import xmlrpclib
 YLINUX_XMLRPC="http://127.0.0.1:8000/xmlrpc/"
 
 
-class User(object):
-    def __init__(self, name):
-        self.name = name
-
-    def id(self):
-
-        pass
-
-class Catalog(object):
-    def __init__(self,name):
-        self.name = name
-
-class Topic(object):
-
-    def __init__(self, title=None, text="", catalog=None, user=None):
-
-        self.title = title
-        if not title:
-            self.tilte = "No Topics"
-        self.text = text
-        self.catalog = catalog
-        self.user = user
-    
 class YLinuxClient(object):
     '''A Simple RPC client for YLinux'''
 
-    def __init__(self, url=YLINUX_XMLRPC, verbose=False):
+    def __init__(self, user, passwd, blogid=0, url=YLINUX_XMLRPC, verbose=False):
         self.server = xmlrpclib.ServerProxy(url, verbose=verbose)
+        #self.server = xmlrpclib.ServerProxy(url, verbose=verbose, use_datetime=True)
 
+        self.blogid = blogid
+        self.user = user
+        self.passwd = passwd
 
-    def add_topic(self, topic):
+    def add_topic(self, struct, publish=True):
 
-        title = topic.title
-        text = topic.text
-        user = topic.user
-        catalog = topic.catalog
         try:
-            self.server.add_topic(title, text, user, catalog)
+            return self.server.metaWeblog.newPost(self.blogid, self.user, self.passwd, struct, publish)
         except:
-            pass
+            traceback.print_exc()
 
+    def edit_topic(self, postid, struct, publish=True):
+
+        try:
+            return self.server.metaWeblog.editPost(postid, self.user, self.passwd, struct, publish)
+        except:
+            traceback.print_exc()
 
     def delete_topic(self, id):
 
-        self.server.delete_topic(id)        
+        try:
+            return self.server.delete_topic(id, self.user, self.passwd)
+        except:
+            traceback.print_exc()
 
     def delete_all_topic(self):
         try:
-            self.server.delete_all_topic()      
+            return self.server.delete_all_topic(self.user, self.passwd)
         except:
-            pass  
+            traceback.print_exc()
 
-    def list_all_topic(self):
+    def list_recent_topics(self, numberOfPosts):
+
+        topics = []
         try:
-            ret = self.server.list_all_topic()
+            topics = self.server.metaWeblog.getRecentPosts(self.blogid, self.user, 
+                                                        self.passwd, numberOfPosts)
         except:
-            pass
+            traceback.print_exc()
 
-        return ret
+        # print 
+        for struct in topics:
+            print struct
 
-    def show_topic(self, id):
-        return self.server.show_topic(id)
+    def show_topic(self, postid):
+        try:
+            return self.server.metaWeblog.getPost(postid, self.user,self.passwd)
+        except:
+            traceback.print_exc()
+
+    def show_category(self):
+        try:
+            return self.server.metaWeblog.getCategories(self.blogid, self.user,self.passwd)
+        except:
+            traceback.print_exc()
 
     def test(self):
         print self.server.system.listMethods()
@@ -77,13 +79,30 @@ class YLinuxClient(object):
 if __name__ == "__main__":
 
 
-    client = YLinuxClient()
-    #client.delete_all_topic()
+    client = YLinuxClient('ray', 'ray')
+    client.list_recent_topics(10)
+
+    # choose one category
+    categories = client.show_category()
+    if len(categories) == 0:
+        print "Not any category found, add some first"
+        sys.exit()
+    ca = categories[0]['categoryName']
 
     # add one topic, Need to add a catelog first! FIXME!!!
-    topic = Topic(title="a title", user='ray', catalog=1,
-                text="====This ia text from ylinux-client\n *one\n *two ")
+    topic = {'title':"a title", 'author':"chenran@163.com", 'category':ca,
+                'description':"====This ia text from ylinux-client\n *one\n *two "}
 
-    client.add_topic(topic)
-    #print client.show_topic(1)
-    print client.list_all_topic()
+    id = client.add_topic(topic)
+    print client.show_topic(id)
+
+    topic = {'title':'update title', 'description':'updated body'}
+    if client.edit_topic(id, topic):
+        print "Edit topic successfully"
+        print client.show_topic(id)
+
+    #if client.delete_topic(id):
+    #    print "delete topic successfully"
+
+    print "===== List all Topics ====="
+    client.list_recent_topics(10)
