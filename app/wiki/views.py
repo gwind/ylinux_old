@@ -24,13 +24,19 @@ import math
 def index(request):
     """首页"""
 
-    # 列出所有顶级目录
+# 列出所有顶级目录
     catalogs = Catalog.objects.filter(parent=None)
-    topics = Topic.objects.all().order_by('-updated')[:10]
+
+# 论坛热帖
+    recentd = datetime.date.today() - datetime.timedelta(30)
+    hot_topics = Topic.objects.filter(updated__gt=recentd).order_by('-view_count')[:6]
+#新帖
+    new_topics = Topic.objects.all().order_by('-updated')[:10]
     posts = Post.objects.all().order_by('-updated')[:10]
     lastUpdataTime = int(time.time())
     return {'catalogs':catalogs,
-            'topics':topics,
+            'hot_topics':hot_topics,
+            'new_topics':new_topics,
             'title': u'[知识库]',
             'posts':posts,
             'lastUpdataTime': lastUpdataTime}
@@ -44,6 +50,7 @@ def doesnotexist(request, type, id):
 
 @render_to('wiki/catalog.html')
 def catalog(request, id=None, curpage=0):
+    PERPAGE = 20
 
     if id:
         try:
@@ -57,8 +64,8 @@ def catalog(request, id=None, curpage=0):
         parents = None
 
     subcatalogs = Catalog.objects.filter(parent=id)
-    topics = Topic.objects.filter(catalog=id).exclude(hidden=1).exclude(recycled=1).order_by('-updated')[curpage:10]
-    pages = [ i+1 for i in range(int(math.ceil(Topic.objects.filter(catalog=id).exclude(hidden=1).exclude(recycled=1).count()/10.0)))]
+    topics = Topic.objects.filter(catalog=id).exclude(hidden=1).exclude(recycled=1).order_by('-updated')[curpage:20]
+    pages = [ i+1 for i in range(int(math.ceil(Topic.objects.filter(catalog=id).exclude(hidden=1).exclude(recycled=1).count()/float(PERPAGE))))]
 
     edit_topic_perm = request.user.has_perm ('ydata.edit_topic')
 
@@ -68,7 +75,7 @@ def catalog(request, id=None, curpage=0):
             'topics':topics,
             'title': u'[知识库] 目录浏览',
             'edit_topic_perm':edit_topic_perm,
-            'curpage': curpage,
+            'curpage': curpage+1,
             'pages': pages}
 
 @render_to('wiki/topic.html')
@@ -83,9 +90,17 @@ def topic(request, id):
     parents = get_parents (Catalog, topic.catalog.id)
     edit_topic_perm = request.user.has_perm ('ydata.edit_topic')
 
+    posts = Post.objects.filter(topic=id, parent=None).order_by('created')
+    POST_HTML = ''
+    for p in posts:
+        POST_HTML += render_post(request.user, p)
+
+
     return {'parents':parents, 'topic':topic,
             'edit_topic_perm':edit_topic_perm,
-            'title': u"[知识库]%s" % topic.name}
+            'title': u"[知识库]%s" % topic.name,
+            'POST_HTML': POST_HTML,
+            'posts': posts}
 
 @render_to('wiki/ajax_topic.html')
 def ajax_topic(request, id):
@@ -353,8 +368,8 @@ def ajax_show_catalog(request, id):
 def ajax_show_posts(request, topicID=None, postID=None):
 
     if topicID:
-        #posts = Post.objects.filter(topic=topicID, parent=None).order_by('created')
-        posts = Post.objects.filter(topic=topicID).order_by('created')
+        posts = Post.objects.filter(topic=topicID, parent=None).order_by('created')
+        #posts = Post.objects.filter(topic=topicID).order_by('created')
     elif postID:
         posts = [get_object_or_404(Post,pk=postID),]
     else:

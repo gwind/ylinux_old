@@ -1,7 +1,21 @@
+// depends on jQuery library.
+// depends on SyntaxHighlighter scripts.
+
+/****************************************************************
+ * Basic functions for all the application on ylinux.
+ *   This should be included in every single pages of the site to make other scripts work.
+ *
+ * Originally created by Jian Lee.
+ * Documented and modified by Wang Zhi.
+ *
+ ***************************************************************/
+
+/** the initial function for the syntaxhighlighter.
+ */
 function load_syntaxhighlighter () {
     SyntaxHighlighter.autoloader(
-        'cpp  /ymedia/js/syntaxhighlighter/scripts/shBrushCpp.js',
-        'applescript            /js/shBrushAppleScript.js'
+        'cpp            /ymedia/js/syntaxhighlighter/scripts/shBrushCpp.js',
+        'applescript    /js/shBrushAppleScript.js'
     );
 
     SyntaxHighlighter.config.tagName = 'code';
@@ -52,6 +66,17 @@ function load_syntaxhighlighter () {
 
 }
 
+/**Load the url more smoothly.
+ * This function actually make use of the jQuery's load function so the syntax of the query and the url are exactly the same.
+ */
+function ylinux_smooth_load(query, url, callback) {
+    $(query).fadeTo('fast', 0.1);
+    $(query).load(url, function() {
+        callback();
+        $(this).fadeTo('fast', 1.0);
+    });
+}
+
 // 返回无参数函数
 function _hello(_name){
        return function(){
@@ -70,12 +95,13 @@ function refresh_wiki_index ( time ) {
     });
 }
 
-
+/*
 function ajax_list_catalog (url) {
-    $("#wiki-container-main").load(url, function () {
+    //$("#wiki-container-main").load(url, function () {
+    $("#view").load(url, function() {
         $(this).addClass("list-catalog-done");
     });
-}
+}*/
 
 function ajax_login () {
     // 下面两个方法都可以获取 input 的 value 

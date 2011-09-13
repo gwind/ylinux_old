@@ -1,6 +1,78 @@
+/* start of header */ 
+#header {
+    line-height: 2em;
+    height: 2em;
+    margin: 0;
+    z-index: 1;
+    background-color: #f1f1f1;
+}
+#logo {
+    float:left;
+    margin: 0;
+    height: 2em;
+}
+#logo img {
+    height: 2em;
+    margin: 0;
+    padding: 0;
+}
+#welcome {
+    float:left;
+    padding: 0 1em;
+    margin:0;
+    height: 2em;
+}
+#navigator {
+    float:right;
+    line-height: 2em;
+}
+#navigator a {
+    float:left;
+    padding: 0 .5em;
+}
+#navigator a:hover {
+    background-color: #0cf;
+}
+#account {
+    text-align: center;
+    width: 220px;
+    margin: 0 auto;
+    background-color: #5a82b5;
+    z-index: 2;
+    line-height: 1.2em;
+}
+#account a {
+    color: white;
+}
+#account button {
+    background-color: #4a82a5;
+    border: 0;
+    cursor: pointer;
+}
+
+/* End header */
+
+h1 {
+    font-size: 1.8em;
+}
+h2 {
+    font-size: 1.6em;
+}
+h3 {
+    font-size: 1.4em;
+}
+h4 {
+    font-size: 1.2em;
+}
+h5 {
+    font-size: 1.0em;
+}
+h6 {
+    font-size: 0.8em;
+}
 ul {
-    margin: 0 4ex;
-    padding: 0px;
+    margin: 0;
+    padding: 0;
 }
 
 ul li {
@@ -24,12 +96,29 @@ input[type="text"] {
     width: 20ex;
 }
 
+body {
+    color: #333333;
+    margin: 0;
+    font-family: "Lucida Grande",Verdana,Arial,"Bitstream Vera Sans",sans-serif;
+    position: relative;
+}
+#main {
+    margin: 0 5ex;
+    position: relative;
+}
+a:link { color: blue; text-decoration: none; }
+a:visited {color: #9F4C09} 
+a:hover {color: green}
+a:active {color: #0000FF}
+
 .title {
     font-family:  Times, TimesNR, 'New Century Schoolbook', Georgia, 'New York', serif;
     font-size: 22px;
     color: white;
     background-color: #313D47;
-    padding: 5px 20px 5px 20px;
+    border-radius: 5px 5px 0 0;
+    padding: 5px 10px 5px 10px;
+    margin: 0;
 }
 .pages-act {
     background-color: #313D47;
@@ -43,6 +132,7 @@ input[type="text"] {
 .content {
     margin-top: 10px;
     padding: 10px 20px 10px 20px;
+    text-indent: 2em;
 }
 .info {
     padding: 2px 20px;
@@ -51,34 +141,50 @@ input[type="text"] {
     background-color: lightblue;
     text-align: right;
 }
-/*
-.box {
-    border-left: 1px solid #CDEAB9;
-    border-right: 1px solid #CDEAB9;
-    border-bottom: 2px solid #CDEAB9;
-    margin: 10px 0;
-}
-*/
 
+/**
+ * the management area.
+ */
 .manage {
-    margin: 1ex 0;
+    margin-top: 1ex;
     line-height: 31px;
 }
 .manage .path {
     float: left;
 }
+.manage .path a {
+    color: black;
+}
 
-#tools form { 
+/**
+ * Set the tools area's properties.
+ * I am trying not to use pixmap to implement the UI elements.
+ */
+.tools form {
     float: right;
     width: 201px; 
-    height: 31px; 
-    background: url(/ymedia/images/bg_search_box.gif); 
+    height: 27px; 
+    margin: 1px;
+    background-color: white;
+    border: 2px solid lightgreen;
+    border-radius: 8px;
 } 
-#tools #new-knowlg-btn {
+.tools .s { 
+    float: left; 
+    padding: 0; 
+    margin: 3px 0 0 6px; 
+    border: 0; 
+    width: 159px; 
+    background: none; 
+    font-size: .8em; 
+} 
+.tools .go { /* the 'Search' button.*/
+    float: right; 
+    margin: 1px 2px 0 0; 
+}
+.tools .new-knowlg-btn { /* the 'New Topic' button */
     float: right;
     border-radius: 8px;
-}
-#tools #new-knowlg-btn {
     height: 31px;
     line-height: 31px;
     margin: 0 5px;
@@ -87,24 +193,14 @@ input[type="text"] {
     color: black;
     text-decoration: none;
 }
-#tools #new-knowlg-btn:hover {
+.tools .new-knowlg-btn:hover {
     background-color: green;
     color: white;
 }
 
-.manage .path a {
-    height: 31px;
-    color: black;
-}
-
-#topic-content {
-    text-indent: 2em;
-}
-
-#topic-view {
-    display: none;
-}
-
+/**
+ * fix some float properties.
+ */
 .clear-fix {
     clear: both;
     line-height: 0;
@@ -114,6 +210,10 @@ input[type="text"] {
     background-color: yellow;
 }
 
+/**
+ * Box is a class with a comfortable margin and padding set and some beautiful borders.
+ * shared with all elements.
+ */
 .box {
     background-color: #FFFFFF;
     background-position: 50% 100%, 50% 50%;
@@ -121,4 +221,41 @@ input[type="text"] {
     border: 1px solid #BDC6D7;
     border-radius: 6px 6px 6px 6px;
     box-shadow: 0 2px rgba(0, 0, 0, 0.1), 0 -2px rgba(99, 149, 185, 0.1) inset, 0 -5px 15px rgba(223, 239, 249, 0.8) inset;
+    margin: 10px 10px;
 }
+
+/**
+ * Wrapper class is a class with margin and padding both set to 0. 
+ * It's useful when you try to wrap an object that has large margin or padding set but want to use the correct box-sizing.
+ * ie. you want to get the width of an object using style.width so you may have to wrap that object with an element of wrapper to make that work correctly.
+ */
+.wrapper {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.no-topics {
+    height: 20em;
+    position: relative;
+}
+.no-topics div {
+    width: 21em;
+    line-height: 20em;
+    margin: auto;
+    padding: auto;
+}
+
+/* footer start */
+#footer {
+    clear: both; /* 此属性定义了元素的哪边上不允许出现浮动元素: left,right,both,none */
+    margin-top: 10px;
+    margin-right: auto;
+    margin-left: auto;
+    bottom: 0;
+    border: 0.1em solid #dcdce9;
+    padding: 5px;
+    text-align: center;
+    list-style: none;
+    background: #EDF5FF;
+}
+/* end footer */

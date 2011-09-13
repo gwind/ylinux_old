@@ -1,9 +1,7 @@
 {% extends 'wiki/base.html' %}
 
-
 {% block extend_header %}
 
-<link rel="stylesheet" href="{{ MEDIA_URL }}themes/{% if theme %}{{ theme }}{% else %}default{% endif %}/main.css" />
 <link rel="stylesheet" href="{{ MEDIA_URL }}themes/{% if theme %}{{ theme }}{% else %}default{% endif %}/common.css" />
 <link rel="stylesheet" href="{{ MEDIA_URL }}themes/{% if theme %}{{ theme }}{% else %}default{% endif %}/topic.css" />
 
@@ -18,77 +16,17 @@
 <script type="text/javascript">
   $(document).ready(function () {
     load_syntaxhighlighter();
-    $("#posts").load("{% url wiki:ajax_show_topic_posts topic.id %}");
+    //$("#posts").load("{% url wiki:ajax_show_topic_posts topic.id %}");
   })
 </script>
 
 {% endblock %}
 
-
-{% block header %}
-<div id="logo"><a href="/"><img src="{{ MEDIA_URL }}images/ylinux-logo.gif" alt="YLinux"/></a></div>
-<div id="welcome"><span>我们不只关注 GNU/Linux ！</span></div>
-
-<div class="right">
-
-  <div id="navigator">
-    <a href="/wiki/topic/news/"><img src="{{ MEDIA_URL }}images/feed.gif" alt="订阅最近动态"/></a>
-    <span>
-      <a href="/">首页</a>
-      <a href="/coding">新闻</a>
-      <a href="/blog">博客</a>
-      <a href="/coding">项目</a>
-      <a href="/wiki">知识库</a>
-    </span>
-  </div>
-
-  <div id="account">
-    {% if user.is_authenticated %}
-    欢迎回来，<a href="{% url account:show_user user.id %}"><b>{{ user }}</a></b>
-    {% if user.is_staff %} | <a href="{% url admin:index %}">管理界面</a> | {% endif %}
-    <span id="logout"><button type="button" onclick="javascript: ajax_logout()">退出</button></span>
-    {% else %}
-    <!--<a href="{% url account:login %}">登录</a> <a href="{% url account:register %}"><b>注册</b></a>-->
-    <span id="login"><button type="button" onclick="javascript: ajax_create_login()">登录</button></span>
-    <span id="register"><button type="button">注册</button></span>
-    {% endif %}
-  </div>
-
-</div>
-{% endblock %}
-
-
-
 {% block content %}
-<div id="tools" class="clearfix">
-  <form method="get" action="http://www.google.com/search" target="google_window">
-    <input type="text" name="as_q" size="16" maxlength="255" value="" id="s"/>
-    <input type="image" src="/ymedia/images/btn_search_box.gif" width="27" height="24" id="go" alt="Search" title="Search" />
-    <!--<input type="submit" name="sa" value="搜索"/>-->
-    <input name="as_sitesearch" value="ylinux.org" type="hidden"/>
-    <input name="newwindow" value="1" type="hidden"/>
-    <input name="complete" value="1" type="hidden"/>
-    <input name="forid" value="zh-CN" type="hidden"/>
-    <input type="hidden" name="num" value="10"/>
-    <input name="btnG" value="Google+%E6%90%9C%E7%B4%A2&" type="hidden"/>
-    <input name="as_ft" value="1" type="hidden"/>
-    <input name="as_qdr" value="all" type="hidden"/>
-    <input name="as_occt" value="any" type="hidden"/>
-    <input name="as_dt" value="i" type="hidden"/>
-  </form>
-</div>
-
-<div class="topic-navigator">
-  <a href="{% url wiki:index %}">知识库</a>
-  {% for id,name in parents %}
-  > <a href="{% url wiki:show_catalog id %}">{{ name }}</a>
-  {% endfor %}
-</div>
-
 <div id="topic">
 
   <div class="topic-header box">
-    <p class="topic-title">{{ topic }}</p>
+    <p class="topic-title title">{{ topic }}</p>
     <p class="topic-info info">
       <b>作   者：</b> <span class="user"><a href="{% url account:show_user topic.user.id %}">{{ topic.user }}</a></span>
       <br/>
@@ -112,16 +50,18 @@
 
   </div>
 
-  <div class="topic-body content box">
+  <div class="topic-body content">
     {{ topic.body_html|safe }}
   </div>
 
-  <div id="posts">
-  </div>
+
+{% if posts %}
+{{ POST_HTML|safe }}
+{% endif %}
 
 </div>
 
-<div class="create-post">
+<div id="create-post" class="create-post">
   <button type="button" onclick="javascript: ajax_new_post(this, 'TOPIC', '{{ topic.id }}')">回复主题</button>
   <!--<a href="{% url wiki:add_post topic.id %}">回复</a>-->
 </div>

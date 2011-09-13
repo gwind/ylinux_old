@@ -1,28 +1,3 @@
-body {
-    /*
-    -moz-border-radius: 11px 11px 11px 11px;
-    background: none repeat scroll 0 0 #FFFFFF;
-    border: 1px solid #DFDFDF;
-    */
-    color: #333333;
-    margin: 10px 20px 10px 20px;
-    font-family: "Lucida Grande",Verdana,Arial,"Bitstream Vera Sans",sans-serif;
-}
-
-
-h1, h2, h3, h4, h5, h6 {
-    border-width: thin medium thick 10px;
-    display: inline;
-}
-
-
-a:link {
-    color: blue;
-    text-decoration: none;    
-}
-a:visited {color: #9F4C09} 
-a:hover {color: green}
-a:active {color: #0000FF}
 
 
 .left {

@@ -1,87 +1,34 @@
-/* Start header */
-#header {
-    border-bottom: 1px solid #DFE6ED;
-    padding-bottom: 5px;
-}
-
-#logo {
-    float: left;
-}
-
-#welcome {
-    float: left;
-}
-
-#welcome span {
-    color: #80A9B3;
-    padding: 5px 10px 5px 30px;
-    font-size: 1.6em;
-}
-
-.right {
-    float: right;
-}
-
-#logo {
-    text-align: right;
-}
-
-#tools form {
-    float: right;
-}
-#tools form { 
-    width: 201px; 
-    height: 31px; 
-    background: url(/ymedia/images/bg_search_box.gif); 
-} 
-#s { 
-    float: left; 
-    padding: 0; 
-    margin: 6px 0 0 6px; 
-    border: 0; 
-    width: 159px; 
-    background: none; 
-    font-size: .8em; 
-} 
-#go { 
-    float: right; 
-    margin: 3px 4px 0 0; 
-}
-
-
-#account {
-    margin-top: 10px;
-    float: right;
-}
-
-#account input {
-    width: 80px;
-}
-
-.login-text {
-    font-size: 0.5em;
-    color: #80A9B3;
-    margin: 5px 10px 5px 10px;
-}
-
-#navigator > span {
+.clearfix:after {
+    content: ".";
+    display: block;
+    height: 0;
     clear: both;
-    background: #DFE6ED;
-    text-align: center;
+    visibility: hidden;
 }
 
-#navigator > span > a {
-    margin: 2px 3px 2px 3px;
-    padding: 1px 2px 1px 2px;
-    /*font-size: 1.3em;*/
+/* Hides from IE-mac \*/
+* html .clearfix {height: 1%;}
+/* End hide from IE-mac */
+
+/**
+ * Box is a class with a comfortable margin and padding set and some beautiful borders.
+ * shared with all elements.
+ */
+.box {
+    background-color: #FFFFFF;
+    background-position: 50% 100%, 50% 50%;
+    background-repeat: no-repeat;
+    border: 1px solid #BDC6D7;
+    border-radius: 6px 6px 6px 6px;
+    box-shadow: 0 2px rgba(0, 0, 0, 0.1), 0 -2px rgba(99, 149, 185, 0.1) inset, 0 -5px 15px rgba(223, 239, 249, 0.8) inset;
+    margin: 10px 10px;
 }
 
-#navigator > span > a:hover {
-    background: #313D47;
-    color: white;
-}
+a:link { color: blue; text-decoration: none; }
+a:visited {color: #9F4C09} 
+a:hover {color: green; text-decoration: underline;}
+a:active {color: #0000FF}
 
-/* End header */
 
 h1 {
     font-size: 1.8em;
@@ -107,120 +54,188 @@ h6 {
     font-size: 0.8em;
 }
 
-#topic {
-    border-left: 1px solid #CDEAB9;
-    border-right: 1px solid #CDEAB9;
-    border-bottom: 2px solid #CDEAB9;
-    /*padding: 5px;*/
+button {
+    padding: 1px;
+    color:#050;
+    font: 84% 'trebuchet ms',helvetica,sans-serif;
+    background-color:#fed;
+    border: 1px dotted;
+    border-color: #696 #363 #363 #696;
+    filter:progid:DXImageTransform.Microsoft.Gradient
+    (GradientType=0,StartColorStr='#ffffffff',EndColorStr='#ffeeddaa');
 }
 
-.topic-header {
-    /*padding: 0 5px 0 5px;*/
+
+
+body {
+    color: #333333;
+    font-family: "Lucida Grande",Verdana,Arial,"Bitstream Vera Sans",sans-serif;
+    margin: 0px;
 }
 
-.topic-title {
-    font-family:  Times, TimesNR, 'New Century Schoolbook', Georgia, 'New York', serif;
-    font-size: 22px;
+
+#header {
+    background-color: #F1F1F1;
+    margin: 0;
+    border-bottom: 1px solid #DFE6ED;
+    padding: 0 20px 0 20px;
+}
+
+#logo {
+    float:left;
+    margin: 0 10px 0 0;
+    height: 2em;
+}
+#logo img {
+    height: 2em;
+    margin: 0;
+    padding: 0;
+}
+#welcome {
+    float:left;
+    padding: 0 1em;
+    margin:0;
+    height: 2em;
+}
+
+#account {
+    float: right;
+    height: 2em;
+}
+
+#navigator {
+    height: 2em;
+    margin: 0 0 0 30px;
+    float: left;
+}
+
+#navigator > a {
+    float: left;
+    padding: 5px;
+    height: 1.5em;
+}
+
+#navigator > a:hover {
+    background: #313D47;
     color: white;
-    background-color: #313D47;
-    padding: 5px 20px 5px 20px;
-}
-
-.topic-info {
-    padding: 5px 20px 5px 20px;
-}
-
-.topic-action {
-    background-color: #E3EBF3;
-    padding: 5px 20px 5px 20px;
-}
-
-.topic-body {
-    margin-top: 20px;
-    padding: 10px 20px 10px 20px;
 }
 
 
-#posts {
-    margin: 20px, 0, 0, 15px;
-    border-top: 3px solid #DFE6ED;
+#account input {
+    width: 80px;
 }
 
-#post > p {
-    color: blue;
+
+#tools {
+    clear: both;
 }
 
-.post-item {
-    margin-top: 15px;
-    margin-left: 15px;
-    /*padding: 7px 0 7px 0;*/
-    border: 1px solid #DFDFDF;
-    -moz-box-shadow: 3px 3px 4px #DFDFDF;
-    -webkit-box-shadow: 3px 3px 4px #DFDFDF;
-    box-shadow: 3px 3px 4px #DFDFDF;
-    background: #fff;
-    filter: progid:DXImageTransform.Microsoft.Shadow(Strength=4,Direction=135,Color='#DFDFDF');
+#tools form {
+    float: right;
+}
+#tools form { 
+    width: 201px; 
+    height: 31px; 
+    background: url(/ymedia/images/bg_search_box.gif); 
+} 
+#s { 
+    float: left; 
+    padding: 0; 
+    margin: 6px 0 0 6px; 
+    border: 0; 
+    width: 159px; 
+    background: none; 
+    font-size: .8em; 
+} 
+#go { 
+    float: right; 
+    margin: 3px 4px 0 0; 
 }
 
-/* 鼠标悬停效果 */
-/*
-.post-item:hover {
-    border: 1px solid #CBCBCB;
-    background: #f0f0f0;
-}
-*/
 
-.post-header {
-    border-bottom: 1px solid #DFDFDF;
-    background: #DDFFCC;
-}
-.post-body {
-    padding: 1px 0 1px 10px;
+#footer {
+    clear: both; /* 此属性定义了元素的哪边上不允许出现浮动元素: left,right,both,none */
+    margin-top: 10px;
+    margin-right: auto;
+    margin-left: auto;
+    bottom: 0;
+    border: 0.1em solid #dcdce9;
+    padding: 5px;
+    text-align: center;
+    list-style: none;
     background: #EDF5FF;
 }
 
-.time {
-    color: green;
-    font-family:  Times, TimesNR, 'New Century Schoolbook', Georgia, 'New York', serif;
-    /*font-size: 18px;*/
+#main {
+    margin: 10px 20px 10px 20px;
 }
 
-.user {
+#me-side {
+    float: left;
+    width: 300px;
+    margin: 20px 0 10px 0;
+    padding-right: 10px;
+    border-right: 1px solid #EDF5FF;
+}
+
+#me-main {
+    /*float: left;*/
+    margin-left: 320px; 
+    padding: 20px 0 0 10px;
+    /*width: auto;*/
+}
+
+.clear-both {
+    clear: both;
+}
+
+
+.topic-list {
+    /*border: 1px solid #336699;*/
+    margin: 10px 0 0;
+    padding: 4px 10px;
+}
+
+.topic-info {
+    font-size: 0.9em;
+}
+
+
+.login-text {
+    font-size: 0.5em;
+    color: #80A9B3;
+    margin: 5px 10px 5px 10px;
+}
+
+
+.owner-info {
+    clear: both;
+    /*border: 1px solid #EDF5FF;*/
+    margin-bottom: 20px;
+}
+
+.owner-avatar {
+    float:left;
+    margin: 5px 10px 5px 5px;
+    height: 3em;
+}
+.owner-avatar img {
+    height: 3em;
+    margin: 0;
+    padding: 0;
+}
+
+
+.owner-name {
     font-size: 1.3em;
-    font-weight: 100;
+    /*border: 1px dotted green;*/
+    /*background-color: #5A82B5;*/
 }
 
-
-.louzhu {
-    border: 1px;
-    margin-right: 10px;
-    color: #7CA95A;
-    font-size: 1.5em;
-    font-weight: 100;
+.post-list {
+    padding: 5px 10px 5px 10px;
 }
 
-
-pre {
-    border: 1px solid #DFDFDF;
-    width: auto;
+.post-info {
+    font-size: 0.8em;
 }
-
-code {
-}
-
-
-.atitle {
-    border-bottom: 1px solid #DADADA;
-    /*clear: both;*/
-    /*color: #666666;*/
-    font: 24px Georgia,"Times New Roman",Times,serif;
-    margin: 5px 0 0 -4px;
-    padding: 0 0 7px;
-}
-
-.asmalltitle {
-    font: 18px Georgia,"Times New Roman",Times,serif;
-    margin: 5px 0 0 -4px;
-    padding: 0 0 7px;
-}
-

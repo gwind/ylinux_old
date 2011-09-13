@@ -1,5 +1,5 @@
 <div class="post-item">
-  <div class="post-header">
+  <div class="post-header title">
     <span class="louzhu"><a name="post{{ post.id }}">飘着</a></span>
     <span class="user"><a href="{% url account:show_user post.user.id %}">{{ post.user }}</a></span>
     <span class="time">{{ post.updated|date:"Y年m月d日 H:i" }}</span>
@@ -8,7 +8,7 @@
     [<span class="delete"><a href="{% url wiki:del_post post.id %}">删除</a></span>]
     {% endifequal %}
   </div>
-  <div class="post-body">
+  <div class="post-body content">
     <p>{{ post.body_html|safe }}</p>
   </div>
 </div>
