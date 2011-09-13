@@ -32,3 +32,17 @@ def upload_single_file(req):
     innerHTML = u'<span><a href="%s">%s</a>， %s， <a href="%s/delete">删除</a></span>' % (url, attachment.name, attachment.size, url)
     r = u'<script type="text/javascript">window.parent.AfterSubmit(%s);</script>' % innerHTML
     return HttpResponse(r)
+
+
+def update_post_profile(req):
+    
+    posts = Post.objects.all()
+    for p in posts:
+        if p.parent:
+            p.touser = p.parent.user
+        else:
+            p.touser = p.topic.user
+        p.updated = p.created
+        p.save()
+
+    return HttpResponse(u'更新 posts 完成!')

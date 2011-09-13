@@ -146,6 +146,7 @@ INSTALLED_APPS = (
     'ylinux.app.wiki',
     'ylinux.app.blog',
     'ylinux.app.ylab',
+    'ylinux.app.me',
     'django_xmlrpc',
 )
 

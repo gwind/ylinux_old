@@ -1,0 +1,42 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh" lang="zh">
+
+
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link REL="SHORTCUT ICON" HREF="{{ MEDIA_URL }}images/favicon.ico">
+    <title>{{ title }}{% if title %} - {% endif %}YLinux.org</title>
+    <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery-1.6.2.min.js" ></script>
+    <script type="text/javascript" src="{{ MEDIA_URL }}js/ylinux.js" ></script>
+    {% block extend_header %}{% endblock %}
+  </head>
+
+
+  <!-- body 用 container 包容，分4块： header,navigator,content,footer -->  
+  <body>
+    <!-- 开始 header (分2块: logo,account) -->
+    <div id="header" class="clearfix">
+      {% block header %}{% endblock %}
+    </div>
+    <!-- 结束 header -->
+
+    <!-- 开始 main -->
+    <div id="main" class="clearfix">
+      {% block content %}{% endblock %}
+    </div>
+    <!-- 结束 main -->
+
+    <!-- 开始 footer -->
+    <div id="footer" class="clearfix">
+      版权 &copy <a href="http://ylinux.org">YLinux.org</a> |
+      <a href="/about">关于</a> |
+      <a href="/contact">联系</a> |
+      <script language="javascript" type="text/javascript" src="http://js.users.51.la/3151082.js"></script>
+      <noscript><a href="http://www.51.la/?3151082" target="_blank"><img alt="51统计" src="http://ylinux.org/ylinux/media/default/ylinux/images/51.gif"/></a></noscript>
+    </div>
+    <!-- 结束 footer -->
+    
+  </body>
+</html>

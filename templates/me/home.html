@@ -1,0 +1,19 @@
+{% extends 'me/home_base.html' %}
+
+{% block content %}
+<p>这里是 {{ user }} 的首页! </p>
+
+<div>
+  <ul>
+    <li>加入时间: {{ owner.date_joined|date:"Y年m月d日 H:i" }}</li>
+    <li>最后登录: {{ owner.last_login|date:"Y年m月d日 H:i" }}</li>
+    <li>文章数: <a title="查看博主发表的文章" href="{% url me:topics owner_id %}">{{ topic_count }}</a></li>
+    <li>回复数: <a title="查看博主发表的评论" href="{% url me:posts_for_other owner_id %}">{{ post_count }}</a></li>
+    <li>被评论: <a title="查看博主得到的评论" href="{% url me:posts_by_other owner_id %}">{{ fpost_count }}</a></li>
+  </ul>
+</div>
+
+<div class="tags">
+  <p>我的 Tags (兴趣) .</p>
+</div>
+{% endblock %}

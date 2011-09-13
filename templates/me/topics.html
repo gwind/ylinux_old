@@ -1,0 +1,23 @@
+{% extends 'me/home_base.html' %}
+
+{% block content %}
+<div id="my-topics">
+  {% if topics %}
+  {% for t in topics %}
+  <div class="topic-list box">
+    <div class="topic-header">
+      <span><strong><a href="{% url wiki:show_topic t.id %}" target="_blank">{{ t }}</a></strong></span>
+    </div>
+    <div class="topic-info">
+      <span>{{ t.updated|date:"Y年m月d日 H:i" }} | {{ t.view_count }} 次阅读 | {{ t.post_count }} 条回复</span>
+    </div>
+    <div class="topic-body">
+      <p>{{ t.body_desc }}</p>
+    </div>
+  </div>
+  {% endfor %}
+  {% else %}
+  <p>这个家伙很懶, 这没有写文章.</p>
+  {% endif %}
+</div>
+{% endblock %}
