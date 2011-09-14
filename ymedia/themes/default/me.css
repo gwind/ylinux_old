@@ -75,6 +75,10 @@ body {
 
 
 #header {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    right: 0px;
     background-color: #F1F1F1;
     margin: 0;
     border-bottom: 1px solid #DFE6ED;
@@ -167,7 +171,7 @@ body {
 }
 
 #main {
-    margin: 10px 20px 10px 20px;
+    margin: 30px 20px 10px 20px;
 }
 
 #me-side {
@@ -225,6 +229,14 @@ body {
     padding: 0;
 }
 
+.error {
+    color: red;
+}
+
+.user {
+    font-weight: bold;
+    font-size: 1.1em;
+}
 
 .owner-name {
     font-size: 1.3em;
@@ -238,4 +250,22 @@ body {
 
 .post-info {
     font-size: 0.8em;
+}
+
+.page_list {
+    border: 1px solid #DFE6ED;
+    background: #EDF5FF;
+}
+.page_list .pre_page:hover, .page_list .next_page:hover, .page_list .page_number:hover {
+    background: #A2C1C6;
+}
+
+.page_number {
+    padding: 2px 5px 2px 5px;
+}
+
+.cur_number {
+    font-weight: bold;
+    color: white;
+    background-color: #5A82B5;
 }

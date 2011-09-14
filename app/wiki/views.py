@@ -391,10 +391,13 @@ def ajax_show_posts(request, topicID=None, postID=None):
 # 回复分为：
 # 1. 回复 Topic
 # 2. 回复 Post
-@login_required
+#@login_required
 @render_to('wiki/replayAJAX.html')
 def replayAJAX(request, topicID = None, postID = None):
     """ 通过 AJAX 方式回复 """
+
+    if not request.user.is_authenticated():
+        return HttpResponse(u'<h1>您没有权限！请 <a href="/account/login">登录</a></h1>')
 
     replayID = None # 需要回复的 id
     parent_post = None
@@ -416,9 +419,6 @@ def replayAJAX(request, topicID = None, postID = None):
                  'ajaxFunc' : ajaxFunc }
 
     else:
-
-        if not request.user.is_authenticated():
-            return HttpResponse(u'<h1>您没有权限！请 <a href="/account/login">登录</a></h1>')
 
         if not topic.catalog.has_access(request.user):
             return HttpResponse(u'<h1>您没有权限回复此帖！</h1>')

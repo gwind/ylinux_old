@@ -9,6 +9,17 @@
     <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery-1.6.2.min.js" ></script>
     {% block extend_header %}
     {% endblock %}
+    <script type="text/javascript">
+      $(document).ready(function () {
+        $(".tools .s").focus(function() {
+          $(this).attr('value', "");
+          $(this).css("color", "#000");
+        }).blur(function() {
+          $(this).attr('value', "搜索");
+          $(this).css("color", "#ccc");
+        });
+      });
+    </script>
   </head>
 
   <!-- body 用 container 包容，分4块： header,navigator,content,footer -->  

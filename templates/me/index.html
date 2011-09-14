@@ -95,9 +95,11 @@
           {% for t in topics %}
           <div class="topic-list box">
             <div class="topic-header">
-              <span><strong><a href="{% url wiki:show_topic t.id %}" target="_blank">{{ t }}</a></strong></span>
+              <span>[<a href="{% url wiki:show_catalog t.catalog.id %}">{{ t.catalog }}</a>]</span>
+              <span><a href="{% url wiki:show_topic t.id %}" target="_blank"><strong>{{ t }}</strong></a></span>
             </div>
             <div class="topic-info">
+              <span class="user"><a href="{% url me:home t.user.id %}">{{ t.user }}</a></span> 发表于
               <span>{{ t.updated|date:"Y年m月d日 H:i" }} | {{ t.view_count }} 次阅读 | {{ t.post_count }} 条回复</span>
             </div>
             <div class="topic-body">

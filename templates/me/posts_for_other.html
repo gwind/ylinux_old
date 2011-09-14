@@ -3,6 +3,21 @@
 {% block content %}
 {% if posts %}
 <div id="replay-other">
+
+  {% if page_list %}
+  <div class="page_list">
+    {% ifnotequal pre_page 0 %}
+    <span class="pre_page"><a href="{% url me:posts_for_other_page owner_id pre_page %}">上一页</a></span>
+    {% endifnotequal %}
+    {% for n in page_list %}
+    <span class="page_number{% ifequal cur_page n %} cur_number{% endifequal %}"><a href="{% url me:posts_for_other_page owner_id n %}">{{ n }}</a></span>
+    {% endfor %}
+    {% ifnotequal cur_page last_page %}
+    <span class="next_page"><a href="{% url me:posts_for_other_page owner_id next_page %}">下一页</a></span>
+    {% endifnotequal %}
+  </div>
+  {% endif %}
+
   {% for p in posts %}
   <div class="post-list box">
     <div class="post-header">
@@ -22,11 +37,25 @@
     </div>
   </div>
   {% endfor %}
+
+  {% if page_list %}
+  <div class="page_list">
+    {% ifnotequal pre_page 0 %}
+    <span class="pre_page"><a href="{% url me:posts_for_other_page owner_id pre_page %}">上一页</a></span>
+    {% endifnotequal %}
+    {% for n in page_list %}
+    <span class="page_number{% ifequal cur_page n %} cur_number{% endifequal %}"><a href="{% url me:posts_for_other_page owner_id n %}">{{ n }}</a></span>
+    {% endfor %}
+    {% ifnotequal cur_page last_page %}
+    <span class="next_page"><a href="{% url me:posts_for_other_page owner_id next_page %}">下一页</a></span>
+    {% endifnotequal %}
+  </div>
+  {% endif %}
+
 </div>
 {% else %}
 <p>我还没有发表评论. :)</p>
 {% endif %}
-</div>
 
 <div class="clear-both"></div>
 {% endblock %}

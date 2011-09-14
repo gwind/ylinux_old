@@ -2,7 +2,7 @@
 
 # 将 YLinux.org 的主要数据结构在此定义
 
-import os, re, codecs
+import os, re, codecs, datetime
 from django.conf import settings
 #from django.core.urlresolvers import reverse
 
@@ -264,7 +264,8 @@ class Post(models.Model):
         self.body_html = urlize(self.body_html)
         if ydata_settings.SMILES_SUPPORT:
             self.body_html = smiles(self.body_html)
-
+        if not self.updated:
+            self.updated = datetime.datetime.now()
         super(Post, self).save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):

@@ -71,8 +71,8 @@
 
         <ul>
           <li><a title="查看博主发表的文章" href="{% url me:topics owner_id %}">文章</a></li>
-          <li><a title="查看博主发表的评论" href="{% url me:posts_for_other owner_id %}">评论</a></li>
-          <li><a title="查看博主得到的评论" href="{% url me:posts_by_other owner_id %}">被评论</a></li>
+          <li><a title="查看博主发表的评论" href="{% url me:from_posts owner_id %}">评论</a></li>
+          <li><a title="查看博主得到的评论" href="{% url me:to_posts owner_id %}">被评论</a></li>
         </ul>
       </div>
 
