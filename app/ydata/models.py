@@ -264,8 +264,12 @@ class Post(models.Model):
         self.body_html = urlize(self.body_html)
         if ydata_settings.SMILES_SUPPORT:
             self.body_html = smiles(self.body_html)
+
         if not self.updated:
             self.updated = datetime.datetime.now()
+
+        self.touser = self.parent.user if self.parent else self.topic.user
+
         super(Post, self).save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
