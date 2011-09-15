@@ -1,0 +1,35 @@
+{% extends 'me/home_base.html' %}
+
+{% block content %}
+
+
+<div>
+  <div class="welcome">
+  {% ifequal user.id owner.id %}
+  <span>{{ user }}, 欢迎回来!</span>
+  {% else %}
+  <span>这里是 {{ owner }} 的首页! </span>
+  {% endifequal %}
+  </div>
+
+  <ul>
+    <li>加入时间: {{ owner.date_joined|date:"Y年m月d日 H:i" }}</li>
+    <li>最后登录: {{ owner.last_login|date:"Y年m月d日 H:i" }}</li>
+    <li>文章数: <a title="查看博主发表的文章" href="{% url me:topics owner_id %}">{{ topic_count }}</a></li>
+    <li>回复数: <a title="查看博主发表的评论" href="{% url me:from_posts owner_id %}">{{ post_count }}</a></li>
+    <li>被评论: <a title="查看博主得到的评论" href="{% url me:to_posts owner_id %}">{{ fpost_count }}</a></li>
+  </ul>
+</div>
+
+<div class="tags">
+  <p>我的 Tags (兴趣) .</p>
+</div>
+
+<div class="news">
+  {% if new_post_count %}
+  <div class="new-post">
+    <span>自上次登录 (us</span>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

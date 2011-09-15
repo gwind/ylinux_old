@@ -1,0 +1,56 @@
+{% extends 'me/home_base.html' %}
+
+{% block content %}
+{% if error %}
+<div class="error">{{ error }}</div>
+{% endif %}
+<div id="my-topics">
+
+  {% if page_list %}
+  <div class="page_list">
+    {% ifnotequal pre_page 0 %}
+    <span class="pre_page"><a href="{% url me:topics_page owner_id pre_page %}">上一页</a></span>
+    {% endifnotequal %}
+    {% for n in page_list %}
+    <span class="page_number{% ifequal cur_page n %} cur_number{% endifequal %}"><a href="{% url me:topics_page owner_id n %}">{{ n }}</a></span>
+    {% endfor %}
+    {% ifnotequal cur_page last_page %}
+    <span class="next_page"><a href="{% url me:topics_page owner_id next_page %}">下一页</a></span>
+    {% endifnotequal %}
+  </div>
+  {% endif %}
+
+  {% if topics %}
+  {% for t in topics %}
+  <div class="topic-list box">
+    <div class="topic-header">
+      <span><strong><a href="{% url wiki:show_topic t.id %}" target="_blank">{{ t }}</a></strong></span>
+    </div>
+    <div class="topic-info">
+      <span>{{ t.updated|date:"Y年m月d日 H:i" }} | {{ t.view_count }} 次阅读 | {{ t.post_count }} 条回复</span>
+    </div>
+    <div class="topic-body">
+      <p>{{ t.body_desc }}</p>
+    </div>
+  </div>
+  {% endfor %}
+  {% else %}
+  <p>这里没有写文章.</p>
+  {% endif %}
+
+  {% if page_list %}
+  <div class="page_list">
+    {% ifnotequal pre_page 0 %}
+    <span class="pre_page"><a href="{% url me:topics_page owner_id pre_page %}">上一页</a></span>
+    {% endifnotequal %}
+    {% for n in page_list %}
+    <span class="page_number{% ifequal cur_page n %} cur_number{% endifequal %}"><a href="{% url me:topics_page owner_id n %}">{{ n }}</a></span>
+    {% endfor %}
+    {% ifnotequal cur_page last_page %}
+    <span class="next_page"><a href="{% url me:topics_page owner_id next_page %}">下一页</a></span>
+    {% endifnotequal %}
+  </div>
+  {% endif %}
+
+</div>
+{% endblock %}

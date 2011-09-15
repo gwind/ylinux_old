@@ -1,0 +1,100 @@
+{% extends 'me/home_base.html' %}
+
+{% block content %}
+{% if posts %}
+<div id="replay-other">
+
+  {% if page_list %}
+  <div class="page_list">
+    {% ifnotequal pre_page 0 %}
+    <span class="pre_page">
+      {% ifequal obj 'to' %}
+      <a href="{% url me:to_posts_page owner_id pre_page %}">上一页</a>
+      {% else %}
+      <a href="{% url me:from_posts_page owner_id pre_page %}">上一页</a>
+      {% endifequal %}
+    </span>
+    {% endifnotequal %}
+    {% for n in page_list %}
+    <span class="page_number{% ifequal cur_page n %} cur_number{% endifequal %}">
+      {% ifequal obj 'to' %}
+      <a href="{% url me:to_posts_page owner_id n %}">{{ n }}</a>
+      {% else %}
+      <a href="{% url me:from_posts_page owner_id n %}">{{ n }}</a>
+      {% endifequal %}
+    </span>
+    {% endfor %}
+    {% ifnotequal cur_page last_page %}
+    <span class="next_page">
+      {% ifequal obj 'to' %}
+      <a href="{% url me:to_posts_page owner_id next_page %}">下一页</a>
+      {% else %}
+      <a href="{% url me:from_posts_page owner_id next_page %}">下一页</a>
+      {% endifequal %}
+    </span>
+    {% endifnotequal %}
+  </div>
+  {% endif %}
+
+  {% for p in posts %}
+  <div class="post-list box">
+    <div class="post-header">
+      <a href="{% url me:home p.user.id %}" target="_blank"><span class="user">{{ p.user }}</span></a> 在
+      <span class="time">{{ p.updated|date:"Y年m月d日 H:i" }}</span>
+    </div>
+    <div class="post-target">
+      <strong>评论</strong>
+      {% if p.parent %}
+      <a href="{% url me:home p.parent.user.id %}" target="_blank"><span class="user">{{ p.parent.user }}</span></a> <strong>的 :</strong>
+      <span><a href="/wiki/topic/{{ p.topic.id }}#post{{ p.parent.id }}" target="_blank"><strong>{{ p.parent }}</strong></a></span>
+      {% else %}
+      <a href="{% url me:home p.topic.user.id %}" target="_blank"><span class="user">{{ p.topic.user }}</span></a> <strong>的 :</strong>
+      <span><a href="{% url wiki:show_topic p.topic.id %}" target="_blank"><strong>{{ p.topic }}</strong></a></span>
+      {% endif %}
+    </div>
+    <div class="post-body">
+      <strong>说:</strong>
+      <span><a href="/wiki/topic/{{ p.topic.id }}#post{{ p.id }}" target="_blank">{{ p }}</a></span>
+    </div>
+  </div>
+  {% endfor %}
+
+  {% if page_list %}
+  <div class="page_list">
+    {% ifnotequal pre_page 0 %}
+    <span class="pre_page">
+      {% ifequal obj 'to' %}
+      <a href="{% url me:to_posts_page owner_id pre_page %}">上一页</a>
+      {% else %}
+      <a href="{% url me:from_posts_page owner_id pre_page %}">上一页</a>
+      {% endifequal %}
+    </span>
+    {% endifnotequal %}
+    {% for n in page_list %}
+    <span class="page_number{% ifequal cur_page n %} cur_number{% endifequal %}">
+      {% ifequal obj 'to' %}
+      <a href="{% url me:to_posts_page owner_id n %}">{{ n }}</a>
+      {% else %}
+      <a href="{% url me:from_posts_page owner_id n %}">{{ n }}</a>
+      {% endifequal %}
+    </span>
+    {% endfor %}
+    {% ifnotequal cur_page last_page %}
+    <span class="next_page">
+      {% ifequal obj 'to' %}
+      <a href="{% url me:to_posts_page owner_id next_page %}">下一页</a>
+      {% else %}
+      <a href="{% url me:from_posts_page owner_id next_page %}">下一页</a>
+      {% endifequal %}
+    </span>
+    {% endifnotequal %}
+  </div>
+  {% endif %}
+
+</div>
+{% else %}
+<p>我还没有发表评论. :)</p>
+{% endif %}
+
+<div class="clear-both"></div>
+{% endblock %}

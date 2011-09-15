@@ -1,144 +1,39 @@
-/* Start header */
-#header {
-    border-bottom: 1px solid #DFE6ED;
-    padding-bottom: 5px;
-}
-
-#logo {
-    float: left;
-}
-
-#welcome {
-    float: left;
-}
-
-#welcome span {
-    color: #80A9B3;
-    padding: 5px 10px 5px 30px;
-    font-size: 1.6em;
-}
-
-.right {
-    float: right;
-}
-
-#logo {
-    text-align: right;
-}
-
-#tools form {
-    float: right;
-}
-#tools form { 
-    width: 201px; 
-    height: 31px; 
-    background: url(/ymedia/images/bg_search_box.gif); 
-} 
-#s { 
-    float: left; 
-    padding: 0; 
-    margin: 6px 0 0 6px; 
-    border: 0; 
-    width: 159px; 
-    background: none; 
-    font-size: .8em; 
-} 
-#go { 
-    float: right; 
-    margin: 3px 4px 0 0; 
-}
-
-
-#account {
-    margin-top: 10px;
-    float: right;
-}
-
-#account input {
-    width: 80px;
-}
-
-.login-text {
-    font-size: 0.5em;
-    color: #80A9B3;
-    margin: 5px 10px 5px 10px;
-}
-
-#navigator > span {
-    clear: both;
-    background: #DFE6ED;
-    text-align: center;
-}
-
-#navigator > span > a {
-    margin: 2px 3px 2px 3px;
-    padding: 1px 2px 1px 2px;
-    /*font-size: 1.3em;*/
-}
-
-#navigator > span > a:hover {
-    background: #313D47;
-    color: white;
-}
-
-/* End header */
-
-h1 {
-    font-size: 1.8em;
-}
-
-h2 {
-    font-size: 1.6em;
-}
-
-h3 {
-    font-size: 1.4em;
-}
-
-h4 {
-    font-size: 1.2em;
-}
-
-h5 {
-    font-size: 1.0em;
-}
-
-h6 {
-    font-size: 0.8em;
-}
 
 #topic {
-    border-left: 1px solid #CDEAB9;
-    border-right: 1px solid #CDEAB9;
-    border-bottom: 2px solid #CDEAB9;
-    /*padding: 5px;*/
+    margin-bottom: 20px;
+}
+
+.topic-navigator {
+    /*background-color: lightblue;*/
+    font-size: 1.2em;
 }
 
 .topic-header {
     /*padding: 0 5px 0 5px;*/
+    margin-top: 10px;
 }
 
-.topic-title {
+.topic-title, .post-title {
     font-family:  Times, TimesNR, 'New Century Schoolbook', Georgia, 'New York', serif;
     font-size: 22px;
-    color: white;
-    background-color: #313D47;
     padding: 5px 20px 5px 20px;
 }
 
-.topic-info {
+.topic-info, .post-info {
     padding: 5px 20px 5px 20px;
 }
 
 .topic-action {
-    background-color: #E3EBF3;
+    background-color: #ECF1F6;
     padding: 5px 20px 5px 20px;
 }
 
+/*
 .topic-body {
     margin-top: 20px;
     padding: 10px 20px 10px 20px;
 }
+*/
 
 
 #posts {
@@ -172,11 +67,10 @@ h6 {
 
 .post-header {
     border-bottom: 1px solid #DFDFDF;
-    background: #DDFFCC;
+    background: #EDF5FF;
 }
 .post-body {
     padding: 1px 0 1px 10px;
-    background: #EDF5FF;
 }
 
 .time {

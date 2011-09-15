@@ -1,27 +1,33 @@
 {% extends 'wiki/base.html' %}
-{% block content %}
+{% block extend_header %}
+<link rel="stylesheet" href="{{ MEDIA_URL }}themes/default/main.css" />
+<link rel="stylesheet" href="{{ MEDIA_URL }}themes/default/common.css" />
+<!-- link rel="stylesheet" href="{{ MEDIA_URL }}themes/default/wiki_index.css" / -->
+<link rel="stylesheet" href="{{ MEDIA_URL }}themes/default/topic.css" />
+{% endblock %}
 
-<h3>回复： {{ topic }}</h3>
+{% block content %}
+<div id="addpost" class="box">
+<div class="title">回复： {{ topic }}</div>
 
 <form action="" method="post">
-
-{{ form.as_p }}
+  {{ form.as_p }}
   <div class="submit">
     <p><input type="submit" value="发表回复" /><a href="javascript:history.go(-1)">返回</a></p>
   </div>
-
 </form>
+</div>
 
-
+<div id="posts" class="box">
 {% if posts %}
-<h3>其他回复：</h3>
-{% for p in posts %}
-<p><a href="{% url account:show_user p.user.id %}">{{ p.user }}</a> 在 {{ p.updated }} 于 <a href="http://www.ip138.com/ips.asp?ip={{ p.user_ip }}&action=2">{{ p.user_ip }}</a></p>
-<p>{{ p.body }}</p>
-{% endfor %}
+    <h3 class="title">其他回复：</h3>
+    {% for p in posts %}
+    <p><a href="{% url account:show_user p.user.id %}">{{ p.user }}</a> 在 {{ p.updated }} 于 <a href="http://www.ip138.com/ips.asp?ip={{ p.user_ip }}&action=2">{{ p.user_ip }}</a></p>
+    <p>{{ p.body }}</p>
+    {% endfor %}
 {% else %}
-<p>目前还没有任何回复</p>
+    <p>目前还没有任何回复</p>
 {% endif %}
-
+</div>
 
 {% endblock %}

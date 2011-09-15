@@ -2,43 +2,104 @@
           "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh" lang="zh">
-
-
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <link REL="SHORTCUT ICON" HREF="{{ MEDIA_URL }}images/favicon.ico">
-    <!--<link rel="stylesheet" href="{{ MEDIA_URL }}themes/{% if theme %}{{ theme }}{% else %}default{% endif %}/style.css" />-->
     <title>{{ title }}{% if title %} - {% endif %}YLinux.org</title>
     <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery-1.6.2.min.js" ></script>
-    {% block extend_header %}{% endblock %}
+    {% block extend_header %}
+    {% endblock %}
+    <script type="text/javascript">
+      $(document).ready(function () {
+        $(".tools .s").focus(function() {
+          $(this).attr('value', "");
+          $(this).css("color", "#000");
+        }).blur(function() {
+          $(this).attr('value', "搜索");
+          $(this).css("color", "#ccc");
+        });
+      });
+    </script>
   </head>
-
 
   <!-- body 用 container 包容，分4块： header,navigator,content,footer -->  
   <body id="RoundAngle">
 
     <div id="container">
-
-
       <!-- 开始 header (分2块: logo,account) -->
-      <div id="header" class="clearfix">
-        {% block header %}{% endblock %}
+      <div id="header">
+        <div id="logo"><a href="/"><img src="{{ MEDIA_URL }}images/ylinux-logo.gif" alt="YLinux"/></a></div>
+        <div id="welcome"><span>我们不只关注 GNU/Linux ！</span></div>
+
+        <div id="navigator">
+        <a href="/wiki/topic/news/"><img src="{{ MEDIA_URL }}images/feed.gif" alt="订阅最近动态"/></a>
+        <span>
+            <a href="/">首页</a>
+            <a href="/coding">新闻</a>
+            <a href="/blog">博客</a>
+            <a href="/coding">项目</a>
+            <a href="/wiki">知识库</a>
+        </span>
+        </div>
+        <div id="account">
+        {% if user.is_authenticated %}
+        欢迎回来，<a href="{% url account:show_user user.id %}"><b>{{ user }}</a></b>
+        {% if user.is_staff %} | <a href="{% url admin:index %}">管理界面</a> | {% endif %}
+        <span id="logout"><button type="button" onclick="javascript: ajax_logout()">退出</button></span>
+        {% else %}
+        <!--<a href="{% url account:login %}">登录</a> <a href="{% url account:register %}"><b>注册</b></a>-->
+        <span id="login"><button type="button" onclick="javascript: ajax_create_login()">登录</button></span>
+        <span id="register"><button type="button">注册</button></span>
+        {% endif %}
+        </div>
+        {% block header %}
+        <div class="clear-fix"></div>
+        {% endblock %}
       </div>
       <!-- 结束 header -->
-
       <!-- 开始 main -->
       <div id="main">
-        {% block content %}{% endblock %}
+        {% block content %}
+        <!-- main content here. -->
+        {% endblock %}
+        <div class="clear-fix"></div>
+        <div class="manage">
+            <div class="tools">
+                <div class="message left" style="float:left">
+                找不到合适的结果？尝试：
+                </div>
+            {% if user.is_authenticated and catalog %}
+                <a class="new-knowlg-btn" href="{% url wiki:add_topic catalog.id %}">新建知识点</a>
+            {% endif %}
+                <form method="get" action="http://www.google.com/search" target="google_window">
+                    <input type="text" name="as_q" size="16" maxlength="255" value="搜索" class="s"/>
+                    <input type="image" src="/ymedia/images/btn_search_box.gif" width="27" height="24" class="go" alt="Search" title="Search" />
+                    <input name="as_sitesearch" value="ylinux.org" type="hidden"/>
+                    <input name="newwindow" value="1" type="hidden"/>
+                    <input name="complete" value="1" type="hidden"/>
+                    <input name="forid" value="zh-CN" type="hidden"/>
+                    <input type="hidden" name="num" value="10"/>
+                    <input name="btnG" value="Google+%E6%90%9C%E7%B4%A2&" type="hidden"/>
+                    <input name="as_ft" value="1" type="hidden"/>
+                    <input name="as_qdr" value="all" type="hidden"/>
+                    <input name="as_occt" value="any" type="hidden"/>
+                    <input name="as_dt" value="i" type="hidden"/>
+                </form>
+            </div>
+        </div>
+        <div class="clear-fix"></div>
       </div>
       <!-- 结束 main -->
 
       <!-- 开始 footer -->
       <div id="footer">
-        版权 &copy <a href="http://ylinux.org">YLinux.org</a> |
+        版权 &copy; <a href="http://ylinux.org">YLinux.org</a> |
         <a href="/about">关于</a> |
         <a href="/contact">联系</a> |
+        <!--
         <script language="javascript" type="text/javascript" src="http://js.users.51.la/3151082.js"></script>
         <noscript><a href="http://www.51.la/?3151082" target="_blank"><img alt="51统计" src="http://ylinux.org/ylinux/media/default/ylinux/images/51.gif"/></a></noscript>
+        -->
       </div>
       <!-- 结束 footer -->
       

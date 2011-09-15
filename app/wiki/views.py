@@ -4,6 +4,7 @@ import time, datetime
 from django.http import Http404, HttpResponse, HttpResponseRedirect, HttpResponseForbidden
 from django.shortcuts import get_object_or_404
 from django.core.urlresolvers import reverse
+from django.views.generic import TemplateView
 #from django.contrib.syndication.views import Feed
 from syndication.views import Feed
 
@@ -17,17 +18,25 @@ import xml.etree.ElementTree as ET
 
 from wiki.utils import render_post
 
+import math
+
 @render_to('wiki/index.html')
 def index(request):
     """首页"""
 
-    # 列出所有顶级目录
+# 列出所有顶级目录
     catalogs = Catalog.objects.filter(parent=None)
-    topics = Topic.objects.all().order_by('-updated')[:10]
+
+# 论坛热帖
+    recentd = datetime.date.today() - datetime.timedelta(30)
+    hot_topics = Topic.objects.filter(updated__gt=recentd).order_by('-view_count')[:6]
+#新帖
+    new_topics = Topic.objects.all().order_by('-updated')[:10]
     posts = Post.objects.all().order_by('-updated')[:10]
     lastUpdataTime = int(time.time())
     return {'catalogs':catalogs,
-            'topics':topics,
+            'hot_topics':hot_topics,
+            'new_topics':new_topics,
             'title': u'[知识库]',
             'posts':posts,
             'lastUpdataTime': lastUpdataTime}
@@ -40,17 +49,23 @@ def doesnotexist(request, type, id):
 
 
 @render_to('wiki/catalog.html')
-def catalog(request, id):
+def catalog(request, id=None, curpage=0):
+    PERPAGE = 20
 
-    try:
-        catalog = Catalog.objects.get(pk=id)
-    except Catalog.DoesNotExist:
-        url = reverse ('wiki:catalog_not_exist', args=[id])
-        return HttpResponseRedirect(url)
+    if id:
+        try:
+            catalog = Catalog.objects.get(pk=id)
+        except Catalog.DoesNotExist:
+            url = reverse ('wiki:catalog_not_exist', args=[id])
+            return HttpResponseRedirect(url)
+        parents = get_parents (Catalog, id)
+    else:
+        catalog = None
+        parents = None
 
-    parents = get_parents (Catalog, id)
     subcatalogs = Catalog.objects.filter(parent=id)
-    topics = Topic.objects.filter(catalog=id).exclude(hidden=1).exclude(recycled=1)
+    topics = Topic.objects.filter(catalog=id).exclude(hidden=1).exclude(recycled=1).order_by('-updated')[curpage:20]
+    pages = [ i+1 for i in range(int(math.ceil(Topic.objects.filter(catalog=id).exclude(hidden=1).exclude(recycled=1).count()/float(PERPAGE))))]
 
     edit_topic_perm = request.user.has_perm ('ydata.edit_topic')
 
@@ -59,8 +74,9 @@ def catalog(request, id):
             'subcatalogs':subcatalogs,
             'topics':topics,
             'title': u'[知识库] 目录浏览',
-            'edit_topic_perm':edit_topic_perm}
-
+            'edit_topic_perm':edit_topic_perm,
+            'curpage': curpage+1,
+            'pages': pages}
 
 @render_to('wiki/topic.html')
 def topic(request, id):
@@ -74,10 +90,31 @@ def topic(request, id):
     parents = get_parents (Catalog, topic.catalog.id)
     edit_topic_perm = request.user.has_perm ('ydata.edit_topic')
 
+    posts = Post.objects.filter(topic=id, parent=None).order_by('created')
+    POST_HTML = ''
+    for p in posts:
+        POST_HTML += render_post(request.user, p)
+
+
     return {'parents':parents, 'topic':topic,
             'edit_topic_perm':edit_topic_perm,
-            'title': u"[知识库]%s" % topic.name}
+            'title': u"[知识库]%s" % topic.name,
+            'POST_HTML': POST_HTML,
+            'posts': posts}
 
+@render_to('wiki/ajax_topic.html')
+def ajax_topic(request, id):
+    try:
+        topic = Topic.objects.get(pk=id)
+    except Topic.DoesNotExist:
+        url = reverse ('wiki:topic_not_exist', args=[id])
+        return HttpResponseRedirect(url)
+
+    parents = get_parents (Catalog, topic.catalog.id)
+    edit_topic_perm = request.user.has_perm ('ydata.edit_topic')
+
+    return {'parents':parents, 'topic':topic,
+            'edit_topic_perm':edit_topic_perm}
 
 @render_to('wiki/post.html')
 def post(request, id):
@@ -317,7 +354,7 @@ def ajax_show_catalog(request, id):
         return { 'error': u'此目录不存在： %s' % id }
 
     parents = get_parents (Catalog, id)
-    topics = Topic.objects.filter(catalog=id).exclude(hidden=1).exclude(recycled=1)
+    topics = Topic.objects.filter(catalog=id).exclude(hidden=1).exclude(recycled=1).order_by('-updated')[:5]
 
     edit_topic_perm = request.user.has_perm ('ydata.edit_topic')
 
@@ -332,18 +369,20 @@ def ajax_show_posts(request, topicID=None, postID=None):
 
     if topicID:
         posts = Post.objects.filter(topic=topicID, parent=None).order_by('created')
+        #posts = Post.objects.filter(topic=topicID).order_by('created')
     elif postID:
         posts = [get_object_or_404(Post,pk=postID),]
     else:
         return HttpResponse(u'显示 posts 出错')
-        
-    HTML = '''
-<script type="text/javascript">
-  $(document).ready(function () {
-    $(".post-item").draggable();
-  })
-</script>
-'''
+
+    HTML = ''
+#    HTML = '''
+#<script type="text/javascript">
+#  $(document).ready(function () {
+#    $(".post-item").draggable();
+#  })
+#</script>
+#'''
     for p in posts:
         HTML += render_post(request.user, p)
     return HttpResponse(HTML)
@@ -352,10 +391,13 @@ def ajax_show_posts(request, topicID=None, postID=None):
 # 回复分为：
 # 1. 回复 Topic
 # 2. 回复 Post
-@login_required
+#@login_required
 @render_to('wiki/replayAJAX.html')
 def replayAJAX(request, topicID = None, postID = None):
     """ 通过 AJAX 方式回复 """
+
+    if not request.user.is_authenticated():
+        return HttpResponse(u'<h1>您没有权限！请 <a href="/account/login">登录</a></h1>')
 
     replayID = None # 需要回复的 id
     parent_post = None
@@ -377,9 +419,6 @@ def replayAJAX(request, topicID = None, postID = None):
                  'ajaxFunc' : ajaxFunc }
 
     else:
-
-        if not request.user.is_authenticated():
-            return HttpResponse(u'<h1>您没有权限！请 <a href="/account/login">登录</a></h1>')
 
         if not topic.catalog.has_access(request.user):
             return HttpResponse(u'<h1>您没有权限回复此帖！</h1>')

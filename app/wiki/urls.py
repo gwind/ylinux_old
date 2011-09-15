@@ -16,7 +16,9 @@ urlpatterns = patterns('wiki.views',
     # Show Catalog : /前缀/catalog/<catalog-id>/
     # Show Topic : /前缀/topic/<topic-id>/
     # Show Post : /前缀/post/<post-id>/
+    url(r'^catalog/$', 'catalog', name='catalogs'),
     url(r'^catalog/(?P<id>\d+)/$', 'catalog', name='show_catalog'),
+    url(r'^catalog/(?P<id>\d+)/(?P<curpage>\d+)/$', 'catalog', name='show_catalog_with_page'),
     url(r'^topic/(?P<id>\d+)/$', 'topic', name='show_topic'),
     url(r'^post/(?P<id>\d+)/$', 'post', name='show_post'),
 
@@ -48,6 +50,7 @@ urlpatterns = patterns('wiki.views',
     url(r'^topic/(?P<topicID>\d+)/ajax_show_posts/$', 'ajax_show_posts', name='ajax_show_topic_posts'),
     url(r'^post/(?P<postID>\d+)/ajax_show_posts/$', 'ajax_show_posts', name='ajax_show_post_posts'),
     url(r'^catalog/(?P<id>\d+)/addtopic/ajax/$', 'ajax_add_topic', name='ajax_add_topic'), # by Plux <yfwz100@gmail.com>
+    url(r'^topic/(?P<id>\d+)/ajax/$', 'ajax_topic', name='ajax_show_topic'), # by Plux <yfwz100@gmail.com>
     url(r'^post/(?P<postID>\d+)/editAJAX/$', 'editPostAJAX', name='editPostAJAX'),
 
 

@@ -1,325 +1,70 @@
-/* Start global style */
-.error {
-    color: red;
-    font-size: 0.6em;
-}
-/* End global style */
-
-
-
-/* Start header */
-#header {
-    border-bottom: 1px solid #DFE6ED;
-    padding-bottom: 5px;
-}
-
-#logo {
-    float: left;
-}
-
-#welcome {
-    float: left;
-}
-
-#welcome span {
-    color: #80A9B3;
-    padding: 5px 10px 5px 30px;
-    font-size: 1.6em;
-}
-
-.right {
-    float: right;
-}
-
-#logo {
-    text-align: right;
-}
-
-#tools form {
-    float: right;
-}
-#tools form { 
-    width: 201px; 
-    height: 31px; 
-    background: url(/ymedia/images/bg_search_box.gif); 
-} 
-#s { 
-    float: left; 
-    padding: 0; 
-    margin: 6px 0 0 6px; 
-    border: 0; 
-    width: 159px; 
-    background: none; 
-    font-size: .8em; 
-} 
-#go { 
-    float: right; 
-    margin: 3px 4px 0 0; 
-}
-
-
-#account {
-    margin-top: 10px;
-    float: right;
-}
-
-#account input {
-    width: 80px;
-}
-
-.login-text {
-    font-size: 0.5em;
-    color: #80A9B3;
-    margin: 5px 10px 5px 10px;
-}
-
-#navigator > span {
-    clear: both;
-    background: #DFE6ED;
-    text-align: center;
-}
-
-#navigator > span > a {
-    margin: 2px 3px 2px 3px;
-    padding: 1px 2px 1px 2px;
-    /*font-size: 1.3em;*/
-}
-
-#navigator > span > a:hover {
-    background: #313D47;
-    color: white;
-}
-
-/* End header */
-
-
-
-/* 未访问的链接 */
-a:link {
-    color: blue;
-    text-decoration: none;
-}
-
-
-/* 已访问的链接 */
-a:visited {
-    color: #334922;
-}
-
-
-/* 当有鼠标悬停在链接上 */
-a:hover {
-    color: green;
-    text-decoration: underline;
-}
-
-
-/* 被选择的链接 */
-a:active {
-    color: #0000FF;
-}
-
-
-.clearfix:after {
-    content: ".";
-    display: block;
-    height: 0;
-    clear: both;
-    visibility: hidden;
-}
-/* Hides from IE-mac \*/
-* html .clearfix {height: 1%;}
-/* End hide from IE-mac */
-
-#update-container {
-    /*border: 2px solid #DFE6ED;*/
-}
-
-#newest-topic-container {
-    width: 49%;
-    height: 100%;
-    /*padding: 5px;*/
-    float: left;
-    /*background: green;*/
-    border-right: 1px solid #DFE6ED;
-}
-
-#newest-post-container {
-    width: 49%;
-    height: 100%;
-    /*padding: 5px;*/
-    float: right;
-    /*background: black;*/
-    border-left: 1px solid #DFE6ED;
-}
-
-#catalog-list {
-    clear: both;
-}
-
-
-.newest-container-title {
-    background: #CAE8EA;
-    color: #608088;
-    padding: 2px 10px 5px 10px;
-}
-
-.newtopic, .newpost {
-    margin: 1px;
-    border-bottom: 1px solid #DFE6ED;
-    padding: 1px 10px 2px 10px;
-    background: #EDF5FF;
-}
-
-.newtopic-title, .newpost-title {
-    font-size: 1.1em;
-}
-
-.newtopic-info, .newpost-info {
-    font-size: 0.6em;
-    color: gray;
-}
-
-.level-item {
-    float: left;
-    width: 30%;
-}
-
-#wiki-container {
-    clear: both;
-    /*margin-top: 20px;*/
-    /*border-top: 5px double #DFE6ED;*/
-}
-
 #wiki-container-catalog {
     width: 250px;
-    height: 100%;
-    /*padding: 5px;*/
-    float: left;
-    /*background: #DFE6ED;*/
-    /*border: 3px double #DFE6ED;*/
-    /*margin: 5px 15px 20px 0px;*/
+    position: absolute;
+    padding-top: 1ex;
 }
-
 #wiki-container-catalog ul {
-    padding: 0 10px 0 10px; /* 多级 ul 如何缩进？ */
+    padding: 0 0 0 1ex; /* 多级 ul 如何缩进？ */
 }
-
+#cmenu {
+    /*background-image: url('/ymedia/images/menu-right.png');
+    background-position: top right;
+    background-repeat: no-repeat;*/
+    opacity: 0.9;
+    padding-right: 10px;
+    overflow: hidden;
+    border-radius: 10px;
+}
 #cmenu li {
-    margin-top: 3px;
-    border: 1px solid #DFE6ED;
+    margin: 0;
     padding: 5px 15px 5px 15px;
     list-style-type: none;
     cursor: pointer;
 }
-
-.cmenu-li {
+#cmenu>li:first-child {
+    border-radius: 10px 10px 0 0;
+}
+#cmenu>li:last-child {
+    border-radius: 0 0 10px 10px;
+}
+.cmenu-li, .cmenu {
     background: #98BAC0;
 }
-.cmenu-ul-li {
+.cmenu-ul-li, .cmenu-ul{
     background: #CAE8EA;
 }
 .cmenu-ul-ul-li {
     background: #EDF5FF;
 }
-
 .catalog-selected {
     background: #313D47;
     color: white;
 }
-
-
-#wiki-container-main {
-    width: auto;
-    height: 100%;
-    padding-top: 18px;
-    padding-left: 30px;
-    /*padding: 0 20px 10px 20px;*/
-    /*float: right;*/
-    /*margin-top: 20px;*/
+.catalog-selected a {
+    color: white !important;
+}
+#view {
     margin-left: 255px;
-    /*background: black;*/
-    /*border-left: 2px solid #DFE6ED;*/
 }
-
-.list-catalog-done {
-    color: red;
+.topic-wrapper, .post-wrapper {
+    width: 50%;
+    margin: 0 !important;
+    padding: 0 !important;
+    float: left;
 }
-
-.have-subcatalog {
-    color: red;
+.newtopic, .topic-box, .newpost {
+    margin: 0.5em;
+    padding-left: 20px;
+    background-image:url("/ymedia/images/featured_topic.png");
+    background-repeat: no-repeat;
+    background-position: 2px 2px;
+}
+#newest-post-container {
+    width: 100%;
+    height: 100%;
+    float: left;
     border-left: 1px solid #DFE6ED;
 }
-
-#wiki-container-main-title {
-    padding: 5px 15px 5px 15px;
-    background: #CAE8EA;
-    color: green;
-    font-size: 1.2em;
+#catalog-list {
+    clear: both;
 }
-
-#new-topic {
-    font-size: 1.6em;
-}
-
-#wiki-container-main table {
-    width: 100%;
-    border-collapse: collapse;
-    border: 1px solid #DFE6ED;
-    color: #6D929B;
-}
-
-#wiki-container-main caption {
-  font-size: 1.2em;
-  font-weight: bold;
-  margin: 1em 0;
-  color: green;
-  text-align: left;
-}
-
-#wiki-container-main th {
-    font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica,
-    sans-serif;
-    color: #6D929B;
-    border-right: 1px solid #C1DAD7;
-    border-bottom: 1px solid #C1DAD7;
-    border-top: 1px solid #C1DAD7;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    text-align: left;
-    padding: 6px 6px 6px 12px;
-    /*background: #CAE8EA url(images/bg_header.jpg) no-repeat;*/
-    background: #CAE8EA;
-}
-
-
-#wiki-container-main td {
-    padding: 0.5em 1em 0.5em 1em;
-    border-right: 1px solid #C1DAD7;
-}
-
-#wiki-container-main .tr-odd {
-    background-color: #edf5ff;
-}
-
-#wiki-container-main tr:hover {
-    background-color: #A9D2A8;
-}
-
-.user {
-    font-size: 1.2em;
-    color: gold;
-}
-
-.time {
-    font-size: 0.8em;
-    color: gray;
-}
-
-.newest-topic {
-}
-
-.newest-post {
-    font-size: 0.6em;
-}
-

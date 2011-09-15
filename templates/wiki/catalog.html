@@ -1,36 +1,120 @@
 {% extends 'wiki/base.html' %}
-{% block content %}
 
-<p>
-  <a href="{% url wiki:index %}">知识库</a>
-  {% for id,name in parents %}
-  | <a href="{% url wiki:show_catalog id %}">{{ name }}</a>
-  {% endfor %}
-</p>
+{% block extend_header %}
+<!-- link rel="stylesheet" href="{{ MEDIA_URL }}themes/default/main.css" / -->
+<link rel="stylesheet" href="{{ MEDIA_URL }}themes/default/common.css" />
+<!-- link rel="stylesheet" href="{{ MEDIA_URL }}themes/default/wiki_index.css" / -->
+<link rel="stylesheet" href="{{ MEDIA_URL }}themes/default/topic.css" />
+<style type="text/css">
+body {
+    position: relative;
+}
+#catalogs-list {
+    position: relative;
+}
+.box {
+    background-color: white;
+}
+</style>
+
+<script src="{{ MEDIA_URL }}js/jquery-ui/js/jquery-ui-1.8.15.custom.min.js" type="text/javascript"></script>
+<script src="{{ MEDIA_URL }}js/syntaxhighlighter/scripts/shCore.js" type="text/javascript"></script>
+<script src="{{ MEDIA_URL }}js/syntaxhighlighter/scripts/shAutoloader.js" type="text/javascript"></script>
+
+<script src="{{ MEDIA_URL }}js/ylinux.js" type="text/javascript"></script>
+<script src="{{ MEDIA_URL }}js/catalog.js" type="text/javascript"></script>
+
+{% endblock %}
+
+{% block content %}
+<div id="view">
+<div id="inner-view">
+    <div id="manage" class="manage">
+        <div class="clear-fix"></div>
+        <div id="catalog-path" class="path"> 
+        <span id="nav-btn">当前位置：</span>
+        <a href="{% url wiki:catalogs %}">知识库</a>
+    {% for id,name in parents %}
+            &gt; <a href="{% url wiki:show_catalog id %}">{{ name }}</a>
+    {% endfor %}
+        </div>
+        <div class="tools">
+            {% if user.is_authenticated %}
+            <a class="new-knowlg-btn" href="{% url wiki:add_topic 1 %}">新建知识点</a>
+            {% endif %}
+            <form method="get" action="http://www.google.com/search" target="google_window">
+                 <input type="text" name="as_q" size="16" maxlength="255" value="搜索" class="s"/>
+                 <input type="image" src="/ymedia/images/btn_search_box.gif" width="27" height="24" class="go" alt="Search" title="Search" />
+                 <input name="as_sitesearch" value="ylinux.org" type="hidden"/>
+                 <input name="newwindow" value="1" type="hidden"/>
+                 <input name="complete" value="1" type="hidden"/>
+                 <input name="forid" value="zh-CN" type="hidden"/>
+                 <input type="hidden" name="num" value="10"/>
+                 <input name="btnG" value="Google+%E6%90%9C%E7%B4%A2&" type="hidden"/>
+                 <input name="as_ft" value="1" type="hidden"/>
+                 <input name="as_qdr" value="all" type="hidden"/>
+                 <input name="as_occt" value="any" type="hidden"/>
+                 <input name="as_dt" value="i" type="hidden"/>
+            </form>
+        </div>
+        <div class="clear-fix"></div>
+    </div>
 
 {% if subcatalogs %}
-<ul>
-  {% for c in subcatalogs %}
-  <li><a href="{% url wiki:show_catalog c.id %}">{{ c.name }}</a></li>
-  {% endfor %}
-</ul>
+<div id="catalog-nav" class="box">
+    <div class="title">下设分类：</div>
+    <div class="content">
+    <ul>
+        {% for c in subcatalogs %}
+        <li><a href="{% url wiki:show_catalog c.id %}">{{ c.name }}</a></li>
+        {% endfor %}
+    </ul>
+    </div>
+</div>
 {% endif %}
 
+{% if catalog %}
+<div id="topics-list" class="box">
+    <div id="topics-list-title" class="title">主题列表：</div>
+    <div id="topics-content">
 {% if topics %}
-<ul>
-  {% for t in topics %}
-  <li>
-    <a href="{% url wiki:show_topic t.id %}">{{ t }}</a>
-    {% if edit_topic_perm %}
-    [<a href="{% url wiki:edit_topic t.id %}">编辑</a>]
-    {% endif %}
-  </li>
-  {% endfor %}
+    <ul style="height:0px;">
+    {% for t in topics %}
+    <li>
+    <div class="topic-box">
+        <div class="topic-title">
+            <span><a href="{% url wiki:show_topic t.id %}" target="_blank">{{ t.name }}</a></span>
+            {% if edit_topic_perm %}
+            [ <a href="{% url wiki:edit_topic t.id %}">编辑</a> ]
+            {% endif %}
+        </div>
+        <div class="topic-info">
+            <span class="user"><a href="{% url account:show_user t.user.id %}" target="_blank">{{ t.user }}</a></span>
+            <span class="time">{{ t.updated|date:"Y年m月d日 H:i" }}</span>
+        </div>
+    </div>
+    </li>
+    {% endfor %}
 </ul>
+{% else %}
+<div class="no-topics">
+    <div>该分类下没有主题。你可以<a id="new_knowlg_btn" href="{% url wiki:add_topic catalog.id %}">新建一个</a>。 :-)</div>
+</div>
 {% endif %}
-
-{% if user.is_authenticated %}
-<p><a href="{% url wiki:add_topic catalog.id %}">新建知识点</a></p>
 {% endif %}
+<div class="clear-fix"></div>
+</div>
+<div id="pages-act" class="pages-act">
+{% for num in pages %}
+    {% ifequal num curpage %}
+    <span class="curpage">{{ num }}</span>
+    {% else %}
+    <a href="{% url wiki:show_catalog_with_page catalog.id num %}">{{ num }}</a>
+    {% endifequal %}
+{% endfor %}
+</div>
+</div>
+</div> {# id:inner-view #}
+</div> {# id:view #}
 
 {% endblock %}

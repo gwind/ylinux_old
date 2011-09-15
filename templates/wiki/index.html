@@ -2,158 +2,256 @@
 
 {% block extend_header %}
 {% if theme %}
-<link rel="stylesheet" href="{{ MEDIA_URL }}themes/{{ theme }}/main.css" />
-<link rel="stylesheet" href="{{ MEDIA_URL }}themes/{{ theme }}/wiki_index.css" />
+    <link rel="stylesheet" href="{{ MEDIA_URL }}themes/{{ theme }}/common.css" />
+    <link rel="stylesheet" href="{{ MEDIA_URL }}themes/{{ theme }}/wiki_index.css" />
 {% else %}
-<link rel="stylesheet" href="{{ MEDIA_URL }}themes/default/main.css" />
-<link rel="stylesheet" href="{{ MEDIA_URL }}themes/default/wiki_index.css" />
+    <link rel="stylesheet" href="{{ MEDIA_URL }}themes/default/common.css" />
+    <link rel="stylesheet" href="{{ MEDIA_URL }}themes/default/wiki_index.css" />
 {% endif %}
-<script type="text/javascript" src="{{ MEDIA_URL }}js/ylinux.js" ></script>
-{% endblock %}
+    <link rel="stylesheet" href="{{ MEDIA_URL }}themes/default/topic.css" />
+    <script src="{{ MEDIA_URL }}js/syntaxhighlighter/scripts/shCore.js" type="text/javascript"></script>
+    <script src="{{ MEDIA_URL }}js/syntaxhighlighter/scripts/shAutoloader.js" type="text/javascript"></script>
+    <script type="text/javascript" src="{{ MEDIA_URL }}js/ylinux.js" ></script>
+    <script type="text/javascript" src="{{ MEDIA_URL }}js/catalog.js"></script>
+    <script type="text/javascript">
+// depends on jQuery library
+// depends on ylinux.js
 
+$(document).ready( function () {
+    $("#cmenu ul").slice(1).hide();
+    //$("#cmenu > ul:first-child ul").hide();
+
+    $("#cmenu > li").addClass("cmenu-li");
+    $("#cmenu li:has(+ul)").append("<span style='float:right'>&gt;</span>");
+    $("#cmenu > ul").addClass("cmenu-ul");
+    $("#cmenu > ul > li").addClass("cmenu-ul-li");
+    $("#cmenu > ul > ul > li").addClass("cmenu-ul-ul-li");
+
+    $("#cmenu li").click(function(event) {
+        //$(this).siblings('li').next('ul').slideUp();
+        $(this).siblings(".cmenu-ul-expanded").slideUp("100");
+        $(this).next("ul").slideDown("200");
+        $(this).next("ul").addClass("cmenu-ul-expanded");
+    });
+    $("#cmenu .catalog-link a").click(function (event) {
+        event.preventDefault();
+        ylinux_smooth_load("#view", $(this).attr("href")+" #inner-view", function() {
+            topic_item_init();
+            manage_init();
+            $("#cmenu").fadeOut();
+            $("#view").animate({"margin-left":"0"});
+        });
+        $(".catalog-selected").removeClass("catalog-selected");
+        $(this).parent("li").addClass("catalog-selected");
+    });
+    function topic_title_clicked (event) {
+        event.preventDefault();
+        ylinux_smooth_load("#view", $(this).attr("href")+" #topic", function() {
+            topic_item_init();
+            $("#cmenu").animate({"width":"0"});
+            $("#view").animate({"margin-left":"0"});
+        });
+    }
+
+    //$("#manage").css({"background-color":"#aaa", "line-height":"34px"});
+    //$("#nav-btn").css({"background-color":"#fff","width":"2em","line-height":"33px"});
+    function manage_init() {
+        $("#nav-btn").click(function (event) {
+            event.preventDefault();
+            //$("#cmenu").slideToggle();
+            if($("#view").css("margin-left") != "255px") {
+                $("#cmenu").fadeIn();
+                $("#view").animate({"margin-left":"255px"});
+            } else {
+                $("#cmenu").fadeOut();
+                $("#view").animate({"margin-left":"0"});
+            }
+        });
+        $("#catalog-path a").click(function(event) {
+            event.preventDefault();
+            ylinux_smooth_load("#view", $(this).attr("href") + " #inner-view", function() {
+                topic_item_init();
+                manage_init();
+                $(".catalog-selected").removeClass("catalog-selected");
+            });
+        });
+    }
+    manage_init();
+
+    //$("#wiki-container-catalog").css({"position":"absolute"});
+
+    // 定时刷新
+    set_wiki_update("{{ lastUpdataTime }}");
+});
+    </script>
+{% endblock %}
 
 {% block header %}
-
-<div id="logo"><a href="/"><img src="{{ MEDIA_URL }}images/ylinux-logo.gif" alt="YLinux"/></a></div>
-<div id="welcome"><span>我们不只关注 GNU/Linux ！</span></div>
-
-<div class="right">
-
-  <div id="navigator">
-    <a href="/wiki/topic/news/"><img src="{{ MEDIA_URL }}images/feed.gif" alt="订阅最近动态"/></a>
-    <span>
-      <a href="/">首页</a>
-      <a href="/coding">新闻</a>
-      <a href="/bbs">论坛</a>
-      <a href="/blog">博客</a>
-      <a href="/coding">项目</a>
-      <a href="/wiki">知识库</a>
-    </span>
-  </div>
-
-  <div id="account">
-    {% if user.is_authenticated %}
-    欢迎回来，<a href="{% url account:show_user user.id %}"><b>{{ user }}</a></b>
-    {% if user.is_staff %} | <a href="{% url admin:index %}">管理界面</a> | {% endif %}
-    <span id="logout"><button type="button" onclick="javascript: ajax_logout()">退出</button></span>
-    {% else %}
-    <!--<a href="{% url account:login %}">登录</a> <a href="{% url account:register %}"><b>注册</b></a>-->
-    <span id="login"><button type="button" onclick="javascript: ajax_create_login()">登录</button></span>
-    <span id="register"><button type="button">注册</button></span>
-    {% endif %}
-  </div>
-
+<div style="position:absolute;width:100%;z-index:1;">
+  <!-- 亦歌控制栏开始 -->
+  <table id="controller_1g1g" cellspacing="4px" cellpadding="0" border="0" style="table-layout:fixed;width:220px;margin:auto;height:24px;cursor:pointer;background-color:#5a82b5;border:solid 1px #444444;border-radius: 0 0 10px 10px;"> 
+  <!-- 控制器界面部分 -->
+    <tr>
+      <td id="playPauseBtn_1g1g" style="width:16px;height:16px;background-image:url('{{ MEDIA_URL }}1g1gasset/play-pause-next.png');cursor:pointer;background-position:center center;overflow:hidden;">
+      </td><!-- 播放/暂停按钮 -->
+      <td id="nextBtn_1g1g" style="width:16px;height:16px;background-image:url('{{ MEDIA_URL }}1g1gasset/play-pause-next.png');background-position:0px -64px;cursor:pointer;overflow:hidden;">
+      </td><!-- 下一首按钮 -->
+      <td valign="middle" id="displayText_1g1g" style="font-size:12px; line-height:12px; color: #ffffff;white-space:nowrap;overflow:hidden;">
+        开始听歌
+      </td><!-- 歌名/歌词显示 -->
+    </tr>
+  </table>
+  <script type="text/javascript">var playerUrl = "http://www.1g1g.com/"</script> <!-- 播放器地址 -->
+  <script type="text/javascript" src="{{ MEDIA_URL }}1g1gasset/controller.js"></script>  <!-- 控制播放器所需程序 -->
+  <!-- 亦歌控制栏结束 -->
 </div>
-
 {% endblock %}
-
 
 {% block content %}
 
-<script type="text/javascript">
-
-    $(document).ready( function () {
-
-        $("#cmenu > ul:not(:first)").hide();
-        $("#cmenu > ul:first ul").hide();
-
-        $("#cmenu > li").addClass("cmenu-li");
-        $("#cmenu > ul > li").addClass("cmenu-ul-li");
-        $("#cmenu > ul > ul > li").addClass("cmenu-ul-ul-li");
-
-        $("#cmenu li").click( function () {
-
-            $(".catalog-selected").removeClass("catalog-selected");
-            $(this).removeClass("background");
-            $(this).addClass("catalog-selected");
-
-            $(this).next("ul").slideToggle("200");
-
-            return false;
-
-        });
-
-        // 显示更新信息
-        $("#wiki-container-main").load("{% url wiki:ajax_show_update %}", function () {
-            $(this).addClass("list-catalog-done");
-        });
-
-        // 定时刷新
-        set_wiki_update("{{ lastUpdataTime }}");
-
-
-    });
-
-</script>
-
-  <div id="tools" class="clearfix">
-    <div style="float: left">
-      <!-- 亦歌控制栏开始 -->
-      <table id="controller_1g1g" cellspacing="4px" cellpadding="0" border="0" style="table-layout:fixed;width:220px;height:24px;cursor:pointer;background-color:#5a82b5;border:solid 1px #444444;"> <!-- 控制器界面部分 -->
-	<tr>
-	  <td id="playPauseBtn_1g1g" style="width:16px;height:16px;background-image:url('{{ MEDIA_URL }}1g1gasset/play-pause-next.png');cursor:pointer;background-position:0px 0px;overflow:hidden;">
-	  </td><!-- 播放/暂停按钮 -->
-	  <td id="nextBtn_1g1g" style="width:16px;height:16px;background-image:url('{{ MEDIA_URL }}1g1gasset/play-pause-next.png');background-position:0px -64px;cursor:pointer;overflow:hidden;">
-	  </td><!-- 下一首按钮 -->
-	  <td valign="middle" id="displayText_1g1g" style="font-size:12px; line-height:12px; color: #ffffff;white-space:nowrap;overflow:hidden;">
-	    开始听歌
-	  </td><!-- 歌名/歌词显示 -->
-	</tr>
-      </table>
-      <script type="text/javascript">var playerUrl = "http://www.1g1g.com/"</script> <!-- 播放器地址 -->
-      <script type="text/javascript" src="{{ MEDIA_URL }}1g1gasset/controller.js"></script>  <!-- 控制播放器所需程序 -->
-      <!-- 亦歌控制栏结束 -->
-    </div>
-
-    <form method="get" action="http://www.google.com/search" target="google_window">
-      <input type="text" name="as_q" size="16" maxlength="255" value="" id="s"/>
-      <input type="image" src="/ymedia/images/btn_search_box.gif" width="27" height="24" id="go" alt="Search" title="Search" />
-      <!--<input type="submit" name="sa" value="搜索"/>-->
-      <input name="as_sitesearch" value="ylinux.org" type="hidden"/>
-      <input name="newwindow" value="1" type="hidden"/>
-      <input name="complete" value="1" type="hidden"/>
-      <input name="forid" value="zh-CN" type="hidden"/>
-      <input type="hidden" name="num" value="10"/>
-      <input name="btnG" value="Google+%E6%90%9C%E7%B4%A2&" type="hidden"/>
-      <input name="as_ft" value="1" type="hidden"/>
-      <input name="as_qdr" value="all" type="hidden"/>
-      <input name="as_occt" value="any" type="hidden"/>
-      <input name="as_dt" value="i" type="hidden"/>
-    </form>
-  </div>
-
-<div id="wiki-update">
-</div>
-<div id="wiki-container" class="clearfix">
-
-  <div id="wiki-container-catalog" class="clearfix">
-    {% if catalogs %}
+<div id="wiki-container-catalog">
+{% if catalogs %}
     <ul id="cmenu">
-      {% for l0 in catalogs %}
-      <li class="catalog-link" class="catalog-level0" {% if l0.children %}class="have-subcatalog"{% endif %} onclick="ajax_list_catalog('{% url wiki:ajax_show_catalog l0.id %}')">{{ l0 }}</li>
-      {% if l0.children %}
+      <li>我的视图</li>
       <ul>
-        {% for l1 in l0.children %}
-        <li class="catalog-link" class="catalog-level1" {% if l1.children %}class="have-subcatalog"{% endif %} onclick="ajax_list_catalog('{% url wiki:ajax_show_catalog l1.id %}')">{{ l1 }}</li>
-        {% if l1.children %}
-        <ul>
-          {% for l2 in l1.children %}
-          <li class="catalog-link" class="catalog-level2" {% if l2.children %}class="have-subcatalog"{% endif %} onclick="ajax_list_catalog('{% url wiki:ajax_show_catalog l2.id %}')">{{ l2 }}</li>
-          {% endfor %}
-        </ul>
-        {% endif %}
-        {% endfor %}
+        <li><a href="{% url wiki:catalogs %}">基本页面</a></li>
       </ul>
-      {% endif %}
-      {% endfor %}
+    {% for l0 in catalogs %}
+      <li class="catalog-link" {% if l0.children %} class="have-subcatalog" {% endif %}><a href="{% url wiki:show_catalog l0.id %}">{{ l0 }}</a></li>
+        {% if l0.children %}
+      <ul>
+            {% for l1 in l0.children %}
+        <li class="catalog-link" {% if l1.children %} class="have-subcatalog" {% endif %}><a href="{% url wiki:show_catalog l1.id %}">{{ l1 }}</a></li>
+                {% if l1.children %}
+        <ul>
+                    {% for l2 in l1.children %}
+          <li class="catalog-link" class="catalog-level2" {% if l2.children %}class="have-subcatalog"{% endif %}><a href="{% url wiki:ajax_show_catalog l2.id %}">{{ l2 }}</a></li>
+                    {% endfor %}
+        </ul>
+                {% endif %}
+            {% endfor %}
+      </ul>
+        {% endif %}
+    {% endfor %}
     </ul>
-    {% endif %}
-  </div>
-
-  <div id="wiki-container-main">
-  </div>
-
+{% endif %}
 </div>
 
 
+<!-- div id="wiki-update">
+</div -->
+
+<div class="clear-fix"></div>
+
+<div id="wiki-container">
+
+<div id="view">
+  <div id="manage" class="manage">
+    <div class="clear-fix"></div>
+    <div id="catalog-path" class="path"> 
+      <span id="nav-btn">导航：</span>
+      <a href="{% url wiki:catalogs %}">知识库</a>
+    {% for id,name in parents %}
+        &gt; <a href="{% url wiki:show_catalog id %}">{{ name }}</a>
+    {% endfor %}
+    </div>
+    <div class="tools">
+            {% if user.is_authenticated %}
+      <a class="new-knowlg-btn" href="{% url wiki:add_topic 1 %}">新建知识点</a>
+            {% endif %}
+      <form method="get" action="http://www.google.com/search" target="google_window">
+        <input type="text" name="as_q" size="16" maxlength="255" value="搜索" class="s"/>
+        <input type="image" src="/ymedia/images/btn_search_box.gif" width="27" height="24" class="go" alt="Search" title="Search" />
+        <input name="as_sitesearch" value="ylinux.org" type="hidden"/>
+        <input name="newwindow" value="1" type="hidden"/>
+        <input name="complete" value="1" type="hidden"/>
+        <input name="forid" value="zh-CN" type="hidden"/>
+        <input type="hidden" name="num" value="10"/>
+        <input name="btnG" value="Google+%E6%90%9C%E7%B4%A2&" type="hidden"/>
+        <input name="as_ft" value="1" type="hidden"/>
+        <input name="as_qdr" value="all" type="hidden"/>
+        <input name="as_occt" value="any" type="hidden"/>
+        <input name="as_dt" value="i" type="hidden"/>
+      </form>
+    </div>
+    <div class="clear-fix"></div>
+  </div>
+
+  <div id="wiki-content">
+    <div id="update-container">
+
+      <div id="hotest-topics" class="box">
+{% if hot_topics %}
+        <div class="title-wrapper wrapper">
+          <h3 class="title">论坛热议：</h3>
+        </div>
+    {% for t in hot_topics %}
+        <div class="topic-wrapper wrapper">
+        <div class="hot-topic topic-box">
+          <div class="topic-title">
+            <span><a href="{% url wiki:show_topic t.id %}" target="_blank">{{ t.name }}</a></span>
+          </div>
+          <div class="topic-info">
+            <span class="user"><a href="{% url account:show_user t.user.id %}" target="_blank">{{ t.user }}</a></span>
+            <span class="time">{{ t.updated|date:"Y年m月d日 H:i" }}</span>
+          </div>
+        </div>
+        </div>
+    {% endfor %}
+        <div class="clear-fix"></div>
+{% else %}
+        <p>无热门文章</p>
+{% endif %}
+      </div>
+
+      <div id="newest-topics" class="box">
+{% if new_topics %}
+        <div class="title-wrapper wrapper">
+          <h3 class="title">最新文章：</h3>
+        </div>
+    {% for t in new_topics %}
+        <div class="topic-wrapper wrapper">
+        <div class="newtopic">
+          <div class="topic-title">
+            <span><a href="{% url wiki:show_topic t.id %}" target="_blank">{{ t.name }}</a></span>
+          </div>
+          <div class="topic-info">
+            <span class="user"><a href="{% url account:show_user t.user.id %}" target="_blank">{{ t.user }}</a></span>
+            <span class="time">{{ t.updated|date:"Y年m月d日 H:i" }}</span>
+          </div>
+        </div>
+        </div>
+    {% endfor %}
+        <div class="clear-fix"></div>
+{% else %}
+        <p>无新文章</p>
+{% endif %}
+      </div>
+
+      <div id="newest-posts" class="box">
+{% if posts %}
+        <div class="title-wrapper">
+          <h3 class="title">最新回复：</h3>
+        </div>
+    {% for p in posts %}
+        <div class="post-wrapper wrapper">
+        <div class="newpost">
+          <div class="post-title">
+            <a href="/wiki/topic/{{ p.topic.id }}#post{{ p.id }}" target="_blank">{{ p }}</a>
+          </div>
+          <div class="post-info">
+            <span class="user"><a href="{% url account:show_user p.user.id %}" target="_blank">{{ p.user }}</a></span>
+            <span class="time">{{ p.updated|date:"Y年m月d日 H:i" }}</span>
+          </div>
+        </div>
+        </div>
+    {% endfor %}
+        <div class="clear-fix"></div>
+{% endif %}
+      </div>
+
+    </div>
+  </div>
+</div>
+</div> <!-- id:view -->
 {% endblock %}

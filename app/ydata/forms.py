@@ -48,6 +48,7 @@ class AddPostForm(forms.ModelForm):
         self.topic.save()
         self.topic.catalog.post_count += 1
         self.topic.catalog.save()
+        post.updated = datetime.datetime.now();
         post.save()
         if ydata_settings.ATTACHMENT_SUPPORT:
             self.save_attachment(post, self.cleaned_data['attachment'])

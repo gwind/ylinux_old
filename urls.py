@@ -29,6 +29,7 @@ urlpatterns = patterns('',
     (r'^bbs/', include('ylinux.app.bbs.urls', namespace='bbs')),
     (r'^ydata/', include('ylinux.app.ydata.urls', namespace='ydata')),
     (r'^lab/', include('ylinux.app.ylab.urls', namespace='lab')),
+    (r'^me/', include('ylinux.app.me.urls', namespace='me')),
 
     # 静态地址
     (r'^favicon\.ico$', 'django.views.generic.simple.redirect_to', {'url': settings.MEDIA_URL+'images/favicon.ico'}),

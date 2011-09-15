@@ -2,7 +2,7 @@
 
 # 将 YLinux.org 的主要数据结构在此定义
 
-import os, re, codecs
+import os, re, codecs, datetime
 from django.conf import settings
 #from django.core.urlresolvers import reverse
 
@@ -111,6 +111,7 @@ class Topic(models.Model):
     updated = models.DateTimeField('Updated')
     user = models.ForeignKey(User, related_name='topics', verbose_name='User')
     user_ip = models.IPAddressField('User IP', blank=True, null=True)
+    # 己弃用!!! 现使用 view_count
     views = models.IntegerField('查看次数', blank=True, default=0)
     # sticky 置顶属性
     sticky = models.BooleanField('Sticky', blank=True, default=False)
@@ -179,6 +180,10 @@ class Topic(models.Model):
         return html
 
     @property
+    def body_desc(self):
+        return ''.join(self.body.split('\n')[:5])
+
+    @property
     def feed_desc(self):
         return ''.join(self.body.split('\n')[:4])
 
@@ -224,8 +229,9 @@ class Post(models.Model):
     # parent 是 Post 间的继承关系
     parent = models.ForeignKey('self', blank=True, null=True, verbose_name='Post', related_name='child')
     user = models.ForeignKey(User, related_name='posts', verbose_name='User')
+    touser = models.ForeignKey(User, blank=True, null=True, related_name='from_posts', verbose_name='ToUser')
     created = models.DateTimeField('Created', auto_now_add=True)
-    updated = models.DateTimeField('Updated', auto_now=True)
+    updated = models.DateTimeField('Updated')
     markup = models.CharField('Markup', max_length=15, default="markdown", choices=MARKUP_CHOICES)
     body = models.TextField('正文')
     body_html = models.TextField('HTML正文')
@@ -258,6 +264,12 @@ class Post(models.Model):
         self.body_html = urlize(self.body_html)
         if ydata_settings.SMILES_SUPPORT:
             self.body_html = smiles(self.body_html)
+
+        if not self.updated:
+            self.updated = datetime.datetime.now()
+
+        self.touser = self.parent.user if self.parent else self.topic.user
+
         super(Post, self).save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):

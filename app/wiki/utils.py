@@ -12,6 +12,7 @@ POST_MAIN = '''
   <span class="post-edit"><button type="button" onclick="javascript: ajax_edit_post(this, '{{ post.id }}')">编辑</button></span>
   {% endifequal %}
   <span><button type="button" onclick="javascript: ajax_new_post(this, 'POST', '{{ post.id }}')">回复</button></span>
+  <span class="right"><a onclick="javascript: scrollTo(0,0);" href="javascript:;">TOP</a></span>
 </div>
 <div class="post-body">
   <p>{{ post.body_html|safe }}</p>
@@ -21,7 +22,7 @@ POST_MAIN = '''
 
 def render_post(user, post):
 
-    POST_ITERM = '<div class="post-item">\n'
+    POST_ITERM = '<div class="post-item box">\n'
 
     t = Template(POST_MAIN)
     c = Context({'post': post, 'user': user})
@@ -30,6 +31,6 @@ def render_post(user, post):
         for child in post.children:
             POST_ITERM += render_post(user, child)
 
-    POST_ITERM += '\n</div>'
+    POST_ITERM += '\n</div>\n'
 
     return POST_ITERM

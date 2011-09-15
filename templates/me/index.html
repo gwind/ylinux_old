@@ -1,0 +1,132 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+          "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh" lang="zh">
+
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link REL="SHORTCUT ICON" HREF="{{ MEDIA_URL }}images/favicon.ico">
+    <title>{{ title }}{% if title %} - {% endif %}YLinux.org</title>
+    <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery-1.6.2.min.js" ></script>
+    <script type="text/javascript" src="{{ MEDIA_URL }}js/ylinux.js" ></script>
+    <link rel="stylesheet" href="{{ MEDIA_URL }}themes/{% if theme %}{{ theme }}{% else %}default{% endif %}/me.css" />
+  </head>
+
+  <!-- body 用 container 包容，分4块： header,navigator,content,footer -->  
+  <body>
+
+    <!-- 开始 header (分2块: logo,account) -->
+    <div id="header" class="clearfix">
+      <div id="logo"><a href="/"><img src="{{ MEDIA_URL }}images/ylinux-logo.gif" alt="YLinux"/></a></div>
+      <div id="navigator">
+        <a href="/">首页</a>
+        <a href="/coding">新闻</a>
+        <a href="/me">ME</a>
+        <a href="/coding">项目</a>
+        <a href="/wiki">知识库</a>
+      </div>
+      <div id="account">
+        {% if user.is_authenticated %}
+        <a href="{% url me:home user.id %}"><span class="visitor">我的主页</span></a>
+        <span id="logout"><button type="button" onclick="javascript: ajax_logout()">退出</button></span>
+        {% else %}
+        <span id="login"><button type="button" onclick="javascript: ajax_create_login()">登录</button></span>
+        <span id="register"><button type="button">注册</button></span>
+        {% endif %}
+      </div>
+    </div>
+    <!-- 结束 header -->
+
+
+    <!-- 开始 main -->
+    <div id="main" class="clearfix">
+
+      <div id="me-side" class="box">
+        <div id="tools" class="clearfix">
+          <form method="get" action="http://www.google.com/search" target="google_window">
+            <input type="text" name="as_q" size="16" maxlength="255" value="" id="s"/>
+            <input type="image" src="/ymedia/images/btn_search_box.gif" width="27" height="24" id="go" alt="Search" title="Search" />
+            <!--<input type="submit" name="sa" value="搜索"/>-->
+            <input name="as_sitesearch" value="ylinux.org" type="hidden"/>
+            <input name="newwindow" value="1" type="hidden"/>
+            <input name="complete" value="1" type="hidden"/>
+            <input name="forid" value="zh-CN" type="hidden"/>
+            <input type="hidden" name="num" value="10"/>
+            <input name="btnG" value="Google+%E6%90%9C%E7%B4%A2&" type="hidden"/>
+            <input name="as_ft" value="1" type="hidden"/>
+            <input name="as_qdr" value="all" type="hidden"/>
+            <input name="as_occt" value="any" type="hidden"/>
+            <input name="as_dt" value="i" type="hidden"/>
+          </form>
+        </div>
+
+        <h2>最近活跃用戶:</h2>
+        <ul>
+          {% for u in users %}
+          <li><a href="{% url me:home u.id %}" target="_blank">{{ u }}</a></li>
+          {% endfor %}
+        </ul>
+
+        <div id="newest-post">
+          <h2>最新评论</h2>
+          {% for p in posts %}
+          <div class="post-list box">
+            <div class="post-body">
+              <span>{{ p }}</span>
+            </div>
+            <div class="post-info">
+              <span class="user"><a href="{% url me:home p.user.id %}" target="_blank">{{ p.user }}</a></span> 在
+              <span class="time">{{ p.updated|date:"Y年m月d日 H:i" }}</span> 对 
+              <span class="topic-title"><a href="{% url wiki:show_topic p.topic.id %}" target="_blank">{{ p.topic }}</a></span> 的评论
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+
+      </div>
+
+
+      <div id="me-main">
+
+        <h2><span style="color: green; font-size: 1.2em;"><strong>{% if user.is_authenticated %}<a href="{% url me:home user.id %}">{{ user }}</a>{% else %}匿名的朋友{% endif %}</strong></span>, 这里还不知道如何归划, 也许你可以<a href="/coding/" target="_blank">帮忙</a>.</h2>
+
+        <div id="newest-topic">
+          {% if topics %}
+          {% for t in topics %}
+          <div class="topic-list box">
+            <div class="topic-header">
+              <span>[<a href="{% url wiki:show_catalog t.catalog.id %}">{{ t.catalog }}</a>]</span>
+              <span><a href="{% url wiki:show_topic t.id %}" target="_blank"><strong>{{ t }}</strong></a></span>
+            </div>
+            <div class="topic-info">
+              <span class="user"><a href="{% url me:home t.user.id %}">{{ t.user }}</a></span> 发表于
+              <span>{{ t.updated|date:"Y年m月d日 H:i" }} | {{ t.view_count }} 次阅读 | {{ t.post_count }} 条回复</span>
+            </div>
+            <div class="topic-body">
+              <p>{{ t.body_desc }}</p>
+            </div>
+          </div>
+          {% endfor %}
+          {% else %}
+          <p>没有新文章.</p>
+          {% endif %}
+        </div>
+
+      </div>
+
+      <div class="clear-both"></div>
+    </div>
+    <!-- 结束 main -->
+
+    <!-- 开始 footer -->
+    <div id="footer" class="clearfix">
+      版权 &copy <a href="http://ylinux.org">YLinux.org</a> |
+      <a href="/about">关于</a> |
+      <a href="/contact">联系</a> |
+      <script language="javascript" type="text/javascript" src="http://js.users.51.la/3151082.js"></script>
+      <noscript><a href="http://www.51.la/?3151082" target="_blank"><img alt="51统计" src="http://ylinux.org/ylinux/media/default/ylinux/images/51.gif"/></a></noscript>
+    </div>
+    <!-- 结束 footer -->
+    
+  </body>
+</html>
