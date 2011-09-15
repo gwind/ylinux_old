@@ -3,14 +3,24 @@
 import xmlrpclib
 from xmlrpclib import Fault
 import traceback
-import sys
+import sys,os
 
 from optparse import OptionParser
 
+# You can set YLINUX_XMLRPC env to specify what the Ylinux XMLRPC URL.
+# That is: export YLINUX_XMLRPC="http://example.com/xmlprc/"
+
 # product URL
-#YLINUX_XMLRPC="http://ylinux.org/xmlrpc/"
+YLINUX_XMLRPC = os.environ.get('YLINUX_XMLRPC', "http://ylinux.org/xmlrpc/")
 # devel URL
-YLINUX_XMLRPC="http://127.0.0.1:8000/xmlrpc/"
+#YLINUX_XMLRPC = os.environ.get('YLINUX_XMLRPC', "http://127.0.0.1:8000/xmlrpc/")
+
+def u(s, encoding):
+    '''convert string to unicode'''
+    if isinstance(s, unicode):
+        return s
+    else:
+        return unicode(s, encoding)
 
 class YLinuxClient(object):
     '''A Simple XML-RPC client for YLinux'''
@@ -64,8 +74,10 @@ class YLinuxClient(object):
         try:
             topics = self.server.metaWeblog.getRecentPosts(self.blogid, self.user, 
                                                         self.passwd, numberOfPosts)
-        except:
-            traceback.print_exc()
+        except Fault, f:
+            #traceback.print_exc()
+            print str(f)
+            return []
 
         # print 
         for struct in topics:
@@ -83,37 +95,46 @@ class YLinuxClient(object):
         return True
 
     def show_category(self):
+        categories = []
         try:
-            return self.server.metaWeblog.getCategories(self.blogid, self.user,self.passwd)
+            categories =  self.server.metaWeblog.getCategories(self.blogid, self.user,self.passwd)
         except Fault, f:
             print str(f)
             return []
+
+        # print
+        for ca in categories:
+            print "="*80
+            for key in ca.keys():
+                print "%s : %s" %(key, ca[key])
 
     def test(self):
         print self.server.system.listMethods()
 
 
 def option_parser():
+
     usage="""
     A simple Ylinux Client.
 
-    %s [-a][-d][-e][-l] [options] 
+    %s [-a][-d][-e][-l][-s][options] 
 
     List of commands:
 
     -a add     add one topic
     -l list    list recent topics
     -e edit    edit one topic
-    -d topci   delete one topic
-    """ % sys.argv[0]
+    -s show    show all category
+    -d topci   delete one topic""" %sys.argv[0]
 
     parser = OptionParser(usage=usage)
 
-    # Onny add/delete/edit/list operations are supported
+    # Only add/delete/edit/list operations are supported
     parser.add_option("-a", "--add", action="store_const", const=1, dest="mode",help="add one topic")
     parser.add_option("-d", "--delete", action="store_const", const=2, dest="mode",help="delete one topic")
     parser.add_option("-e", "--edit", action="store_const", const=3, dest="mode",help="edit one topic")
     parser.add_option("-l", "--list", action="store_const", const=4, dest="mode",help="list recent topic")
+    parser.add_option("-s", "--show", action="store_const", const=5, dest="mode",help="show all category")
 
     parser.add_option("-u", "--user", dest="user", help="specify user account")
     parser.add_option("-p", "--passwd", dest="passwd", help="specify account passwd")
@@ -157,7 +178,7 @@ def main():
         else:
             if options.filename:
                 with open(options.filename, 'r') as f:
-                    text = f.read().decode('utf8')
+                    text = f.read()
             else:
                 print "[-m] or [-f] option is required for topic text!"
                 sys.exit()
@@ -167,10 +188,14 @@ def main():
             print "[-c] option is required for topic category!"
             sys.exit()
 
-        topic = {'title':options.title, 'category':options.category,
-                'description':text}
-        if c.add_topic(topic):
+        topic = {'title':u(options.title, 'utf8'), 'category':u(options.category, 'utf8'),
+                'description':u(text, 'utf8')}
+        id = c.add_topic(topic)
+        if id:
             print "add topic successfully!"
+            print "Try this command for topic detail."
+            print "  ylinux-client -u %s -p %s -l -i %d" %(options.user, options.passwd, id)
+            print "or web visit -> /topic/%d" %id
 
     elif options.mode == 2:
         # delte topic
@@ -198,12 +223,12 @@ def main():
         else:
             if options.filename:
                 with open(options.filename, 'r') as f:
-                    text = f.read().decode('utf8')
+                    text = f.read()
             else:
                 print "[-m] or [-f] option is required for topic text!"
                 sys.exit()
 
-        topic = {'title':options.title, 'description':text}
+        topic = {'title':u(options.title, 'utf8'), 'description':u(text, 'utf8')}
         if c.edit_topic(options.id, topic):
             print "edit topic successfully!"
 
@@ -220,8 +245,12 @@ def main():
                 print "%s : %s" %(key, struct[key])
         else:
             c.list_recent_topics(options.count)
+    elif options.mode == 5:
+        # show category
+        c.show_category()
+
     else:
-        print "Please input Support operation: [-a][-d][-e][-l]"
+        print "Please input Support operation: [-a][-d][-e][-l][-s]"
         sys.exit()
     
     # end

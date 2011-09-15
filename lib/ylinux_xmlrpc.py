@@ -14,6 +14,13 @@ from xmlrpclib import Fault, Boolean, DateTime
 from account import authenticate,login
 from ydata.models import Topic,Catalog,User
 
+def st(u, encoding):
+    '''convert unicode to string'''
+    if isinstance(u, str):
+        return u
+    else:
+        return u.encode(encoding)
+
 def datetime_from_iso(isostring):
 
     try:
@@ -166,11 +173,11 @@ def edit_topic(postid, user, passwd, struct, publish):
     try:
         topic = Topic.objects.get(pk=postid)
         if struct.has_key('title'):
-            topic.name = struct['title']
+            topic.name = st(struct['title'], 'utf-8')
 
         topic.save()
         if struct.has_key('description'):
-            topic.save_file(struct['description'])
+            topic.save_file(st(struct['description'], 'utf-8'))
 
         return True
     except Exception, e:
@@ -182,13 +189,14 @@ def new_topic(blogid, user, passwd, struct, publish):
     if not has_auth(user, passwd):
         raise Fault(-1, "Authentication Failure")
 
-    title = struct.get('title', "No Topic")
+    title = st(struct.get('title', "No Title"), 'utf-8')
     markup = struct.get('markup', "markdown")
 
     topic = Topic(name=title, markup=markup)
     topic.updated = datetime.now()
 
-    catalog = Catalog.objects.get(name=struct['category'])
+    ca = st(struct['category'], 'utf-8')
+    catalog = Catalog.objects.get(name=ca)
     topic.catalog = catalog
 
     # find which user
@@ -198,8 +206,8 @@ def new_topic(blogid, user, passwd, struct, publish):
     catalog.topic_count += 1
     catalog.save()
 
-    text = struct.get('description', "")
-    topic.save_file(text)
+    text = struct.get('description', "Nothing")
+    topic.save_file(st(text, 'utf-8'))
     return topic.id
 
 ###
