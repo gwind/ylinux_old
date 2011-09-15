@@ -151,7 +151,7 @@ def option_parser():
 def main():
 
     (options, args) = option_parser()
-    # print options, args
+    #print options, args
 
     if not options.user:
         print "[-u] Ylinux user account is required!"
@@ -209,7 +209,7 @@ def main():
     elif options.mode == 3:
         # edit topic
         if not options.id:
-            print "[-i] topic id is required for delete topic!"
+            print "[-i] topic id is required for edit topic!"
             sys.exit()
 
         # get topic text first
@@ -228,7 +228,12 @@ def main():
                 print "[-m] or [-f] option is required for topic text!"
                 sys.exit()
 
-        topic = {'title':u(options.title, 'utf8'), 'description':u(text, 'utf8')}
+        topic = {}
+        # if title is not input, don't modify title
+        if not options.title == "No Title":
+            topic = {'title':u(options.title, 'utf8'), 'description':u(text, 'utf8')}
+        else:
+            topic = {'description':u(text, 'utf8')}
         if c.edit_topic(options.id, topic):
             print "edit topic successfully!"
 
