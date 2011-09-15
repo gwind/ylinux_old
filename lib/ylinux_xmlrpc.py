@@ -175,6 +175,7 @@ def edit_topic(postid, user, passwd, struct, publish):
         if struct.has_key('title'):
             topic.name = st(struct['title'], 'utf-8')
 
+        topic.updated = datetime.now()
         topic.save()
         if struct.has_key('description'):
             topic.save_file(st(struct['description'], 'utf-8'))
